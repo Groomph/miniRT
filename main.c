@@ -1,4 +1,4 @@
-#include "mlx.h"
+#include "libmlx_Linux.a"
 
 int	main(void)
 {
