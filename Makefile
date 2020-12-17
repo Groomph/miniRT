@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2020/12/17 13:23:00 by rsanchez         ###   ########.fr        #
+#    Updated: 2020/12/17 15:59:55 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,15 @@ NAME = miniRT
 
 CC = clang
 
-FLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
-FLAGSHARD = -Weverything
+EXTRAFLAGS = -Weverything
 
 LIB	= libraries
 
-LIBLINUX = minilibx-linux
+LIBLINUX = -L $(LIB)/minilibx-linux/ -lmlx -lXext -lX11
+
+LIBMAC	= -L $(LIB)/minilibx_opengl_20191021/
 
 HEADER = includes
 
@@ -30,7 +32,7 @@ DIR_PARS = parsing
 
 DIR_O = temporary
 
-SOURCES = main.c \
+SOURCES = main.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -39,13 +41,14 @@ OBJS = $(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	make -C $(LIB)/$(LIBLINUX)
-	cp $(LIB)/$(LIBLINUX)/libmlx.a .
-	$(CC) $(FLAGS) -o $(NAME) $(OBJS) -L. -lmlx -lXext -lX11
+	make -C $(LIB)/minilibx-linux
+	cp $(LIB)/minilibx-linux/libmlx.a .
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBLINUX)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
+	$(CFLAGS) = bite	
 	mkdir -p $(DIR_O)
-	$(CC) $(FLAGS) -I $(HEADER) -o $@ -c $<
+	$(CC) $(CFLAGS) -I $(HEADER) -o $@ -c $<
 
 norme:
 	@echo
@@ -54,19 +57,19 @@ norme:
 	norminette $(DIR_S)/
 
 soft: $(OBJS)
-	make -C $(LIB)/$(LIBLINUX)
-	cp $(LIB)/$(LIBLINUX)/libmlx.a .
-	$(CC) -o $(NAME) -I $(HEADER) $(OBJS) -L. -lmlx -lXext -lX11
+	make -C $(LIB)/minilibx-linux
+	cp $(LIB)/minilibx-linux/libmlx.a .
+	$(CC) -o $(NAME) -I $(HEADER) $(OBJS) $(LIBLINUX)
 
 hardmode: $(OBJS)
-	make -C $(LIB)/$(LIBLINUX)
-	cp $(LIB)/$(LIBLINUX)/libmlx.a .
-	$(CC) $(FLAGSHARD) -o $(NAME)_hardmode -I $(HEADER) $(OBJS) -L. -lmlx -lXext -lX11
+	make -C $(LIB)/minilibx-linux
+	cp $(LIB)/minilibx-linux/libmlx.a .
+	$(CC) $(FLAGSHARD) -o $(NAME)_hardmode -I $(HEADER) $(OBJS) $(LIBLINUX)
 
 clean:
 	rm -f $(OBJS)
 	rm -rf $(DIR_O)
-	make clean -C $(LIB)/$(LIBLINUX)
+	make clean -C $(LIB)/minilibx-linux
 
 fclean: clean
 	rm -f $(NAME)_hardmode
