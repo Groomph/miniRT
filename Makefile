@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2020/12/17 15:59:55 by rsanchez         ###   ########.fr        #
+#    Updated: 2020/12/18 10:55:44 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = clang
 
 CFLAGS = -Wall -Wextra -Werror
 
-EXTRAFLAGS = -Weverything
+FLAGSHARD = -Weverything
 
 LIB	= libraries
 
@@ -42,13 +42,11 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C $(LIB)/minilibx-linux
-	cp $(LIB)/minilibx-linux/libmlx.a .
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBLINUX)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
-	$(CFLAGS) = bite	
 	mkdir -p $(DIR_O)
-	$(CC) $(CFLAGS) -I $(HEADER) -o $@ -c $<
+	$(CC) -I $(HEADER) -o $@ -c $<
 
 norme:
 	@echo
@@ -56,15 +54,13 @@ norme:
 	@echo
 	norminette $(DIR_S)/
 
-soft: $(OBJS)
-	make -C $(LIB)/minilibx-linux
-	cp $(LIB)/minilibx-linux/libmlx.a .
-	$(CC) -o $(NAME) -I $(HEADER) $(OBJS) $(LIBLINUX)
-
 hardmode: $(OBJS)
 	make -C $(LIB)/minilibx-linux
-	cp $(LIB)/minilibx-linux/libmlx.a .
 	$(CC) $(FLAGSHARD) -o $(NAME)_hardmode -I $(HEADER) $(OBJS) $(LIBLINUX)
+
+soft: $(OBJS)
+	make -C $(LIB)/minilibx-linux
+	$(CC) -o $(NAME) -I $(HEADER) $(OBJS) $(LIBLINUX)
 
 clean:
 	rm -f $(OBJS)
