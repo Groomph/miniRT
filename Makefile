@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2020/12/18 10:55:44 by rsanchez         ###   ########.fr        #
+#    Updated: 2020/12/18 17:19:33 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ DIR_PARS = parsing
 
 DIR_O = temporary
 
-SOURCES = main.c
+SOURCES = main.c vector/vector.c vector/vector2.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -46,6 +46,7 @@ $(NAME): $(OBJS)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	mkdir -p $(DIR_O)
+	mkdir -p $(DIR_O)/vector
 	$(CC) -I $(HEADER) -o $@ -c $<
 
 norme:
