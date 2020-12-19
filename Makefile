@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2020/12/18 17:19:33 by rsanchez         ###   ########.fr        #
+#    Updated: 2020/12/19 11:35:56 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ FLAGSHARD = -Weverything
 
 LIB	= libraries
 
-LIBLINUX = -L $(LIB)/minilibx-linux/ -lmlx -lXext -lX11
+LIBLINUX = -L $(LIB)/minilibx-linux/ -lmlx -lXext -lX11 -lm
 
 LIBMAC	= -L $(LIB)/minilibx_opengl_20191021/
 
@@ -32,7 +32,7 @@ DIR_PARS = parsing
 
 DIR_O = temporary
 
-SOURCES = main.c vector/vector.c vector/vector2.c
+SOURCES = main.c vector/vector_operations.c vector/vector_getters.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 

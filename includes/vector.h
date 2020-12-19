@@ -13,5 +13,4 @@ t_vector        divide_vectors(long double doub, t_vector *vec2);
 
 long double     get_scalar_product(t_vector *vec1, t_vector *vec2);
 long double     get_norme(t_vector *vec1);
-
-t_vector        normalizer(t_vector *vec1);
+void        get_normalized(t_vector *vec1);
