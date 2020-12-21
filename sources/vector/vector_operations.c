@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.c                                           :+:      :+:    :+:   */
+/*   vector_operations.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2020/12/18 17:21:05 by romain           ###   ########.fr       */
+/*   Updated: 2020/12/21 18:40:23 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_vector	subtract_vectors(t_vector *vec1, t_vector *vec2)
 	return (tmp);
 }
 
-t_vector	multiply_vectors(long double doub, t_vector *vec1)
+t_vector	multiply_vectors(double doub, t_vector *vec1)
 {
 	t_vector	tmp;
 
@@ -42,7 +42,7 @@ t_vector	multiply_vectors(long double doub, t_vector *vec1)
 	return (tmp);
 }
 
-t_vector	divide_vectors(long double doub, t_vector *vec1)
+t_vector	divide_vectors(double doub, t_vector *vec1)
 {
 	t_vector	tmp;
 

@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2020/12/19 11:35:56 by rsanchez         ###   ########.fr        #
+#    Updated: 2020/12/21 18:13:56 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ DIR_PARS = parsing
 
 DIR_O = temporary
 
-SOURCES = main.c vector/vector_operations.c vector/vector_getters.c
+SOURCES = main.c vector/vector_operations.c vector/vector_getters.c \
+	  window_camera.c sphere.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 

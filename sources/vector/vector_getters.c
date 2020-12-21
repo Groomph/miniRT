@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector2.c                                          :+:      :+:    :+:   */
+/*   vector_getters.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2020/12/19 11:31:53 by rsanchez         ###   ########.fr       */
+/*   Updated: 2020/12/21 18:28:05 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include <math.h>
 
-long double	get_scalar_product(t_vector *vec1, t_vector *vec2)
+t_vector	get_vector_product(t_vector *vec1, t_vector *vec2)
+{
+	t_vector	temp;
+
+	temp.x = vec1->y * vec2->z - vec1->z * vec2->y;
+	temp.y = vec1->z * vec2->x - vec1->x * vec2->z;
+	temp.z = vec1->x * vec2->y - vec1->y * vec2->x;
+	return temp;
+}
+
+double		get_scalar_product(t_vector *vec1, t_vector *vec2)
 {
 	return ((vec1->x * vec2->x) + (vec1->y * vec2->y) + (vec1->z * vec2->z));
 }
 
-long double	get_norme(t_vector *vec1)
+double		get_norme(t_vector *vec1)
 {
 	return ((vec1->x * vec1->x) + (vec1->y * vec1->y) + (vec1->z * vec1->z));
 }
 
 void		get_normalized(t_vector *vec1)
 {
-	long double	norme;
+	double	norme;
 
 	norme = sqrt(get_norme(vec1));
 	vec1->x /= norme;
