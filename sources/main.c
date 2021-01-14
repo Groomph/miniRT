@@ -6,29 +6,25 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2020/12/21 18:41:52 by romain           ###   ########.fr       */
+/*   Updated: 2021/01/14 17:34:55 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "minirt.h"
-#include "window_camera.h"
 #include <stdio.h>
 
 void	ray_caster(t_cam *cam, t_vector *ray_dir, long double pct_w, long double pct_h)
 {
-	ray_dir->x = cam->lower_corner.x 
-		+ cam->horizontal.x * pct_w
-		+ cam->vertical.x * pct_h
-		- cam->origin.x;       
-	ray_dir->y = cam->lower_corner.y
-		+ cam->horizontal.y * pct_w
-		+ cam->vertical.y * pct_h
-		- cam->origin.y;       
-	ray_dir->z = cam->lower_corner.z
-		+ cam->horizontal.z * pct_w
-		+ cam->vertical.z * pct_h
-		- cam->origin.z;
+	t_vector temp;
+	
+	temp = multiply_vector(&(cam->horizontal), pct_w);
+	*ray_dir = add_vectors(&(cam->lower_corner), &temp);
+	temp = multiply_vector(&(cam->vertical), pct_h);
+	*ray_dir = add_vectors(ray_dir, &temp);
+	*ray_dir = subtract_vectors(ray_dir, &(cam->origin));
+//	get_normalized(ray_dir);
+
 //		printf("%%w: %Lf\n", pct_w);
 //		printf("%%h: %Lf\n", pct_h);
 //		printf("ray x: %Lf\n", ray_dir->x);
@@ -37,82 +33,64 @@ void	ray_caster(t_cam *cam, t_vector *ray_dir, long double pct_w, long double pc
 	//	scanf("%c", test);	
 }
 
-int	main(void)
+int		is_intercept_object(t_scene *scene, t_vector *ray_dir)
+{
+	t_list	*temp;
+	t_obj	*temp_obj;
+
+	temp = scene->object;
+	while (temp)
+	{
+		temp_obj = temp->object;
+		if (temp_obj->f(scene->active_cam, ray_dir, &(temp_obj->data)))
+			return (temp_obj->color);
+		temp = temp->next;
+	}
+	return (0);
+}
+
+
+void            init_window_img(t_img *img, void **mlx_ptr, void **window_ptr)
+{
+        *window_ptr = mlx_new_window(*mlx_ptr, img->line_w, img->col_h, "test");
+        img->img = mlx_new_image(*mlx_ptr, img->line_w, img->col_h);
+        img->addr = (int*)mlx_get_data_addr(img->img, &(img->bits_pixel),
+                        &(img->line_w), &(img->endian));
+        img->line_w /= 4;
+}
+
+
+int	main(int ac, char **av)
 {
 	void	*mlx_ptr;
 	void	*window_ptr;
-	t_img	img;
-	t_cam	cam;
-
-	mlx_ptr = mlx_init();
-	init_window_img(&img, &mlx_ptr, &window_ptr);
-	init_camera(&img, &cam);
-
+	t_scene	scene;
 	int	x;
 	int	y;
+	t_vector ray_direction;
 
 	x = 0;
 	y = 0;
-
-/*	t_sphere sphere;
-	sphere.origin.x = -(cos(PI/4));
-	sphere.origin.y = 0;
-	sphere.origin.z = -1.0;
-	sphere.radius = cos(PI/4);
-
-	t_sphere sphere2;
-	sphere2.origin.x = cos(PI/4);
-	sphere2.origin.y = 0.0;
-	sphere2.origin.z = -1.0;
-	sphere2.radius = cos(PI/4);
-*/	
-	t_sphere sphere;
-	sphere.origin.x = 0;
-	sphere.origin.y = 0;
-	sphere.origin.z = -1.0;
-	sphere.radius = 0.5;
-
-	t_sphere sphere2;
-	sphere2.origin.x = -1.0;
-	sphere2.origin.y = 0;
-	sphere2.origin.z = -1.0;
-	sphere2.radius = 0.5;
-
-	t_sphere sphere3;
-	sphere3.origin.x = 1.0;
-	sphere3.origin.y = 0;
-	sphere3.origin.z = -1.0;
-	sphere3.radius = 0.5;
-	
-	t_sphere sphere4;
-	sphere4.origin.x = 0.0;
-	sphere4.origin.y = -1000.5;
-	sphere4.origin.z = 0;
-	sphere4.radius = 1000.0;
-
-	t_vector ray_direction;
-
-	while (y < img.col_h)
+	init_zero(&scene, sizeof(scene));
+	check_prog_args(&scene, ac, av);
+	mlx_ptr = mlx_init();
+	init_window_img(&(scene.img), &mlx_ptr, &window_ptr);
+	while (y < scene.img.col_h)
 	{
-		while (x < img.line_w)
+		while (x < scene.img.line_w)
 		{
-			ray_caster(&cam, &ray_direction, 1.0 - (double)x / (double)(img.line_w - 1),
-							1.0 - (double)y / (double)(img.col_h - 1));
-			if (is_intercept_sphere(&(cam.origin), &ray_direction, &sphere4))
-				img.addr[y * img.line_w + x] = 0x0000FF00;
-			if (is_intercept_sphere(&(cam.origin), &ray_direction, &sphere3))
-				img.addr[y * img.line_w + x] = 0x00FF0000;
-			if (is_intercept_sphere(&(cam.origin), &ray_direction, &sphere))
-				img.addr[y * img.line_w + x] = 0x000000FF;
-			if (is_intercept_sphere(&(cam.origin), &ray_direction, &sphere2))
-				img.addr[y * img.line_w + x] = 0x00FF00FF;
+			ray_caster(scene.active_cam, &ray_direction,
+				1 - (double)x / (double)(scene.img.line_w - 1),
+				1 - (double)y / (double)(scene.img.col_h - 1));
+			scene.img.addr[y * scene.img.line_w + x] = is_intercept_object(&scene, &ray_direction);
 			x++;
 		}
 		y++;
 		x = 0;
 	}
 	printf("Rendering done\n");
-	mlx_put_image_to_window(mlx_ptr, window_ptr, img.img, 0, 0);
+	mlx_put_image_to_window(mlx_ptr, window_ptr, scene.img.img, 0, 0);
 	mlx_loop(mlx_ptr);
+	stop_program(&scene, 0, 0);
 	return (1);
 }

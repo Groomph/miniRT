@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2020/12/21 18:28:05 by romain           ###   ########.fr       */
+/*   Updated: 2020/12/21 19:53:04 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,5 @@ void		get_normalized(t_vector *vec1)
 	double	norme;
 
 	norme = sqrt(get_norme(vec1));
-	vec1->x /= norme;
-	vec1->y /= norme;
-	vec1->z /= norme;
+	*vec1 = divide_vector(vec1, norme);
 }
