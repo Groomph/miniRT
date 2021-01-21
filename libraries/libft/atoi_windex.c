@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 19:00:15 by romain            #+#    #+#             */
-/*   Updated: 2021/01/08 00:10:32 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/18 02:31:30 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,10 @@ int	atoi_windex(const char *str, int *i)
 	neg = 1;
 	while (str[*i] == ' ')
 		(*i)++;
-	if (str[*i] == '-' || str[*i] == '+')
-	{
-		if (str[*i] == '-')
-			neg = -1;
-		(*i)++;
-	}
+	if (str[*i] == '-' && ++(*i))
+		neg = -1;
+	else if (str[*i] == '+')
+	       (*i)++;
 	while (str[*i] >= '0' && str[*i] <= '9')
 	{
 		nb *= 10;

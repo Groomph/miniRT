@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 20:12:47 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/08 16:22:20 by romain           ###   ########.fr       */
+/*   Updated: 2021/01/20 23:13:30 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	vector_microparser(t_vector *vector, char *format, int *i)
 {
-	int	j;
+	int		j;
 	double	doub[3];
 
 	j = 0;
@@ -34,7 +34,7 @@ int	vector_microparser(t_vector *vector, char *format, int *i)
 			return (0);
 		j++;
 	}
-	set_vector(vector, doub[0], doub[1], doub[2]);
+	*vector = get_vector(0, doub[0], doub[1], doub[2]);
 	return (1);
 }
 
@@ -57,21 +57,16 @@ int	int_microparser(int *nb, char *format, int *i)
 	while (format[*i] == ' ')
 		(*i)++;
 	if (format[*i] >= '0' && format[*i] <= '9')
-		*nb = atoi_windex(format, i);	
+		*nb = atoi_windex(format, i);
 	else if (format[(*i) + 1] >= '0' && format[(*i) + 1] <= '9'
 						&& format[*i] == '-')
-		*nb = atoi_windex(format, i);	
+		*nb = atoi_windex(format, i);
 	else
 		return (0);
 	return (1);
 }
 
-int		fuse_trgb(int t, int r, int g, int b)
-{
-	return(t << 24 | r << 16 | g << 8 | b);
-}
-
-int	color_microparser(int *color, char *format, int *i)
+int	color_microparser(t_color *color, char *format, int *i)
 {
 	int	j;
 	int	nb[4];
@@ -82,13 +77,13 @@ int	color_microparser(int *color, char *format, int *i)
 	while (j < 4)
 	{
 		if (format[*i] >= '0' && format[*i] <= '9')
-			nb[j] = atoi_windex(format, i);	
+			nb[j] = atoi_windex(format, i);
 		else
 			return (0);
 		if (j < 3 && format[(*i)++] != ',' || nb[j] > 255)
 			return (0);
 		j++;
 	}
-	*color = fuse_trgb(nb[0], nb[1], nb[2], nb[3]);
+	*color = get_vector(nb[0], nb[1], nb[2], nb[3]);
 	return (1);
 }

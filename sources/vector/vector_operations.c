@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2020/12/27 22:09:46 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/21 00:18:37 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_vector	add_vectors(t_vector *vec1, t_vector *vec2)
 	return (tmp);
 }
 
-t_vector	subtract_vectors(t_vector *vec1, t_vector *vec2)
+t_vector	sub_vectors(t_vector *vec1, t_vector *vec2)
 {
 	t_vector	tmp;
 
@@ -52,9 +52,13 @@ t_vector	divide_vector(t_vector *vec1, double doub)
 	return (tmp);
 }
 
-void		set_vector(t_vector *vec1, double _x, double _y, double _z)
+t_vector	get_vector(double oo, double xx, double yy, double zz)
 {
-	vec1->x = _x;
-	vec1->y = _y;
-	vec1->z = _z;
+	t_vector	tmp;
+
+	tmp.other = oo;
+	tmp.x = xx;
+	tmp.y = yy;
+	tmp.z = zz;
+	return (tmp);
 }

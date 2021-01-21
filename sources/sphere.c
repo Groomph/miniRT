@@ -6,64 +6,75 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/01/14 17:36:16 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/21 05:40:07 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "vector.h"
 #include <math.h>
 
-BOOL    is_intercept_sphere(t_vector *ray_o, t_vector *ray_dir, t_data *data)
+void		set_hit_normale(t_ray *ray, t_sphere *sphere)
 {
-        double		a;
-        double		b;
-        double		c;
-        double		delta;
-	t_sphere	*sphere;
-        t_vector temp;
+	double	t;
+	t_point	hit_from_cam;
 
-	sphere = &(data->sphere);
-        temp = subtract_vectors(ray_o, &(sphere->origin));
-
-//      printf("x: %Lf\n", ray_dir->x);
-//      printf("y: %Lf\n", ray_dir->y);
-//      printf("z: %Lf\n", ray_dir->z);
-
-//      int     i = 0;
-//      while (i < 1000000)     
-//              i++;
-
-        a = get_norme(ray_dir);
-        b = get_scalar_product(&temp, ray_dir);
-        c = get_norme(&temp) - sphere->radius * sphere->radius;
-        delta = (b * b) - (a * c);
-        if (delta < 0.0)
-                return (FALSE);
-	double root = (-b - sqrt(delta)) / a;
-	if (root < 0 || root > 10000000.0)
+	if (ray->t[0] >= 0)
+		t = ray->t[0];
+	else
 	{
-		root = (-b + sqrt(delta)) / a;
-		if (root < 0 || root > 10000000.0)
-		return (FALSE);
+		t = ray->t[1];
+		ray->t[1] = ray->t[0];
+		ray->t[0] = t;
 	}
-	return (TRUE);
-/*      
-           long double t1;
-           long double t2;
-
-           t1 = (-b - sqrt(delta)) / (2.0 * a);
-           t2 = (-b + sqrt(delta)) / (2.0 * a);
-           if (t2 > 0.0)
-           return (TRUE);
-*/              return (FALSE);
+	hit_from_cam = multiply_vector(&(ray->dir), t);
+	ray->hit = add_vectors(&(ray->o), &hit_from_cam);
+	ray->hit_normale = sub_vectors(&(ray->hit), &(sphere->o));
+	set_normalized(&(ray->hit_normale));
 }
 
-static int		parse_sphere(t_obj *sphere, char* format)
+/*
+**ajouter gestion de la lumiere au sein d'un objet en comparant si t < 0 et t2 > 0
+*/
+
+BOOL		is_intercept_sphere(t_ray *ray, t_data *data)
+{
+	t_vector	ray_sph_o;
+	double		b;
+	double		c;
+	double		delta;
+
+	ray_sph_o = sub_vectors(&(ray->o), &(data->sphere.o));
+	b = get_scalar_product(&ray_sph_o, &(ray->dir));
+	c = get_norme(&ray_sph_o) - data->sphere.radius * data->sphere.radius;
+	delta = (b * b) - c;
+	if (delta < 0.0)
+		return (FALSE);
+	delta = sqrt(delta);
+	ray->t[0] = (-b - delta);
+	if (ray->t[0] < 0 || ray->t[0] > ray->max_t)
+	{
+		ray->t[1] = -b + delta;
+		if (ray->t[1] < 0 || ray->t[1] > ray->max_t)
+			return (FALSE);
+//		write(1, "do we enter?\n", 14);
+	}
+	set_hit_normale(ray, &(data->sphere));
+	return (TRUE);
+}
+
+/*
+**double	a;
+**a = get_norme(&(ray->dir));
+**delta = (b * b) - (a * c);
+*/
+
+static int	parse_sphere(t_obj *sphere, char *format)
 {
 	int	i;
 
 	i = 2;
-	if (!vector_microparser(&(sphere->data.sphere.origin), format, &i)
+	if (!vector_microparser(&(sphere->data.sphere.o), format, &i)
 		|| !double_microparser(&(sphere->data.sphere.radius), format, &i)
 		|| sphere->data.sphere.radius <= 0
 		|| !color_microparser(&(sphere->color), format, &i))
@@ -73,14 +84,16 @@ static int		parse_sphere(t_obj *sphere, char* format)
 	if (format[i] != '\0')
 		return (FALSE);
 	sphere->f = is_intercept_sphere;
-
-	printf("        %.1lf,%.1lf,%.1lf      ", sphere->data.sphere.origin.x, sphere->data.sphere.origin.y, sphere->data.sphere.origin.z);
-	printf("%.1lf    ", sphere->data.sphere.radius);
-	printf("%d     \n\n", sphere->color);         
+	printf("        %.1lf,%.1lf,%.1lf      ", sphere->data.sphere.o.x,
+						sphere->data.sphere.o.y,
+						sphere->data.sphere.o.z);
+	printf("%.2lf    ", sphere->data.sphere.radius);
+	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n",
+	sphere->color.other, sphere->color.x, sphere->color.y, sphere->color.z);
 	return (TRUE);
 }
 
-int		add_sphere(t_scene *scene, char *format)
+int			add_sphere(t_scene *scene, char *format)
 {
 	t_obj		*sphere;
 	t_list		*temp_list;

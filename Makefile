@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/01/13 15:36:37 by rsanchez         ###   ########.fr        #
+#    Updated: 2021/01/20 23:14:31 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ DIR_O = temporary
 
 SOURCES = main.c $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c \
 	  vector/vector_operations.c vector/vector_getters.c \
-	  camera.c sphere.c quit_program.c 
+	  ray_caster.c camera.c sphere.c light_color.c quit_program.c 
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 

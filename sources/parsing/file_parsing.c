@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/01/13 18:40:28 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/21 00:18:03 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,73 +16,71 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static int	set_resolution(t_scene *scene, char *format)
+static BOOL	set_resolution(t_img *img, char *format)
 {
 	int	i;
 
-	if (scene->img.set == FALSE)
-	{
-		i = 1;
-		if (!int_microparser(&(scene->img.line_w), format, &i)
-		|| !int_microparser(&(scene->img.col_h), format, &i))
-			return (FALSE);
-		while (format[i] == ' ')
-			i++;
-		if (format[i] != '\0')
-			return(FALSE);
-		scene->img.set = 1;
-	}
-	else
-		return(FALSE);
+	if (img->set == TRUE)
+		return (FALSE);
+	i = 1;
+	if (!int_microparser(&(img->line_w), format, &i))
+		return (FALSE);
+	if (!int_microparser(&(img->col_h), format, &i))
+		return (FALSE);
+	while (format[i] == ' ')
+		i++;
+	if (format[i] != '\0')
+		return (FALSE);
+	img->set = TRUE;
 	return (TRUE);
 }
 
-static void	add_object(t_scene *scene, char *line, int count_line)
+static void	add_object(t_scene *scene, t_img *img, char *line, int line_nb)
 {
 	int check;
 
 	if (str_n_comp(line, "c ", 2) == 0)
 		check = add_camera(scene, line);
 	else if (str_n_comp(line, "R ", 2) == 0)
-		check = set_resolution(scene, line);
+		check = set_resolution(img, line);
 	else if (str_n_comp(line, "sp ", 3) == 0)
 		check = add_sphere(scene, line);
 	else
 		check = -2;
 	if (check != TRUE)
-		stop_program(scene, check + 6, count_line);
+		stop_program(scene, check + 6, line_nb);
 }
 
-static void	parsing_rt_file(t_scene *scene, int fd)
+static void	parsing_rt_file(t_scene *scene, t_img *img, int fd)
 {
-	int	check;
-	char	*temp_line;
-	int	count_line;
+	int		check;
+	char	*line;
+	int		line_nb;
 
 	check = 1;
-	temp_line = NULL;
-	count_line = 0;
+	line = NULL;
+	line_nb = 0;
 	while (check > 0)
 	{
-		check = get_next_line(fd, &temp_line);
+		check = get_next_line(fd, &line);
 		printf("%d        ", check);
-		printf("%s\n", temp_line);
+		printf("%s\n", line);
 		if (check == -1)
 		{
-			if (temp_line)
-				free(temp_line);
+			if (line)
+				free(line);
 			close(fd);
-			stop_program(scene, 3, count_line);
+			stop_program(scene, 3, line_nb);
 		}
-		if (temp_line[0] != '\0')
-			add_object(scene, temp_line, count_line);
-		count_line++;
-		free(temp_line);
-		temp_line = NULL;
+		if (line[0] != '\0')
+			add_object(scene, img, line, line_nb);
+		line_nb++;
+		free(line);
+		line = NULL;
 	}
 }
 
-void		check_prog_args(t_scene *scene, int ac, char **av)
+void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
 {
 	int	fd;
 
@@ -99,11 +97,15 @@ void		check_prog_args(t_scene *scene, int ac, char **av)
 			fd = open(av[1], O_RDONLY);
 		if (fd < 0)
 			stop_program(scene, 11, -1);
-		parsing_rt_file(scene, fd);
+		parsing_rt_file(scene, img, fd);
 		close(fd);
 	}
-	if (!scene->img.set || !scene->cam/* || !scene->ambiant_light*/)
-			stop_program(scene, 7, -1);
-	list_iter(scene->cam, param_camera, &(scene->img));
-	scene->active_cam = scene->cam->object;
+	if (!img->set || !scene->cam_list)
+		stop_program(scene, 7, -1);
+	list_iter(scene->cam_list, param_camera, img);
+	scene->cam = scene->cam_list->object;
 }
+
+/*
+**if (!img->set || !scene->cam_list || !scene->ambiant_light)
+*/
