@@ -6,15 +6,14 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:08:40 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/20 21:55:24 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/29 11:45:12 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
 
-# define PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067
-# define get_norme(x) get_scalar_product(x, x)
+# define PI 3.1415926535897932384626433832795028841971693993751058209749445923
 
 typedef struct		s_3d_vector
 {
@@ -35,7 +34,9 @@ t_vector		get_vector(double oo, double xx, double yy, double zz);
 
 t_vector		get_vector_product(t_vector *vec1, t_vector *vec2);
 double			get_scalar_product(t_vector *vec1, t_vector *vec2);
-//double			get_norme(t_vector *vec1);
+double			get_norme(t_vector *vec1);
 void			set_normalized(t_vector *vec1);
-int			fuse_vector(t_vector *vec);
+t_point			get_x_rotation(t_vector *vec, double theta);
+t_point			get_y_rotation(t_vector *vec, double theta);
+t_point			get_z_rotation(t_vector *vec, double theta);
 #endif

@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/01/20 23:14:31 by rsanchez         ###   ########.fr        #
+#    Updated: 2021/01/28 22:16:39 by romain           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,15 +30,21 @@ HEADER = includes
 
 DIR_S = sources
 
-DIR_PARS = parsing
+DIR_PARS = scene_parsing
 
-DIR_LIST = list
+DIR_EQUA = equations_objects
+
+DIR_VECM = vector_matrice
 
 DIR_O = temporary
 
-SOURCES = main.c $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c \
-	  vector/vector_operations.c vector/vector_getters.c \
-	  ray_caster.c camera.c sphere.c light_color.c quit_program.c 
+SOURCES = main.c ray_caster.c path_tracer.c light_shader.c \
+	  color.c quit_program.c \
+	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c \
+	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
+	  $(DIR_EQUA)/sphere.c \
+	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
+	  $(DIR_VECM)/matrice.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -53,10 +59,10 @@ $(NAME): $(OBJS)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	mkdir -p $(DIR_O)
-	mkdir -p $(DIR_O)/vector
-	mkdir -p $(DIR_O)/parsing
-	mkdir -p $(DIR_O)/libft
-	$(CC) -I $(HEADER) -o $@ -c $<
+	mkdir -p $(DIR_O)/$(DIR_PARS)
+	mkdir -p $(DIR_O)/$(DIR_EQUA)
+	mkdir -p $(DIR_O)/$(DIR_VECM)
+	$(CC) -g -I $(HEADER) -o $@ -c $<
 
 norme:
 	@echo

@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/01/21 05:11:01 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/27 15:11:22 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,13 @@ int			main(int ac, char **av)
 	void	*mlx;
 	void	*window;
 	t_scene	scene;
-	t_img	img;
 
 	init_zero(&scene, sizeof(scene));
-	init_zero(&img, sizeof(img));
-	check_prog_args(&scene, &img, ac, av);
+	check_prog_args(&scene, &(scene.img), ac, av);
 	mlx = mlx_init();
-	set_window_img(&img, mlx, &window);
-	ray_caster(&scene, &img, mlx, window);
+	set_window_img(&(scene.img), mlx, &window);
+	ray_caster(&scene, mlx, window);
 	mlx_loop(mlx);
 	stop_program(&scene, 0, 0);
 	return (1);
 }
-
-/*
-**Ajouter une condition de parsing fausse quand cam.o == cam.look_at
-*/

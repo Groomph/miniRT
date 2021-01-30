@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:25:29 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/13 18:45:31 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/27 10:33:13 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,6 @@ double		atodoub_windex(const char *str, int *i);
 /*
  *******************  LINKED LIST  *******************
 */
-
-t_list			*list_new(void *object);
-void			list_add_front(t_list **first_link, t_list *new_link);
-void			list_add_back(t_list **first_link, t_list *new_link);
-int			list_size(t_list *current_link);
-t_list			*list_last(t_list *list);
-void			list_iter(t_list *list, void (*f)(void *,void *), void *obj);
-t_list			*list_map(t_list *list, void *(*f)(void *), void (*del)(void *));
-void			list_delone(t_list *list, void (*del)(void*));
-void			list_clear(t_list **list, void (*del)(void *));
 
 /*
  *******************  FILE DESCRIPTOR  *******************
