@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/01/29 22:04:05 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/01/31 17:52:31 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,45 @@ static t_vector	get_ray_dir(t_cam *cam, t_img *img, double x, double y)
 	return (dir);
 }
 
+static void		pixel_correction(t_cam *cam, t_color *color)
+{
+	color->x /= cam->anti_aliasing * cam->anti_aliasing;
+	color->y /= cam->anti_aliasing * cam->anti_aliasing;
+	color->z /= cam->anti_aliasing * cam->anti_aliasing;
+	if (cam->gamma)
+	{
+		color->x = pow(color->x * 70, 1 / 1.9);
+		color->y = pow(color->y * 70, 1 / 1.9);
+		color->z = pow(color->z * 70, 1 / 1.9);
+	}
+}
+
 static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 {
-	int		alias;
 	int		i;
 	int		j;
 	t_color	temp_color;
 
 	temp_color = get_vector(0, 0, 0, 0);
-	alias = 1;
 	i = -1;
-	while (++i < alias)
+	while (++i < scene->cam->anti_aliasing)
 	{
 		j = -1;
-		while (++j < alias)
+		while (++j < scene->cam->anti_aliasing)
 		{
 			ray->o = scene->cam->o;
 			ray->dir = get_ray_dir(scene->cam, &(scene->img),
-			x + (double)i / alias, y + (double)j / alias);
+			x + (double)i / scene->cam->anti_aliasing,
+			y + (double)j / scene->cam->anti_aliasing);
 			path_tracer(scene, ray, NULL, 0);
 			temp_color.x += ray->color.x;
 			temp_color.y += ray->color.y;
 			temp_color.z += ray->color.z;
 		}
 	}
-	temp_color.x /= alias * alias;
-	temp_color.y /= alias * alias;
-	temp_color.z /= alias * alias;
+	pixel_correction(scene->cam, &temp_color);
 	return (fuse_vector(&(temp_color)));
 }
-
-/*
-**	ray->color.x = pow(ray->color.x, 1 / 2.0);
-**	ray->color.y = pow(ray->color.y, 1 / 2.0);
-**	ray->color.z = pow(ray->color.z, 1 / 2.0);
-*/
 
 static void	display_progress(double pixel, t_img *img, double *count)
 {

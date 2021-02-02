@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/01/28 20:56:55 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/01 23:37:47 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	parse_sphere(t_obj *sphere, char *format)
 	sphere->type = SPHERE;
 	sphere->inter_f = is_intercept_sphere;
 	sphere->normal_f = set_sphere_normal;
+	sphere->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", sphere->o.x, sphere->o.y,
 								sphere->o.z);
 	printf("%.2lf    ", sphere->radius);
@@ -50,5 +51,5 @@ int			add_sphere(t_scene *scene, char *format)
 	scene->object = sphere;
 	if (!parse_sphere(sphere, format))
 		return (-1);
-	return (TRUE);
+	return (TRUE + 4);
 }

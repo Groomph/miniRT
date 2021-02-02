@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/29 11:21:06 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/02 13:30:04 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,47 @@
 #include <math.h>
 #include <stdio.h>
 
-static void	set_lower_point(t_cam *cam)
+BOOL			set_camera_bonus2(t_cam *cam, char *format, int *i)
 {
-	t_vector	focale;
-	t_vector	temp;
-
-	focale = sub_vectors(&(cam->o), &(cam->look_at));
-	set_normalized(&focale);
-	temp = divide_vector(&(cam->horizontal), 2.0);
-	cam->lower_corner = sub_vectors(&(cam->o), &temp);
-	temp = divide_vector(&(cam->vertical), 2.0);
-	cam->lower_corner = sub_vectors(&(cam->lower_corner), &temp);
-	cam->lower_corner = sub_vectors(&(cam->lower_corner), &focale);
-	printf("camera horizontal: %lf %lf %lf\n",
-		cam->horizontal.x, cam->horizontal.y, cam->horizontal.z);
-	printf("camera vertical: %lf %lf %lf\n",
-		cam->vertical.x, cam->vertical.y, cam->vertical.z);
-	printf("lower_corner: %lf %lf %lf\n",
-		cam->lower_corner.x, cam->lower_corner.y, cam->lower_corner.z);
-	printf("focale: %lf %lf %lf\n", focale.x, focale.y, focale.z);
+	if (str_n_comp(&(format[*i]), "ANTI_ALIASING=", 14) == 0 && (*i += 14))
+	{
+		if (!int_microparser(&(cam->anti_aliasing), format, i)
+			|| cam->anti_aliasing < 1 || cam->anti_aliasing > 100)
+			return (FALSE);
+	}
+	else if (str_n_comp(&(format[*i]), "RECURSIVITY=", 12) == 0 && (*i += 12))
+	{
+		if (!int_microparser(&(cam->recursivity), format, i)
+			|| cam->recursivity < 0 || cam->recursivity > 100)
+			return (FALSE);
+	}
+	else if (str_n_comp(&(format[*i]), "LOOK_AT=", 8) == 0 && (*i += 8))
+	{
+		if (!vector_microparser(&(cam->look_at), format, i))
+			return (FALSE);
+	}
+	else if (str_n_comp(&(format[*i]), "GAMMA", 5) == 0 && (*i += 5))
+		cam->gamma = TRUE;
+	else
+		return (FALSE);
+	return (TRUE);
 }
 
-/*
-**	cam->look_at = sub_vectors(&(cam->look_at), &(cam.o));
-**	set_normalized(&(cam->look_at));
-*/
-
-void		param_camera(t_cam *cam, double w, double h)
+BOOL			set_camera_bonus(t_cam *cam, char *format, int i)
 {
-	double		ratio;
-	t_vector	focale;
-	t_vector	cross;
+	int	check;
 
-	cam->fov_hori *= PI;
-	cam->fov_hori /= 180.0;
-	cam->fov_hori = tan(cam->fov_hori / 2.0);
-	ratio = w / h;
-	cam->pov_w = 2.0 * cam->fov_hori;
-	cam->pov_h = cam->pov_w / ratio;
-	focale = sub_vectors(&(cam->o), &(cam->look_at));
-	set_normalized(&focale);
-	cross = get_vector_product(&(cam->vup), &focale);
-	if (get_norme(&cross) == 0)
-		cross = get_z_rotation(&focale, 90.0);
-	set_normalized(&cross);
-	cam->horizontal = multiply_vector(&cross, cam->pov_w);
-	cross = get_vector_product(&focale, &cross);
-	set_normalized(&cross);
-	cam->vertical = multiply_vector(&cross, cam->pov_h);
-	set_lower_point(cam);
+	check = 1;
+	while (format[i] == ' ')
+		i++;
+	if (!set_camera_bonus2(cam, format, &i))
+		return (FALSE);
+	while (format[i] == ' ')
+		i++;
+	if (format[i] != '\0')
+		return (set_camera_bonus(cam, format, i));
+	return (TRUE);
 }
-
-/*
-**	cam->pov_h = 2.0 * cam->fov_hori;
-**	cam->pov_w = cam->pov_h * ratio;
-**	set_normalized(&focale);
-**	set_normalized(&(cam->vup));
-**	printf("cross2\n");
-**	set_normalized(&cross);
-*/
 
 static int	parse_camera(t_cam *cam, char *format)
 {
@@ -88,16 +70,11 @@ static int	parse_camera(t_cam *cam, char *format)
 	while (format[i] == ' ')
 		i++;
 	if (format[i] != '\0')
-	{
-		if (!vector_microparser(&(cam->look_at), format, &i))
-			return (FALSE);
-		while (format[i] == ' ')
-			i++;
-		if (format[i] != '\0')
-			return (FALSE);
-	}
-	else
-		cam->look_at = get_vector(0.0, 0.0, 0.0, -1.0);
+		return (FALSE);
+	cam->look_at = get_vector(0.0, 0.0, 0.0, -1.0);
+	cam->anti_aliasing = 1;
+	cam->recursivity = 0;
+	cam->gamma = FALSE;
 	return (TRUE);
 }
 
@@ -120,5 +97,5 @@ int			add_camera(t_scene *scene, char *format)
 	printf("%.1lf         ", cam->fov_hori);
 	printf("%.1lf,%.1lf,%.1lf \n\n",
 				cam->look_at.x, cam->look_at.y, cam->look_at.z);
-	return (TRUE);
+	return (TRUE + 2);
 }

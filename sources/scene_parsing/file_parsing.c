@@ -3,45 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   file_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/01/29 11:17:28 by rsanchez         ###   ########.fr       */
+/*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
+/*   Updated: 2021/02/02 13:19:09 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include <math.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 
-static BOOL	set_ambient_light(t_scene *scene, char *format)
+static void	set_lower_point(t_cam *cam)
 {
-	int	i;
+	t_vector	focale;
+	t_vector	temp;
 
-	if (scene->ambient_is_set)
-		return (FALSE);
-	i = 1;
-	if (!double_microparser(&(scene->ambient_intensity), format, &i)
-		|| scene->ambient_intensity < 0
-		|| scene->ambient_intensity > 1
-		|| !color_microparser(&(scene->ambient_light), format, &i))
-		return (FALSE);
-	while (format[i] == ' ')
-		i++;
-	if (format[i] != '\0')
-		return (FALSE);
-	printf("        %.1lf,%.1lf,%.1lf      ", scene->ambient_light.x,
-			scene->ambient_light.y,
-			scene->ambient_light.z);
-	scene->ambient_is_set = TRUE;
-	printf("%.2lf\n\n", scene->ambient_intensity);
-	return (TRUE);
+	focale = sub_vectors(&(cam->o), &(cam->look_at));
+	set_normalized(&focale);
+	temp = divide_vector(&(cam->horizontal), 2.0);
+	cam->lower_corner = sub_vectors(&(cam->o), &temp);
+	temp = divide_vector(&(cam->vertical), 2.0);
+	cam->lower_corner = sub_vectors(&(cam->lower_corner), &temp);
+	cam->lower_corner = sub_vectors(&(cam->lower_corner), &focale);
+	printf("camera horizontal: %lf %lf %lf\n",
+		cam->horizontal.x, cam->horizontal.y, cam->horizontal.z);
+	printf("camera vertical: %lf %lf %lf\n",
+		cam->vertical.x, cam->vertical.y, cam->vertical.z);
+	printf("lower_corner: %lf %lf %lf\n",
+		cam->lower_corner.x, cam->lower_corner.y, cam->lower_corner.z);
+	printf("focale: %lf %lf %lf\n", focale.x, focale.y, focale.z);
 }
 
-static BOOL	set_resolution(t_img *img, char *format)
+/*
+**	cam->look_at = sub_vectors(&(cam->look_at), &(cam.o));
+**	set_normalized(&(cam->look_at));
+*/
+
+static void		param_camera(t_cam *cam, double w, double h)
+{
+	double		ratio;
+	t_vector	focale;
+	t_vector	cross;
+
+	cam->fov_hori *= PI;
+	cam->fov_hori /= 180.0;
+	cam->fov_hori = tan(cam->fov_hori / 2.0);
+	ratio = w / h;
+	cam->pov_w = 2.0 * cam->fov_hori;
+	cam->pov_h = cam->pov_w / ratio;
+	focale = sub_vectors(&(cam->o), &(cam->look_at));
+	set_normalized(&focale);
+	cross = get_vector_product(&(cam->vup), &focale);
+	if (get_norme(&cross) == 0)
+		cross = get_z_rotation(&focale, 90.0);
+	set_normalized(&cross);
+	cam->horizontal = multiply_vector(&cross, cam->pov_w);
+	cross = get_vector_product(&focale, &cross);
+	set_normalized(&cross);
+	cam->vertical = multiply_vector(&cross, cam->pov_h);
+	set_lower_point(cam);
+}
+
+/*
+**	cam->pov_h = 2.0 * cam->fov_hori;
+**	cam->pov_w = cam->pov_h * ratio;
+**	set_normalized(&focale);
+**	set_normalized(&(cam->vup));
+**	printf("cross2\n");
+**	set_normalized(&cross);
+*/
+
+BOOL	set_resolution(t_img *img, char *format)
 {
 	int	i;
 
@@ -60,50 +97,30 @@ static BOOL	set_resolution(t_img *img, char *format)
 	return (TRUE);
 }
 
-static void	add_object(t_scene *scene, t_img *img, char *line, int line_nb)
-{
-	int check;
-
-	if (str_n_comp(line, "R ", 2) == 0)
-		check = set_resolution(img, line);
-	else if (str_n_comp(line, "A ", 2) == 0)
-		check = set_ambient_light(scene, line);
-	else if (str_n_comp(line, "c ", 2) == 0)
-		check = add_camera(scene, line);
-	else if (str_n_comp(line, "l ", 2) == 0)
-		check = add_light(scene, line);
-	else if (str_n_comp(line, "sp ", 3) == 0)
-		check = add_sphere(scene, line);
-	else
-		check = -2;
-	if (check != TRUE)
-		stop_program(scene, check + 6, line_nb);
-}
-
 static void	parsing_rt_file(t_scene *scene, t_img *img, int fd)
 {
 	int		check;
 	char	*line;
 	int		line_nb;
+	int		previous;
 
 	check = 1;
 	line = NULL;
 	line_nb = 0;
+	previous = 20;
 	while (check > 0)
 	{
 		check = get_next_line(fd, &line);
-		printf("%d        ", check);
-		printf("%s\n", line);
+		printf("%d      %s\n", check, line);
 		if (check == -1)
 		{
 			if (line)
 				free(line);
 			close(fd);
-			stop_program(scene, 3, line_nb);
+			stop_program(scene, 14, line_nb);
 		}
 		if (line[0] != '\0')
-			add_object(scene, img, line, line_nb);
-		line_nb++;
+			previous = add_object(scene, line, line_nb++, previous);
 		free(line);
 		line = NULL;
 	}

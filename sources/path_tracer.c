@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 11:41:07 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/30 12:17:55 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/02 13:13:34 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,28 +62,32 @@ BOOL	find_nearest_object(t_scene *scene, t_ray *ray, void *ignore)
 **}
 */
 
+int		reflect_ray(t_scene *scene, t_ray *ray, void *ignore, int i)
+{
+	t_vector	temp;
+	double		cos;
+
+	ray->nearest_object->normal_f(ray, ray->nearest_object);
+	temp = multiply_vector(&(ray->hit_normal), EPSILON);
+	ray->o = add_vectors(&(ray->hit), &temp);
+	ray->t = 1000000;
+	cos = 2.0 * get_scalar_product(&(ray->dir), &(ray->hit_normal));
+	temp = multiply_vector(&(ray->hit_normal), cos);
+	ray->dir = sub_vectors(&(ray->dir), &temp);
+	set_normalized(&(ray->dir));
+	return (path_tracer(scene, ray, NULL, i + 1));
+}
+
 int		path_tracer(t_scene *scene, t_ray *ray, void *ignore, int i)
 {
 	t_light	*temp_light;
-	t_vector	temp;
-	double		cos;
 
 	ray->t = 1000000;
 	ray->color = get_vector(0, 0, 0, 0);
 	if (find_nearest_object(scene, ray, ignore))
 	{
-		if (ray->nearest_object->radius < 1.0 && i < 2)
-		{
-			ray->nearest_object->normal_f(ray, ray->nearest_object);
-			temp = multiply_vector(&(ray->hit_normal), 0.001);
-			ray->o = add_vectors(&(ray->hit), &temp);
-			ray->t = 1000000;
-			cos = 2.0 * get_scalar_product(&(ray->dir), &(ray->hit_normal));
-			temp = multiply_vector(&(ray->hit_normal), cos);
-			ray->dir = sub_vectors(&(ray->dir), &temp);
-			set_normalized(&(ray->dir));
-			return (path_tracer(scene, ray, NULL, i + 1));
-		}
+		if (ray->nearest_object->specular && i < scene->cam->recursivity)
+			return (reflect_ray(scene, ray, ignore, i));
 		apply_ambient_light(scene, ray);
 		temp_light = scene->light;
 		while (temp_light)
@@ -94,3 +98,18 @@ int		path_tracer(t_scene *scene, t_ray *ray, void *ignore, int i)
 	}
 	return (fuse_vector(&(ray->color)));
 }
+
+/*
+**		if (ray->nearest_object->radius < 1.0 && i < 2)
+**		{
+**			ray->nearest_object->normal_f(ray, ray->nearest_object);
+**			temp = multiply_vector(&(ray->hit_normal), 0.001);
+**			ray->o = add_vectors(&(ray->hit), &temp);
+**			ray->t = 1000000;
+**			cos = 2.0 * get_scalar_product(&(ray->dir), &(ray->hit_normal));
+**			temp = multiply_vector(&(ray->hit_normal), cos);
+**			ray->dir = sub_vectors(&(ray->dir), &temp);
+**			set_normalized(&(ray->dir));
+**			return (path_tracer(scene, ray, NULL, i + 1));
+**		}
+*/

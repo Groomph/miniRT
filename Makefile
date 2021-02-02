@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/01/28 22:16:39 by romain           ###   ########.fr        #
+#    Updated: 2021/02/01 18:13:52 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,9 +40,10 @@ DIR_O = temporary
 
 SOURCES = main.c ray_caster.c path_tracer.c light_shader.c \
 	  color.c quit_program.c \
-	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c \
+	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c $(DIR_PARS)/add_object.c \
 	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
-	  $(DIR_EQUA)/sphere.c \
+	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c \
+	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
 	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
 	  $(DIR_VECM)/matrice.c
 
