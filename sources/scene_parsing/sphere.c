@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/01 23:37:47 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 23:10:24 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	parse_sphere(t_obj *sphere, char *format)
 	i = 2;
 	if (!vector_microparser(&(sphere->o), format, &i)
 		|| !double_microparser(&(sphere->radius), format, &i)
-		|| sphere->radius <= 0
+		|| sphere->radius <= EPSILON
 		|| !color_microparser(&(sphere->color), format, &i))
 		return (FALSE);
 	while (format[i] == ' ')
@@ -29,7 +29,7 @@ static int	parse_sphere(t_obj *sphere, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	sphere->type = SPHERE;
-	sphere->inter_f = is_intercept_sphere;
+	sphere->inter_f = is_intersect_sphere;
 	sphere->normal_f = set_sphere_normal;
 	sphere->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", sphere->o.x, sphere->o.y,
@@ -46,10 +46,10 @@ int			add_sphere(t_scene *scene, char *format)
 
 	sphere = malloc(sizeof(t_obj));
 	if (!sphere)
-		return (FALSE);
+		return (-1);
 	sphere->next = scene->object;
 	scene->object = sphere;
 	if (!parse_sphere(sphere, format))
-		return (-1);
+		return (FALSE);
 	return (TRUE + 4);
 }

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 10:24:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 12:55:54 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:09:07 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ BOOL		set_ambient_light(t_scene *scene, char *format)
 		return (FALSE);
 	i = 1;
 	if (!double_microparser(&(scene->ambient_intensity), format, &i)
-			|| scene->ambient_intensity < 0
-			|| scene->ambient_intensity > 1
+			|| scene->ambient_intensity <= 0
+			|| scene->ambient_intensity >= 1
 			|| !color_microparser(&(scene->ambient_light), format, &i))
 		return (FALSE);
 	while (format[i] == ' ')
@@ -59,8 +59,8 @@ static int	parse_light(t_light *light, char *format)
 	i = 1;
 	if (!vector_microparser(&(light->o), format, &i)
 			|| !double_microparser(&(light->intensity), format, &i)
-			|| light->intensity < 0
-			|| light->intensity > 1
+			|| light->intensity <= 0
+			|| light->intensity >= 1
 			|| !color_microparser(&(light->color), format, &i))
 		return (FALSE);
 	while (format[i] == ' ')
@@ -82,10 +82,10 @@ int			add_light(t_scene *scene, char *format)
 
 	light = malloc(sizeof(t_light));
 	if (!light)
-		return (FALSE);
+		return (-1);
 	light->next = scene->light;
 	scene->light = light;
 	if (!parse_light(light, format))
-		return (-1);
+		return (FALSE);
 	return (TRUE + 3);
 }

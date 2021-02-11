@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 13:24:11 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 23:09:29 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static double	find_delta(t_ray *ray, t_obj *sphere, double *b)
 	return ((*b * *b) - c);
 }
 
-BOOL		is_intercept_sphere(t_ray *ray, t_obj *sphere, t_inter *inter)
+BOOL		is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter)
 {
 	double		delta;
 	double		b;

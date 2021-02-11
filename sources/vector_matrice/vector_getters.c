@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/01 20:24:58 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 12:00:05 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ double		set_normalized(t_vector *vec1)
 	double	norme;
 
 	norme_squarred = get_norme(vec1);
-	if (norme_squarred > 0.0)
+	if (norme_squarred > EPSILON)
 	{
 		norme = sqrt(norme_squarred);
 		norme = 1 / norme;

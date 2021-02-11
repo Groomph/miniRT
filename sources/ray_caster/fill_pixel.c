@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_caster.c                                       :+:      :+:    :+:   */
+/*   fill_pixel.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/01/31 17:52:31 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/11 16:10:19 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,22 @@
 #include <math.h>
 #include <stdio.h>
 
-static t_vector	get_ray_dir(t_cam *cam, t_img *img, double x, double y)
+static void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
 {
-	t_vector	dir;
 	t_point		x_pos;
 	t_point		y_pos;
 
-	x = 1 - x / (img->line_w - 1);
-	y = 1 - y / (img->col_h - 1);
-	x_pos = multiply_vector(&(cam->horizontal), x);
-	dir = add_vectors(&(cam->lower_corner), &x_pos);
-	y_pos = multiply_vector(&(cam->vertical), y);
-	dir = add_vectors(&dir, &y_pos);
-	dir = sub_vectors(&dir, &(cam->o));
-	set_normalized(&dir);
-	return (dir);
+	ray->o = scene->cam->o;
+	x = 1 - x / (scene->img.line_w - 1);
+	y = 1 - y / (scene->img.col_h - 1);
+	x_pos = multiply_vector(&(scene->cam->horizontal), x);
+	ray->dir = add_vectors(&(scene->cam->lower_corner), &x_pos);
+	y_pos = multiply_vector(&(scene->cam->vertical), y);
+	ray->dir = add_vectors(&(ray->dir), &y_pos);
+	ray->dir = sub_vectors(&(ray->dir), &(scene->cam->o));
+	set_normalized(&(ray->dir));
+	ray->t = 1000000;
+	ray->color = get_vector(0, 0, 0, 0);
 }
 
 static void		pixel_correction(t_cam *cam, t_color *color)
@@ -58,11 +59,10 @@ static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 		j = -1;
 		while (++j < scene->cam->anti_aliasing)
 		{
-			ray->o = scene->cam->o;
-			ray->dir = get_ray_dir(scene->cam, &(scene->img),
+			set_ray(scene, ray,
 			x + (double)i / scene->cam->anti_aliasing,
 			y + (double)j / scene->cam->anti_aliasing);
-			path_tracer(scene, ray, NULL, 0);
+			path_tracer(scene, ray, 0);
 			temp_color.x += ray->color.x;
 			temp_color.y += ray->color.y;
 			temp_color.z += ray->color.z;
@@ -72,59 +72,31 @@ static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 	return (fuse_vector(&(temp_color)));
 }
 
-static void	display_progress(double pixel, t_img *img, double *count)
-{
-	if (*count < pixel / (img->line_w * img->col_h))
-	{
-		printf("Rendering: %d%%\n", (int)(*count * 100));
-		*count += 0.05;
-	}
-}
-
 void		ray_caster(t_scene *scene, void *mlx, void *window)
 {
 	t_ray	ray;
 	int		x;
 	int		y;
 	int		pixel;
-	double	count;
+	int		count[3];
 
 	y = -1;
 	pixel = 0;
-	count = 0.05;
+	count[2] = (scene->img.col_h / 20) + 1;
+	count[1] = count[2];
+	count[0] = 1;
 	while (++y < scene->img.col_h)
 	{
 		x = -1;
 		while (++x < scene->img.line_w)
+			scene->img.addr[pixel++] = fill_pixel(scene, &ray, x, y);
+		while (y > count[1])
 		{
-			scene->img.addr[pixel] = fill_pixel(scene, &ray, x, y);
-			display_progress(pixel, &(scene->img), &count);
-			pixel++;
+			printf("Rendering: %d%%\n", 5 * count[0]++);
+			count[1] += count[2];
 		}
 	}
-	mlx_put_image_to_window(mlx, window, scene->img.img, 0, 0);
+	if (!scene->saveit)
+		mlx_put_image_to_window(mlx, window, scene->img.img, 0, 0);
 	printf("Rendering done\n");
 }
-
-/*
-**	if (i < alias / 4)
-**	{
-**		randomx = (double)i / (alias / 4) * -1;
-**		randomy = (double)i / (alias / 4);
-**	}
-**	if (i < alias / 2)
-**	{
-**		randomx = ((double)i - (alias / 4)) / (alias / 4) * -1;
-**		randomy = ((double)i - (alias / 4)) / (alias / 4) * -1;
-**	}
-**	if (i < alias / 2 / 2)
-**	{
-**		randomx = ((double)i - (alias / 2)) / (alias / 4);
-**		randomy = ((double)i - (alias / 2)) / (alias / 4) * -1;
-**	}
-**	if (i < alias)
-**	{
-**		randomx = ((double)i - (alias / 2 + alias / 4)) / (alias / 4);
-**		randomy = ((double)i - (alias / 2 + alias / 4)) / (alias / 4);
-**	}
-*/

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 12:54:43 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 23:10:45 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	parse_triangle(t_obj *triangle, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	triangle->type = TRIANGLE;
-	triangle->inter_f = is_intercept_triangle;
+	triangle->inter_f = is_intersect_triangle;
 	triangle->normal_f = set_triangle_normal;
 	triangle->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o.x, triangle->o.y,
@@ -52,16 +52,16 @@ int			add_triangle(t_scene *scene, char *format)
 
 	triangle = malloc(sizeof(t_obj));
 	if (!triangle)
-		return (FALSE);
+		return (-1);
 	triangle->next = scene->object;
 	scene->object = triangle;
 	if (!parse_triangle(triangle, format))
-		return (-1);
+		return (FALSE);
 	edge1 = sub_vectors(&(triangle->o2), &(triangle->o));
 	edge2 = sub_vectors(&(triangle->o3), &(triangle->o));
 	triangle->normal = get_vector_product(&edge1, &edge2);
 	norme = set_normalized(&(triangle->normal));
-	if (norme == 0)
-		return (-1);
+	if (norme < EPSILON)
+		return (FALSE);
 	return (TRUE + 4);
 }

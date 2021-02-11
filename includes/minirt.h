@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 13:19:19 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/11 16:29:14 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,17 @@ enum	e_type_object
 {
 	PLANE,
 	TRIANGLE,
-	CARRE,
+	SQUARE,
 	SPHERE,
-	CYLINDER
+	CYLINDER,
+	CUBE
+};
+
+enum	e_key
+{
+	N = 110,
+	ESCAPE = 65307,
+	UBE
 };
 
 typedef struct		s_window_image
@@ -81,6 +89,7 @@ typedef struct		s_intersection
 	double		t1;
 	double		t2;
 	BOOL		hit_inside;
+	double		dist;
 }			t_inter;
 
 typedef struct		s_rayon
@@ -89,6 +98,7 @@ typedef struct		s_rayon
 	t_vector	dir;
 	double		t;
 	BOOL		hit_inside;
+	double		dist;
 	t_color		color;
 	struct s_object	*nearest_object;
 	t_point		hit;
@@ -102,7 +112,11 @@ typedef struct		s_object
 	t_point		o;
 	t_point		o2;
 	t_point		o3;
+	t_point		a;
+	t_vector	ab;
+	t_vector	ad;
 	double		radius;
+	double		h;
 	t_vector	normal;
 	BOOL		(*inter_f)(t_ray*, struct s_object*, t_inter*);
 	void		(*normal_f)(t_ray*, struct s_object*);
@@ -112,6 +126,8 @@ typedef struct		s_object
 
 typedef struct		s_scene
 {
+	void		*mlx;
+	void		*window;
 	t_cam		*cam_list;
 	t_cam		*cam;
 	t_color		ambient_light;
@@ -128,14 +144,16 @@ typedef struct		s_scene
 ****************************************************************/
 
 void			check_prog_args(t_scene *scene, t_img *img, int ac, char **av);
-int			add_object(t_scene *scene, char *line, int line_nb, int prev);
+int			add_object(t_scene *scene, char *line, int prev);
 int			add_camera(t_scene *scene, char *format);
-BOOL			set_resolution(t_img *img, char *format);
+BOOL			set_resolution(t_scene *scene, t_img *img, char *format);
 BOOL			set_ambient_light(t_scene *scene, char *format);
 int			add_light(t_scene *scene, char *format);
 int			add_plane(t_scene *scene, char *format);
 int			add_triangle(t_scene *scene, char *format);
+int			add_square(t_scene *scene, char *format);
 int			add_sphere(t_scene *scene, char *format);
+int			add_cylinder(t_scene *scene, char *format);
 BOOL			set_camera_bonus(t_cam *cam, char *format, int i);
 BOOL			set_light_bonus(t_light *light, char *format, int i);
 BOOL			set_object_bonus(t_obj *obj, char *format, int i);
@@ -144,18 +162,27 @@ int			double_microparser(double *doub, char *format, int *i);
 int			vector_microparser(t_vector *vector, char *format, int *i);
 int			color_microparser(t_color *color, char *format, int *i);
 
-void			stop_program(t_scene *scene, int errornb, int line);
+void			error_parsing(t_scene *scene, int fd, int errornb, int line);
+void			stop_program(t_scene *scene);
 
 void			ray_caster(t_scene *scene, void *mlx, void *window);
-int			path_tracer(t_scene *scene, t_ray *ray, void *ignore, int i);
-BOOL			is_intercept_sphere(t_ray *ray, t_obj *sphere, t_inter *inter);
-BOOL			is_intercept_plane(t_ray *ray, t_obj *sphere, t_inter *inter);
-BOOL			is_intercept_triangle(t_ray *ray, t_obj *sphere, t_inter *inter);
+void			path_tracer(t_scene *scene, t_ray *ray, int i);
+BOOL			is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter);
+BOOL			is_intersect_plane(t_ray *ray, t_obj *plane, t_inter *inter);
+BOOL			is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter);
+BOOL			is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter);
+BOOL			is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter);
 void			set_sphere_normal(t_ray *ray, t_obj *sphere);
-void			set_plane_normal(t_ray *ray, t_obj *sphere);
-void			set_triangle_normal(t_ray *ray, t_obj *sphere);
+void			set_plane_normal(t_ray *ray, t_obj *plane);
+void			set_triangle_normal(t_ray *ray, t_obj *triangle);
+void			set_square_normal(t_ray *ray, t_obj *square);
+void			set_cylinder_normal(t_ray *ray, t_obj *cylinder);
 void			apply_ambient_light(t_scene *scene, t_ray *ray);
 void			apply_light(t_scene *scene, t_light *light, t_ray *ray);
+
+void			create_bmp(t_scene *scene);
+
+int			press_key(int key, t_scene *scene);
 
 int			fuse_trgb(int t, int r, int g, int b);
 int			fuse_vector(t_vector *vec);

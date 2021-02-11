@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 13:30:04 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/02 17:28:31 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ BOOL			set_camera_bonus(t_cam *cam, char *format, int i)
 		i++;
 	if (format[i] != '\0')
 		return (set_camera_bonus(cam, format, i));
+	if (cam->o.x == cam->look_at.x && cam->o.y == cam->look_at.y
+						&& cam->o.z == cam->look_at.z)
+		return (FALSE);
 	return (TRUE);
 }
 
@@ -71,7 +74,7 @@ static int	parse_camera(t_cam *cam, char *format)
 		i++;
 	if (format[i] != '\0')
 		return (FALSE);
-	cam->look_at = get_vector(0.0, 0.0, 0.0, -1.0);
+	cam->look_at = get_vector(0.0, 0.0, 0.0, -11.1111);
 	cam->anti_aliasing = 1;
 	cam->recursivity = 0;
 	cam->gamma = FALSE;
@@ -89,8 +92,7 @@ int			add_camera(t_scene *scene, char *format)
 	scene->cam_list = cam;
 	if (!parse_camera(cam, format))
 		return (FALSE);
-	if (get_norme(&(cam->vup)) == 0.0 || (cam->o.x == cam->vup.x
-			&& cam->o.y == cam->vup.y && cam->o.z == cam->vup.z))
+	if (cam->vup.x == 0.0 && cam->vup.y == 0.0 && cam->vup.z == 0.0)
 		return (FALSE);
 	printf("        %.1lf,%.1lf,%.1lf      ", cam->o.x, cam->o.y, cam->o.z);
 	printf("%.1lf,%.1lf,%.1lf      ", cam->vup.x, cam->vup.y, cam->vup.z);

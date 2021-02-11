@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/02/01 18:13:52 by rsanchez         ###   ########.fr        #
+#    Updated: 2021/02/11 18:05:39 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,22 +30,29 @@ HEADER = includes
 
 DIR_S = sources
 
+DIR_RAYC = ray_caster
+
 DIR_PARS = scene_parsing
 
 DIR_EQUA = equations_objects
 
 DIR_VECM = vector_matrice
 
+DIR_CONT = controls
+
 DIR_O = temporary
 
-SOURCES = main.c ray_caster.c path_tracer.c light_shader.c \
-	  color.c quit_program.c \
+SOURCES = main.c save.c \
+	  $(DIR_RAYC)/fill_pixel.c $(DIR_RAYC)/path_tracer.c $(DIR_RAYC)/light_shader.c \
 	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c $(DIR_PARS)/add_object.c \
 	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
-	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c \
+	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c $(DIR_PARS)/square.c \
+	  $(DIR_PARS)/cylinder.c \
 	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
+	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c \
+	  $(DIR_CONT)/lobby.c $(DIR_CONT)/quit_program.c \
 	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
-	  $(DIR_VECM)/matrice.c
+	  $(DIR_VECM)/matrice.c $(DIR_VECM)/color.c
 
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
@@ -60,9 +67,11 @@ $(NAME): $(OBJS)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	mkdir -p $(DIR_O)
+	mkdir -p $(DIR_O)/$(DIR_RAYC)
 	mkdir -p $(DIR_O)/$(DIR_PARS)
 	mkdir -p $(DIR_O)/$(DIR_EQUA)
 	mkdir -p $(DIR_O)/$(DIR_VECM)
+	mkdir -p $(DIR_O)/$(DIR_CONT)
 	$(CC) -g -I $(HEADER) -o $@ -c $<
 
 norme:

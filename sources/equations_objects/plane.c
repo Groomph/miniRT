@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 13:34:10 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 23:09:39 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	set_plane_normal(t_ray *ray, t_obj *plane)
 **ajouter gestion lumiere au sein d'un objet en comparant si t < 0 et t2 > 0
 */
 
-BOOL	is_intercept_plane(t_ray *ray, t_obj *plane, t_inter *inter)
+BOOL	is_intersect_plane(t_ray *ray, t_obj *plane, t_inter *inter)
 {
 	double		cos;
 	t_vector	ray_pl_o;
@@ -54,7 +54,7 @@ BOOL	is_intercept_plane(t_ray *ray, t_obj *plane, t_inter *inter)
 		return (FALSE);
 	ray_pl_o = sub_vectors(&(plane->o), &(ray->o));
 	t = get_scalar_product(&(plane->normal), &ray_pl_o) / cos;
-	if (t < EPSILON)
+	if (t < 0)
 		return (FALSE);
 	inter->t1 = t;
 	inter->hit_inside = FALSE;

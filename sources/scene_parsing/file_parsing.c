@@ -6,11 +6,12 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 13:19:09 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/11 18:15:06 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "mlx.h"
 #include <math.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -60,7 +61,7 @@ static void		param_camera(t_cam *cam, double w, double h)
 	set_normalized(&focale);
 	cross = get_vector_product(&(cam->vup), &focale);
 	if (get_norme(&cross) == 0)
-		cross = get_z_rotation(&focale, 90.0);
+		cross = get_z_rotation(&focale, 90.0, FALSE);
 	set_normalized(&cross);
 	cam->horizontal = multiply_vector(&cross, cam->pov_w);
 	cross = get_vector_product(&focale, &cross);
@@ -78,22 +79,32 @@ static void		param_camera(t_cam *cam, double w, double h)
 **	set_normalized(&cross);
 */
 
-BOOL	set_resolution(t_img *img, char *format)
+BOOL	set_resolution(t_scene *scene, t_img *img, char *format)
 {
-	int	i;
+	int		i;
+	int		max_x;
+	int		max_y;
+	long int	max;
 
 	if (img->set)
 		return (FALSE);
 	i = 1;
-	if (!int_microparser(&(img->line_w), format, &i))
-		return (FALSE);
-	if (!int_microparser(&(img->col_h), format, &i))
+	mlx_get_screen_size(scene->mlx, &max_x, &max_y);
+	if (!int_microparser(&(img->line_w), format, &i)
+		|| !int_microparser(&(img->col_h), format, &i))
 		return (FALSE);
 	while (format[i] == ' ')
 		i++;
-	if (format[i] != '\0')
+	max = img->line_w * img->col_h;
+	if (format[i] != '\0' || img->line_w <= 0 || img->col_h <= 0
+							|| max > 1000000000)
 		return (FALSE);
+	if (!scene->saveit && img->line_w > max_x)
+		img->line_w = max_x;
+	if (!scene->saveit && img->col_h > max_y)
+		img->col_h = max_y;
 	img->set = TRUE;
+	img->col_h += (img->col_h % 4 > 0) ? 4 - (img->col_h % 4) : 0;
 	return (TRUE);
 }
 
@@ -105,24 +116,19 @@ static void	parsing_rt_file(t_scene *scene, t_img *img, int fd)
 	int		previous;
 
 	check = 1;
-	line = NULL;
 	line_nb = 0;
 	previous = 20;
-	while (check > 0)
+	while (check > 0 && ++line_nb)
 	{
 		check = get_next_line(fd, &line);
 		printf("%d      %s\n", check, line);
 		if (check == -1)
-		{
-			if (line)
-				free(line);
-			close(fd);
-			stop_program(scene, 14, line_nb);
-		}
-		if (line[0] != '\0')
-			previous = add_object(scene, line, line_nb++, previous);
+			error_parsing(scene, fd, 14, line_nb);
+		else if (line[0] != '\0')
+			previous = add_object(scene, line, previous);
 		free(line);
-		line = NULL;
+		if (previous < TRUE)
+			error_parsing(scene, fd, previous + 6, line_nb);
 	}
 }
 
@@ -133,19 +139,19 @@ void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
 
 	fd = -1;
 	if (ac > 3 || ac == 1)
-		stop_program(scene, 13, -1);
+		error_parsing(scene, fd, 13, -1);
 	if (ac == 3 && !str_n_comp(av[2], "-save", 6))
 		scene->saveit = 1;
 	else if (ac == 3)
-		stop_program(scene, 12, -1);
+		error_parsing(scene, fd, 12, -1);
 	if (str_nstr_comp(av[1], ".rt\0", 4))
 		fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		stop_program(scene, 11, -1);
+		error_parsing(scene, -1, 11, -1);
 	parsing_rt_file(scene, img, fd);
 	close(fd);
 	if (!(img->set) || !(scene->cam_list) || !(scene->ambient_is_set))
-		stop_program(scene, 7, -1);
+		error_parsing(scene, -1, 7, -1);
 	temp_cam = scene->cam_list;
 	while (temp_cam)
 	{

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 12:55:36 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/03 23:10:35 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	parse_plane(t_obj *plane, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	plane->type = PLANE;
-	plane->inter_f = is_intercept_plane;
+	plane->inter_f = is_intersect_plane;
 	plane->normal_f = set_plane_normal;
 	plane->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->o.x, plane->o.y,
@@ -49,14 +49,13 @@ int			add_plane(t_scene *scene, char *format)
 
 	plane = malloc(sizeof(t_obj));
 	if (!plane)
-		return (FALSE);
+		return (-1);
 	plane->next = scene->object;
 	scene->object = plane;
 	if (!parse_plane(plane, format))
-		return (-1);
-	if (plane->normal.x == 0.0 && plane->normal.y == 0.0
-					&& plane->normal.z == 0.0)
-		return (-1);
-	set_normalized(&(plane->normal));
+		return (FALSE);
+	norme = set_normalized(&(plane->normal));
+	if (norme < EPSILON)
+		return (FALSE);
 	return (TRUE + 4);
 }
