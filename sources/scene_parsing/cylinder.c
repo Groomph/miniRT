@@ -6,13 +6,41 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/09 15:56:38 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/12 22:30:34 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector.h"
 #include <stdio.h>
+
+int		add_disk(t_scene *scene, t_obj *cylinder, int i)
+{
+	t_obj		*disk;
+
+	disk = malloc(sizeof(t_obj));
+	if (!disk)
+		return (FALSE);
+	disk->o = cylinder->o;
+	disk->normal = cylinder->normal;
+	disk->radius = cylinder->radius;
+	disk->color = cylinder->color;
+	disk->inter_f = is_intersect_disk;
+	disk->normal_f = set_disk_normal;
+	disk->specular = cylinder->specular;
+	disk->type = DISK;
+	disk->next = cylinder->next;
+	cylinder->next = disk;
+	if (i == 0)
+	{
+		cylinder->o = multiply_vector(&(cylinder->normal), cylinder->h);
+		cylinder->o = add_vectors(&(disk->o), &(cylinder->o));
+		if (!add_disk(scene, cylinder, 1))
+			return (FALSE);
+		cylinder->o = disk->o;
+	}
+	return (TRUE);
+}
 
 static int	parse_cylinder(t_obj *cylinder, char *format, int i)
 {

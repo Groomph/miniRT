@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:46:34 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 18:35:53 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/11 20:44:10 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 typedef struct	s_file_header
 {
-	char		signature[2];
+	char		signature1;
+	char		signature2;
 	int		file_size_bytes;
 	short		reserved1;
 	short		reserved2;

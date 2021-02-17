@@ -6,25 +6,30 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 00:45:54 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/12 22:34:47 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <stdio.h>
 
-BOOL		set_object_bonus(t_obj *obj, char *format, int i)
+BOOL		set_object_bonus(t_scene *scene, t_obj *obj, char *format, int i)
 {
 	while (format[i] == ' ')
 		i++;
 	if (str_n_comp(&(format[i]), "SPECULAR", 8) == 0 && (i += 8))
 		obj->specular = TRUE;
+	else if (str_n_comp(&(format[i]), "CAPS", 4) == 0 && (i += 4))
+		obj->caps = TRUE;
 	else
 		return (FALSE);
 	while (format[i] == ' ')
 		i++;
 	if (format[i] != '\0')
-		return (set_object_bonus(obj, format, i));
+		return (set_object_bonus(scene, obj, format, i));
+	if (obj->caps == TRUE)
+	       	if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
+			return (FALSE);
 	return (TRUE);
 }
 
@@ -39,7 +44,7 @@ static int	add_bonus(t_scene *scene, char *format, int previous)
 	else if (previous == 4)
 		check = set_light_bonus(scene->light, format, 5);
 	else if (previous >= 5)
-		check = set_object_bonus(scene->object, format, 5);
+		check = set_object_bonus(scene, scene->object, format, 5);
 	else
 		check = -2;
 	if (check < TRUE)
@@ -59,6 +64,8 @@ static int	add_object2(t_scene *scene, char *line)
 		return (add_square(scene, line));
 	else if (str_n_comp(line, "cy ", 3) == 0)
 		return (add_cylinder(scene, line));
+	else if (str_n_comp(line, "cu ", 3) == 0)
+		return (add_cube(scene, line, 0));
 	else
 		return (-2);
 }

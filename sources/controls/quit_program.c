@@ -6,13 +6,14 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 00:50:41 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/11 21:28:54 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "mlx.h"
 #include <stdio.h>
+#include <unistd.h>
 
 static void	error_printer(errornb, line)
 {
@@ -74,7 +75,7 @@ static void		clear_all(t_cam *cam, t_light *light, t_obj *obj)
 	}
 }
 
-void		stop_program(t_scene *scene)
+int		stop_program(t_scene *scene)
 {
 	clear_all(scene->cam_list, scene->light, scene->object);
 	if (scene->window)
@@ -87,4 +88,5 @@ void		stop_program(t_scene *scene)
 		free(scene->mlx);
 	}
 	exit(0);
+	return (1);
 }

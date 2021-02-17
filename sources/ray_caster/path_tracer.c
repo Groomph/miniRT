@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 11:41:07 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/10 23:50:49 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/12 19:04:11 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void		path_tracer(t_scene *scene, t_ray *ray, int i)
 	{
 		if (ray->nearest_object->specular && i < scene->cam->recursivity)
 			return (reflect_ray(scene, ray, i));
-		apply_ambient_light(scene, ray);
+		apply_light_effects(ray, &(scene->ambient), 1.0);
 		temp_light = scene->light;
 		while (temp_light)
 		{
-			apply_light(scene, temp_light, ray);
+			apply_light(scene, ray, temp_light);
 			temp_light = temp_light->next;
 		}
 	}

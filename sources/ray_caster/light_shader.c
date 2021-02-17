@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/10 20:38:20 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/12 19:04:34 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 	}
 	return (TRUE);
 }
-
+/*
 void		apply_ambient_light(t_scene *scene, t_ray *ray)
 {
 	ray->color.x = ray->nearest_object->color.x * scene->ambient_intensity
@@ -49,43 +49,71 @@ void		apply_ambient_light(t_scene *scene, t_ray *ray)
 	ray->color.z = ray->nearest_object->color.z * scene->ambient_intensity
 						* (scene->ambient_light.z / 255);
 }
-
-static void		apply_light_effects(t_ray *ray, t_light *light, double cos)
+*/
+void	apply_light_effects(t_ray *ray, t_light *light, double cos)
 {
 	if (cos < 0.0)
 		cos *= -1.0;
-	ray->color.x += cos * (ray->nearest_object->color.x
-				* (light->color.x / 255) * light->intensity);
-	ray->color.y += cos * (ray->nearest_object->color.y
-				* (light->color.y / 255) * light->intensity);
-	ray->color.z += cos * (ray->nearest_object->color.z
-				* (light->color.z / 255) * light->intensity);
+	ray->color.x += cos * (ray->nearest_object->color.x * light->intensity
+							* (light->color.x / 255));
+	ray->color.y += cos * (ray->nearest_object->color.y * light->intensity
+							* (light->color.y / 255));
+	ray->color.z += cos * (ray->nearest_object->color.z * light->intensity
+							* (light->color.z / 255));
 }
 
-void		apply_light(t_scene *scene, t_light *light, t_ray *ray)
+static double	set_light_ray(t_ray *ray, t_light *light,
+						t_ray *light_ray, double *norme)
+{
+	light_ray->o = ray->hit;
+	if (light->parallel)
+	{
+		light_ray->dir = multiply_vector(&(light->o), -1.0);
+		*norme = 50;
+		light_ray->t = 1000000;
+	}
+	else
+	{
+		light_ray->dir = sub_vectors(&(light->o), &(ray->hit));
+		*norme = set_normalized(&(light_ray->dir));
+		light_ray->t = sqrt(*norme);
+	}
+	return (get_scalar_product(&(light_ray->dir), &(ray->hit_normal)));
+}
+
+static void	set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
+{
+	light_ray->o = multiply_vector(&(ray->hit_normal), EPSILON);
+	light_ray->o = add_vectors(&(light_ray->o), &(ray->hit));
+	if (light->parallel)
+	{
+		light_ray->dir = multiply_vector(&(light->o), -1.0);
+		set_normalized(&(light_ray->dir));
+		light_ray->t = 1000000;
+	}
+	else
+	{
+		light_ray->dir = sub_vectors(&(light->o), &(light_ray->o));
+		light_ray->t = sqrt(set_normalized(&(light_ray->dir)));
+	}
+}
+
+void		apply_light(t_scene *scene, t_ray *ray, t_light *light)
 {
 	t_ray		light_ray;
 	t_ray		temp_light;
 	double		cos;
-	double		normed_squarred;
-	t_vector	temp;
+	double		norme_squarred;
 
 	ray->nearest_object->normal_f(ray, ray->nearest_object);
-	light_ray.o = ray->hit;
-	light_ray.dir = sub_vectors(&(light->o), &(ray->hit));
-	normed_squarred = set_normalized(&(light_ray.dir));
-	light_ray.t = sqrt(normed_squarred);
-	cos = get_scalar_product(&(light_ray.dir), &(ray->hit_normal));
+	cos = set_light_ray(ray, light, &light_ray, &norme_squarred);
 	if (cos < EPSILON && cos > -EPSILON)
 		return ;
 	if (cos < EPSILON && (ray->nearest_object->type == SPHERE
 			|| ray->nearest_object->type == CYLINDER))
 		return ;
-	temp_light.o = multiply_vector(&(ray->hit_normal), EPSILON);
-	temp_light.o = add_vectors(&(temp_light.o), &(ray->hit));
-	temp_light.dir = sub_vectors(&(light->o), &(temp_light.o));
-	temp_light.t = sqrt(set_normalized(&(temp_light.dir)));
+	set_temp_light_ray(ray, light, &temp_light);
 	if (!is_illuminated(scene, &light_ray, ray, &temp_light))
 		return ;
-	apply_light_effects(ray, light, cos * (50 / normed_squarred));
+	apply_light_effects(ray, light, cos * (50 / norme_squarred));
 }

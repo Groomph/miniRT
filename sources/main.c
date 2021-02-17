@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 16:28:45 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/12 17:24:06 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int			main(int ac, char **av)
 	check_prog_args(&scene, &(scene.img), ac, av);
 	set_window_img(&scene, scene.mlx, &(scene.window));
 	ray_caster(&scene, scene.mlx, scene.window);
-	if (scene.saveit);
-		create_bmp(&scene);
+	if (scene.saveit)
+		create_bmp(&scene, &(scene.img));
 	mlx_hook(scene.window, 2, (1L << 0), press_key, &scene);
 	mlx_hook(scene.window, 33, (1L << 17), stop_program, &scene);
 	mlx_loop(scene.mlx);

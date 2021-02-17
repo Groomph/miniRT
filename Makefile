@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/02/11 18:05:39 by rsanchez         ###   ########.fr        #
+#    Updated: 2021/02/12 17:16:59 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SOURCES = main.c save.c \
 	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c $(DIR_PARS)/square.c \
 	  $(DIR_PARS)/cylinder.c \
 	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
-	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c \
+	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c $(DIR_EQUA)/disk.c \
 	  $(DIR_CONT)/lobby.c $(DIR_CONT)/quit_program.c \
 	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
 	  $(DIR_VECM)/matrice.c $(DIR_VECM)/color.c

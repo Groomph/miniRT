@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 10:24:16 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 17:09:07 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/12 14:13:37 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,36 @@ BOOL		set_ambient_light(t_scene *scene, char *format)
 	if (scene->ambient_is_set)
 		return (FALSE);
 	i = 1;
-	if (!double_microparser(&(scene->ambient_intensity), format, &i)
-			|| scene->ambient_intensity <= 0
-			|| scene->ambient_intensity >= 1
-			|| !color_microparser(&(scene->ambient_light), format, &i))
+	if (!double_microparser(&(scene->ambient.intensity), format, &i)
+			|| scene->ambient.intensity <= 0
+			|| scene->ambient.intensity >= 1
+			|| !color_microparser(&(scene->ambient.color), format, &i))
 		return (FALSE);
 	while (format[i] == ' ')
 		i++;
 	if (format[i] != '\0')
 		return (FALSE);
-	printf("        %.1lf,%.1lf,%.1lf      ", scene->ambient_light.x,
-			scene->ambient_light.y,
-			scene->ambient_light.z);
 	scene->ambient_is_set = TRUE;
-	printf("%.2lf\n\n", scene->ambient_intensity);
+	printf("      %.2lf", scene->ambient.intensity);
+	printf("      %.1lf,%.1lf,%.1lf,%.1lf\n\n", scene->ambient.color.other,
+				scene->ambient.color.x, scene->ambient.color.y,
+						scene->ambient.color.z);
 	return (TRUE + 1);
 }
 
 BOOL		set_light_bonus(t_light *light, char *format, int i)
 {
+	double	norme;
+
 	while (format[i] == ' ')
 		i++;
 	if (str_n_comp(&(format[i]), "PARALLEL", 8) == 0 && (i += 8))
+	{
+		norme = set_normalized((&light->o));
+		if (norme == 0)
+			return (FALSE);
 		light->parallel = TRUE;
+	}
 	else
 		return (FALSE);
 	while (format[i] == ' ')
