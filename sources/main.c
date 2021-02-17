@@ -6,12 +6,12 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/12 17:24:06 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 20:26:27 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
 #include "minirt.h"
+#include "mlx.h"
 
 static void	set_window_img(t_scene *scene, void *mlx, void **window)
 {
@@ -36,8 +36,10 @@ int			main(int ac, char **av)
 	ray_caster(&scene, scene.mlx, scene.window);
 	if (scene.saveit)
 		create_bmp(&scene, &(scene.img));
+	mlx_do_key_autorepeatoff(scene.mlx);
 	mlx_hook(scene.window, 2, (1L << 0), press_key, &scene);
 	mlx_hook(scene.window, 33, (1L << 17), stop_program, &scene);
+	mlx_hook(scene.window, 4, (1L << 2), press_mouse_button, &scene);
 	mlx_loop(scene.mlx);
 	stop_program(&scene);
 	return (1);

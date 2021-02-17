@@ -6,14 +6,29 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/12 22:34:47 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:57:23 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <stdio.h>
 
-BOOL		set_object_bonus(t_scene *scene, t_obj *obj, char *format, int i)
+static void	set_bonus_compound(t_scene *scene, t_obj *obj, int i)
+{
+	t_obj	*temp;
+
+	temp = obj->next;
+	while (i-- > 0)
+	{
+		temp->specular = obj->specular;
+		temp->check_board = obj->check_board;
+		temp->rainbow = obj->rainbow;
+		temp = temp->next;
+	}
+}
+
+static BOOL	set_object_bonus(t_scene *scene, t_obj *obj, char *format,
+									int i)
 {
 	while (format[i] == ' ')
 		i++;
@@ -21,6 +36,10 @@ BOOL		set_object_bonus(t_scene *scene, t_obj *obj, char *format, int i)
 		obj->specular = TRUE;
 	else if (str_n_comp(&(format[i]), "CAPS", 4) == 0 && (i += 4))
 		obj->caps = TRUE;
+	else if (str_n_comp(&(format[i]), "CHECK_BOARD", 11) == 0 && (i += 11))
+		obj->check_board = TRUE;
+	else if (str_n_comp(&(format[i]), "RAINBOW", 7) == 0 && (i += 7))
+		obj->rainbow = TRUE;
 	else
 		return (FALSE);
 	while (format[i] == ' ')
@@ -30,6 +49,9 @@ BOOL		set_object_bonus(t_scene *scene, t_obj *obj, char *format, int i)
 	if (obj->caps == TRUE)
 	       	if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
 			return (FALSE);
+	if ((obj->type == CYLINDER && obj->caps) || obj->type == CUBE
+						|| obj->type == PYRAMIDE)
+		set_bonus_compound(scene, obj, obj->type);
 	return (TRUE);
 }
 
@@ -65,7 +87,11 @@ static int	add_object2(t_scene *scene, char *line)
 	else if (str_n_comp(line, "cy ", 3) == 0)
 		return (add_cylinder(scene, line));
 	else if (str_n_comp(line, "cu ", 3) == 0)
-		return (add_cube(scene, line, 0));
+		return (add_cube(scene, line));
+	else if (str_n_comp(line, "py ", 3) == 0)
+		return (add_pyramide(scene, line));
+	else if (str_n_comp(line, "co ", 3) == 0)
+		return (add_cone(scene, line));
 	else
 		return (-2);
 }

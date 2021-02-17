@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/12 19:04:34 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 18:18:42 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,11 @@ void		apply_light(t_scene *scene, t_ray *ray, t_light *light)
 	double		cos;
 	double		norme_squarred;
 
-	ray->nearest_object->normal_f(ray, ray->nearest_object);
 	cos = set_light_ray(ray, light, &light_ray, &norme_squarred);
 	if (cos < EPSILON && cos > -EPSILON)
 		return ;
 	if (cos < EPSILON && (ray->nearest_object->type == SPHERE
+			|| ray->nearest_object->type == CONE
 			|| ray->nearest_object->type == CYLINDER))
 		return ;
 	set_temp_light_ray(ray, light, &temp_light);

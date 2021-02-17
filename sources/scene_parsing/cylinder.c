@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/12 22:30:34 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:48:31 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 	disk->color = cylinder->color;
 	disk->inter_f = is_intersect_disk;
 	disk->normal_f = set_disk_normal;
-	disk->specular = cylinder->specular;
 	disk->type = DISK;
 	disk->next = cylinder->next;
 	cylinder->next = disk;
@@ -86,5 +85,7 @@ int			add_cylinder(t_scene *scene, char *format)
 	norme = set_normalized(&(cylinder->normal));
 	if (norme == 0)
 		return (FALSE);
+	cylinder->check_board = FALSE;
+	cylinder->rainbow = FALSE;
 	return (TRUE + 4);
 }

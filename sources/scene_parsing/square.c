@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/10 18:35:15 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/17 17:01:37 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,49 +47,35 @@ static void	set_edges2(t_obj *square, t_vector *x_axe, t_vector *y_axe)
 {
 	t_vector	half_x_axe;
 	t_vector	half_y_axe;
-	t_vector	b;
-	t_vector	d;
 
 	half_y_axe = divide_vector(y_axe, 2.0);
 	half_x_axe = divide_vector(x_axe, 2.0);
-	square->a = add_vectors(&(square->o), &half_y_axe);
+	square->a = sub_vectors(&(square->o), &half_y_axe);
 	square->a = sub_vectors(&square->a, &half_x_axe);
-	b = add_vectors(&(square->a), x_axe);
-	d = sub_vectors(&(square->a), y_axe);
-	square->ab = sub_vectors(&b, &(square->a));
-	square->ad = sub_vectors(&d, &(square->a));
-	printf("         %.1lf,%.1lf,%.1lf\n", square->a.x,
-						square->a.y, square->a.z);
-	printf("         %.1lf,%.1lf,%.1lf\n", b.x, b.y, b.z);
-	printf("         %.1lf,%.1lf,%.1lf\n", d.x, d.y, d.z);
+	square->b = add_vectors(&(square->a), x_axe);
+	square->c = add_vectors(&(square->b), y_axe);
+	square->d = add_vectors(&(square->a), y_axe);
+	square->ab = sub_vectors(&(square->b), &(square->a));
+	square->ad = sub_vectors(&(square->d), &(square->a));
 }
 
-static void	set_edges(t_obj *square)
+void	set_edges(t_obj *square)
 {
 	t_vector	x_axe;
 	t_vector	y_axe;
 
-	if (square->normal.z == 1.0 || square->normal.z == -1.0)
-	{
-		y_axe = get_vector(0, 0, 1, 0);
-		x_axe = get_vector_product(&y_axe, &(square->normal));
-	}
+	if (square->normal.y == 1 || square->normal.y == -1)
+		y_axe = get_vector(0, 0, 0, 1);
 	else
-	{
-		y_axe = get_z_rotation(&(square->normal), 90, FALSE);
-		x_axe = get_vector_product(&y_axe, &(square->normal));
-	}
+		y_axe = get_vector(0, 0, 1, 0);
+	x_axe = get_vector_product(&y_axe, &(square->normal));
+	y_axe = get_vector_product(&x_axe, &(square->normal));
 	set_normalized(&y_axe);
 	set_normalized(&x_axe);
 	y_axe = multiply_vector(&y_axe, square->radius);
 	x_axe = multiply_vector(&x_axe, square->radius);
 	set_edges2(square, &x_axe, &y_axe);
 }
-
-/*
-**	set_normalized(&y_axe);
-**	set_normalized(&x_axe);
-*/
 
 int			add_square(t_scene *scene, char *format)
 {
@@ -107,5 +93,7 @@ int			add_square(t_scene *scene, char *format)
 	if (norme == 0)
 		return (FALSE);
 	set_edges(square);
+	square->check_board = FALSE;
+	square->rainbow = FALSE;
 	return (TRUE + 4);
 }

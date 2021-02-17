@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 11:41:07 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/12 19:04:11 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 19:13:48 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void		reflect_ray(t_scene *scene, t_ray *ray, int i)
 	t_vector	temp;
 	double		cos;
 
-	ray->nearest_object->normal_f(ray, ray->nearest_object);
 	temp = multiply_vector(&(ray->hit_normal), EPSILON);
 	ray->o = add_vectors(&(ray->hit), &temp);
 	ray->t = 1000000;
@@ -63,6 +62,7 @@ void		path_tracer(t_scene *scene, t_ray *ray, int i)
 
 	if (find_nearest_object(scene, ray))
 	{
+		ray->nearest_object->normal_f(ray, ray->nearest_object);
 		if (ray->nearest_object->specular && i < scene->cam->recursivity)
 			return (reflect_ray(scene, ray, i));
 		apply_light_effects(ray, &(scene->ambient), 1.0);
@@ -72,5 +72,9 @@ void		path_tracer(t_scene *scene, t_ray *ray, int i)
 			apply_light(scene, ray, temp_light);
 			temp_light = temp_light->next;
 		}
+		if (ray->nearest_object->rainbow)
+			rainbow(ray, ray->nearest_object->type);
+		if (ray->nearest_object->check_board)
+			check_board(ray);
 	}
 }

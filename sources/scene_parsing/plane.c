@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/03 23:10:35 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:46:20 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static int	parse_plane(t_obj *plane, char *format)
 	plane->inter_f = is_intersect_plane;
 	plane->normal_f = set_plane_normal;
 	plane->specular = FALSE;
+	plane->check_board = FALSE;
+	plane->rainbow = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->o.x, plane->o.y,
 								plane->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->normal.x, plane->normal.y,

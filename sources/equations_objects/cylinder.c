@@ -6,13 +6,14 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/09 19:26:02 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/16 20:20:36 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector.h"
 #include <math.h>
+#include <stdio.h>
 
 void		set_cylinder_normal(t_ray *ray, t_obj *cylinder)
 {
@@ -63,7 +64,7 @@ static BOOL	find_delta(t_ray *ray, t_obj *cylinder, t_inter *inter)
 	inter->t1 = ((-cyl.b) - sqrt(cyl.delta)) / (2 * cyl.a);
 	inter->t2 = ((-cyl.b) + sqrt(cyl.delta)) / (2 * cyl.a);
 	if (inter->t1 >= inter->t2)
-		printf("WHAT??!!\n");
+		printf("WHAT?!\n");
 	if ((inter->t1 < 0 && inter->t2 < 0)
 			|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
 		return (FALSE);

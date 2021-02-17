@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/12 22:31:43 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 20:30:08 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ enum	e_type_object
 {
 	PLANE,
 	TRIANGLE,
-	SQUARE,
-	SPHERE,
 	CYLINDER,
+	SQUARE,
+	PYRAMIDE,
+	CUBE,
+	SPHERE,
 	DISK,
-	CUBE
+	CONE
 };
 
 enum	e_key
@@ -114,6 +116,9 @@ typedef struct		s_object
 	t_point		o2;
 	t_point		o3;
 	t_point		a;
+	t_point		b;
+	t_point		c;
+	t_point		d;
 	t_vector	ab;
 	t_vector	ad;
 	double		radius;
@@ -123,6 +128,8 @@ typedef struct		s_object
 	void		(*normal_f)(t_ray*, struct s_object*);
 	BOOL		specular;
 	BOOL		caps;
+	BOOL		check_board;
+	BOOL		rainbow;
 	struct s_object	*next;
 }			t_obj;
 
@@ -156,6 +163,12 @@ int			add_square(t_scene *scene, char *format);
 int			add_sphere(t_scene *scene, char *format);
 int			add_cylinder(t_scene *scene, char *format);
 int			add_disk(t_scene *scene, t_obj *obj, int i);
+int			add_cube(t_scene *scene, char *format);
+int			add_pyramide(t_scene *scene, char *format);
+int			add_cone(t_scene *scene, char *format);
+void			set_edges(t_obj *square);
+//void			set_bonus_compound(t_scene *scene, t_obj *cube);
+//void			set_pyramide_specular(t_scene *scene, t_obj *cube);
 BOOL			set_camera_bonus(t_cam *cam, char *format, int i);
 BOOL			set_light_bonus(t_light *light, char *format, int i);
 //BOOL			set_object_bonus(t_obj *obj, char *format, int i);
@@ -175,19 +188,25 @@ BOOL			is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter);
 BOOL			is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter);
 BOOL			is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter);
 BOOL			is_intersect_disk(t_ray *ray, t_obj *cylinder, t_inter *inter);
+BOOL			is_intersect_cone(t_ray *ray, t_obj *cone, t_inter *inter);
 void			set_sphere_normal(t_ray *ray, t_obj *sphere);
 void			set_plane_normal(t_ray *ray, t_obj *plane);
 void			set_triangle_normal(t_ray *ray, t_obj *triangle);
 void			set_square_normal(t_ray *ray, t_obj *square);
 void			set_cylinder_normal(t_ray *ray, t_obj *cylinder);
 void			set_disk_normal(t_ray *ray, t_obj *cylinder);
+void			set_cone_normal(t_ray *ray, t_obj *cone);
 //void			apply_ambient_light(t_scene *scene, t_ray *ray);
 void			apply_light(t_scene *scene, t_ray *ray, t_light *light);
 void			apply_light_effects(t_ray *ray, t_light *light, double cos);
+void			check_board(t_ray *ray);
+void			rainbow(t_ray *ray, int type);
 
 void			create_bmp(t_scene *scene, t_img *img);
 
 int			press_key(int key, t_scene *scene);
+//int			press_mouse_button(int key, t_scene *scene);
+int			press_mouse_button(int key, int x, int y, t_scene *scene);
 
 int			fuse_trgb(int t, int r, int g, int b);
 int			fuse_vector(t_vector *vec);

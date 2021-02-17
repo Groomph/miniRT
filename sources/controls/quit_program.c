@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 21:28:54 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 20:35:19 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@ int		stop_program(t_scene *scene)
 		mlx_destroy_image(scene->mlx, scene->img.img);
 	if (scene->mlx)
 	{
+		mlx_do_key_autorepeaton(scene->mlx);
 		mlx_destroy_display(scene->mlx);
 		free(scene->mlx);
 	}
+	printf("coucou?\n");
 	exit(0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/03 23:10:45 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:47:44 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,7 @@ int			add_triangle(t_scene *scene, char *format)
 	norme = set_normalized(&(triangle->normal));
 	if (norme < EPSILON)
 		return (FALSE);
+	triangle->check_board = FALSE;
+	triangle->rainbow = FALSE;
 	return (TRUE + 4);
 }

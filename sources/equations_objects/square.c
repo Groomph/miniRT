@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/10 18:40:18 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/17 17:00:13 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ void		set_square_normal(t_ray *ray, t_obj *square)
 		ray->hit_normal = square->normal;
 	}
 	set_normalized(&(ray->hit_normal));
-	if (ray->hit_normal.x == -0.0)
-		ray->hit_normal.x = 0.0;
-	if (ray->hit_normal.y == -0.0)
-		ray->hit_normal.y = 0.0;
-	if (ray->hit_normal.z == -0.0)
-		ray->hit_normal.z = 0.0;
-//	printf("ray->hit_normal: %lf, %lf, %lf\n",
-//		ray->hit_normal.x, ray->hit_normal.y, ray->hit_normal.z);
 }
+
+/*	if (ray->hit_normal.x == -0.0)
+**		ray->hit_normal.x = 0.0;
+**	if (ray->hit_normal.y == -0.0)
+**		ray->hit_normal.y = 0.0;
+**	if (ray->hit_normal.z == -0.0)
+**		ray->hit_normal.z = 0.0;
+**	printf("ray->hit_normal: %lf, %lf, %lf\n",
+**		ray->hit_normal.x, ray->hit_normal.y, ray->hit_normal.z);
+*/
 
 /*
 **	printf("ray->hit: %lf, %lf, %lf\n",
@@ -109,8 +111,8 @@ BOOL		is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter)
 	ap = sub_vectors(&hit_point, &(square->a));
 	cos1 = get_scalar_product(&ap, &(square->ab));
 	cos2 = get_scalar_product(&ap, &(square->ad));
-	cos1 /= get_norme(&square->ab);
-	cos2 /= get_norme(&square->ad);
+	cos1 /= get_norme(&(square->ab));
+	cos2 /= get_norme(&(square->ad));
 	if (!(cos1 >= 0.0 && cos1 <= 1.0 && cos2 >= 0.0 && cos2 <= 1.0))
 		return (FALSE);
 	inter->t1 = inter2.t1;

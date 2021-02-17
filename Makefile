@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/02/12 17:16:59 by rsanchez         ###   ########.fr        #
+#    Updated: 2021/02/17 15:30:55 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,12 +44,15 @@ DIR_O = temporary
 
 SOURCES = main.c save.c \
 	  $(DIR_RAYC)/fill_pixel.c $(DIR_RAYC)/path_tracer.c $(DIR_RAYC)/light_shader.c \
+	  $(DIR_RAYC)/color_disruption.c \
 	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c $(DIR_PARS)/add_object.c \
 	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
 	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c $(DIR_PARS)/square.c \
-	  $(DIR_PARS)/cylinder.c \
+	  $(DIR_PARS)/cylinder.c $(DIR_PARS)/cube.c $(DIR_PARS)/pyramide.c \
+	  $(DIR_PARS)/cone.c \
 	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
 	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c $(DIR_EQUA)/disk.c \
+	  $(DIR_EQUA)/cone.c \
 	  $(DIR_CONT)/lobby.c $(DIR_CONT)/quit_program.c \
 	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
 	  $(DIR_VECM)/matrice.c $(DIR_VECM)/color.c
