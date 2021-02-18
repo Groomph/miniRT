@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 17:01:37 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 05:30:05 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int			add_square(t_scene *scene, char *format)
 	square = malloc(sizeof(t_obj));
 	if (!square)
 		return (-1);
+	square->main = NULL;
 	square->next = scene->object;
 	scene->object = square;
 	if (!parse_square(square, format))

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 16:47:44 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 05:30:36 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int			add_triangle(t_scene *scene, char *format)
 	triangle = malloc(sizeof(t_obj));
 	if (!triangle)
 		return (-1);
+	triangle->main = NULL;
 	triangle->next = scene->object;
 	scene->object = triangle;
 	if (!parse_triangle(triangle, format))

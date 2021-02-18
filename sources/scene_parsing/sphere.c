@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/17 16:46:00 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 05:29:04 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	parse_sphere(t_obj *sphere, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	sphere->type = SPHERE;
+	sphere->main = NULL;
 	sphere->inter_f = is_intersect_sphere;
 	sphere->normal_f = set_sphere_normal;
 	sphere->specular = FALSE;

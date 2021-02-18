@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/12 17:23:32 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 00:54:44 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static void	set_lower_point(t_cam *cam)
 	t_vector	focale;
 	t_vector	temp;
 
-	focale = sub_vectors(&(cam->o), &(cam->look_at));
-	set_normalized(&focale);
+	focale = multiply_vector(&(cam->look_at), -1);
 	temp = divide_vector(&(cam->horizontal), 2.0);
 	cam->lower_corner = sub_vectors(&(cam->o), &temp);
 	temp = divide_vector(&(cam->vertical), 2.0);
@@ -45,20 +44,16 @@ static void	set_lower_point(t_cam *cam)
 **	set_normalized(&(cam->look_at));
 */
 
-static void		param_camera(t_cam *cam, double w, double h)
+void		param_camera(t_cam *cam, double w, double h)
 {
 	double		ratio;
 	t_vector	focale;
 	t_vector	cross;
 
-	cam->fov_hori *= PI;
-	cam->fov_hori /= 180.0;
-	cam->fov_hori = tan(cam->fov_hori / 2.0);
 	ratio = w / h;
 	cam->pov_w = 2.0 * cam->fov_hori;
 	cam->pov_h = cam->pov_w / ratio;
-	focale = sub_vectors(&(cam->o), &(cam->look_at));
-	set_normalized(&focale);
+	focale = multiply_vector(&(cam->look_at), -1);
 	cross = get_vector_product(&(cam->vup), &focale);
 	if (get_norme(&cross) == 0)
 		cross = get_z_rotation(&focale, 90.0, FALSE);

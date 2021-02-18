@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 16:10:19 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 04:14:37 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <math.h>
 #include <stdio.h>
 
-static void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
+void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
 {
 	t_point		x_pos;
 	t_point		y_pos;

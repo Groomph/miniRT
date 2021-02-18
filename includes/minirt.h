@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 20:30:08 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 06:04:36 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,21 @@ enum	e_key
 {
 	N = 110,
 	ESCAPE = 65307,
-	UBE
+	PLUS = 65451,
+	MINUS = 65453,
+	UP = 65362,
+	DOWN = 65364,
+	RIGHT = 65361,
+	LEFT = 65363,
+	Z = 122,
+	S = 115,
+	Q = 113,
+	D = 100,
+	CTRL = 65507,
+	SPACE = 32,
+	A = 97,
+	E = 101,
+	TAB = 65289
 };
 
 typedef struct		s_window_image
@@ -126,12 +140,19 @@ typedef struct		s_object
 	t_vector	normal;
 	BOOL		(*inter_f)(t_ray*, struct s_object*, t_inter*);
 	void		(*normal_f)(t_ray*, struct s_object*);
+	struct s_object	*main;
 	BOOL		specular;
 	BOOL		caps;
 	BOOL		check_board;
 	BOOL		rainbow;
 	struct s_object	*next;
 }			t_obj;
+
+typedef struct		s_controler
+{
+	int		coef;
+	t_obj		*selected_obj;
+}			t_control;
 
 typedef struct		s_scene
 {
@@ -145,6 +166,7 @@ typedef struct		s_scene
 	t_obj		*object;
 	t_img		img;
 	BOOL		saveit;
+	t_control	control;
 }			t_scene;
 
 /****************************************************************
@@ -167,6 +189,9 @@ int			add_cube(t_scene *scene, char *format);
 int			add_pyramide(t_scene *scene, char *format);
 int			add_cone(t_scene *scene, char *format);
 void			set_edges(t_obj *square);
+void			reset_cube(t_obj *first);
+void			reset_new_triangle(t_obj *first);
+void			reset_disk(t_obj *first);
 //void			set_bonus_compound(t_scene *scene, t_obj *cube);
 //void			set_pyramide_specular(t_scene *scene, t_obj *cube);
 BOOL			set_camera_bonus(t_cam *cam, char *format, int i);
@@ -180,8 +205,10 @@ int			color_microparser(t_color *color, char *format, int *i);
 void			error_parsing(t_scene *scene, int fd, int errornb, int line);
 int			stop_program(t_scene *scene);
 
+void			set_ray(t_scene *scene, t_ray *ray, double x, double y);
 void			ray_caster(t_scene *scene, void *mlx, void *window);
 void			path_tracer(t_scene *scene, t_ray *ray, int i);
+BOOL			find_nearest_object(t_scene *scene, t_ray *ray);
 BOOL			is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter);
 BOOL			is_intersect_plane(t_ray *ray, t_obj *plane, t_inter *inter);
 BOOL			is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter);
@@ -207,6 +234,10 @@ void			create_bmp(t_scene *scene, t_img *img);
 int			press_key(int key, t_scene *scene);
 //int			press_mouse_button(int key, t_scene *scene);
 int			press_mouse_button(int key, int x, int y, t_scene *scene);
+void			translat_lobby(t_scene *scene, int key, t_obj *obj);
+void			rotate_lobby(t_scene *scene, int key);
+void			param_camera(t_cam *cam, double w, double h);
+
 
 int			fuse_trgb(int t, int r, int g, int b);
 int			fuse_vector(t_vector *vec);

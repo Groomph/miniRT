@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 16:49:36 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 07:05:36 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,47 @@ static void	set_new_square(t_obj *square, t_obj *first, int i)
 	translat = multiply_vector(&(square->ab), 0.5);
 	square->o = add_vectors(&(square->o), &translat);
 	square->color = first->color;
-	square->type = SQUARE;
+	square->type = CUBE;
+	square->main = first;
 	square->inter_f = is_intersect_square;
 	square->normal_f = set_square_normal;
 	square->radius = first->radius;
-	square->next = first->next;
-	first->next = square;
 }
 
-int			add_cube(t_scene *scene, char *format)
+void	reset_cube(t_obj *first)
 {
-	t_obj		*square;
-	double		norme;
-	int			i;
+	int		i;
+	t_obj	*square;
 
-	i = add_square(scene, format);
-	if (i <= 0)
-		return (i);
-	scene->object->type = CUBE;
+	i = -1;
+	square = first->next;
+	while (++i < 5)
+	{
+		set_new_square(square, first, i);
+		if (i == 0)
+			square->normal = first->normal;
+		else if (i >= 3)
+			square->normal = first->ad;
+		else
+			square->normal = first->ab;
+		set_normalized(&(square->normal));
+		square = square->next;
+	}
+}
+
+static BOOL	set_cube(t_scene *scene, t_obj *first)
+{
+	int		i;
+	t_obj	*square;
+
 	i = -1;
 	while (++i < 5)
 	{
 		square = malloc(sizeof(t_obj));
 		if (!square)
-			return (-1);
+			return (FALSE);
+		square->next = first->next;
+		first->next = square;
 		set_new_square(square, scene->object, i);
 		if (i == 0)
 			square->normal = scene->object->normal;
@@ -96,5 +113,20 @@ int			add_cube(t_scene *scene, char *format)
 			square->normal = scene->object->ab;
 		set_normalized(&(square->normal));
 	}
+	return (TRUE);
+}
+
+BOOL			add_cube(t_scene *scene, char *format)
+{
+	double		norme;
+	int			i;
+
+	i = add_square(scene, format);
+	if (i <= 0)
+		return (i);
+	scene->object->type = CUBE;
+	scene->object->main = scene->object;
+	if (!set_cube(scene, scene->object))
+		return (-1);
 	return (TRUE + 4);
 }

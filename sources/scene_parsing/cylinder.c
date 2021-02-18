@@ -6,13 +6,29 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/17 16:48:31 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 07:19:39 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "vector.h"
 #include <stdio.h>
+
+void		reset_disk(t_obj *first)
+{
+	t_obj	*disk;
+	printf("  %.1lf,%.1lf,%.1lf  ", first->o.x, first->o.y, first->o.z);
+
+	disk = first->next;
+	disk->normal = first->normal;
+	disk->o = first->o;
+	printf("  %.1lf,%.1lf,%.1lf  ", disk->o.x, disk->o.y, disk->o.z);
+	disk = disk->next;
+	disk->normal = first->normal;
+	disk->o = multiply_vector(&(first->normal), first->h);
+	disk->o = add_vectors(&(disk->o), &(first->o));
+	printf("  %.1lf,%.1lf,%.1lf  ", disk->o.x, disk->o.y, disk->o.z);
+}
 
 int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 {
@@ -28,6 +44,7 @@ int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 	disk->inter_f = is_intersect_disk;
 	disk->normal_f = set_disk_normal;
 	disk->type = DISK;
+	disk->main = cylinder;
 	disk->next = cylinder->next;
 	cylinder->next = disk;
 	if (i == 0)
@@ -37,6 +54,7 @@ int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 		if (!add_disk(scene, cylinder, 1))
 			return (FALSE);
 		cylinder->o = disk->o;
+		cylinder->main = cylinder;
 	}
 	return (TRUE);
 }
@@ -78,6 +96,7 @@ int			add_cylinder(t_scene *scene, char *format)
 	cylinder = malloc(sizeof(t_obj));
 	if (!cylinder)
 		return (-1);
+	cylinder->main = NULL;
 	cylinder->next = scene->object;
 	scene->object = cylinder;
 	if (!parse_cylinder(cylinder, format, 2))
@@ -85,6 +104,7 @@ int			add_cylinder(t_scene *scene, char *format)
 	norme = set_normalized(&(cylinder->normal));
 	if (norme == 0)
 		return (FALSE);
+	cylinder->caps = FALSE;
 	cylinder->check_board = FALSE;
 	cylinder->rainbow = FALSE;
 	return (TRUE + 4);

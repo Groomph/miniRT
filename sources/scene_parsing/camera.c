@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/02 17:28:31 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/18 00:54:18 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ BOOL			set_camera_bonus2(t_cam *cam, char *format, int *i)
 	else if (str_n_comp(&(format[*i]), "LOOK_AT=", 8) == 0 && (*i += 8))
 	{
 		if (!vector_microparser(&(cam->look_at), format, i))
+			return (FALSE);
+		cam->look_at = sub_vectors(&(cam->look_at), &(cam->o));
+		if (!set_normalized(&(cam->look_at)))
 			return (FALSE);
 	}
 	else if (str_n_comp(&(format[*i]), "GAMMA", 5) == 0 && (*i += 5))
@@ -69,12 +72,15 @@ static int	parse_camera(t_cam *cam, char *format)
 		|| !vector_microparser(&(cam->vup), format, &i)
 		|| !int_microparser(&fov, format, &i) || fov < 1 || fov > 180)
 		return (FALSE);
-	cam->fov_hori = (double)fov;
 	while (format[i] == ' ')
 		i++;
 	if (format[i] != '\0')
 		return (FALSE);
-	cam->look_at = get_vector(0.0, 0.0, 0.0, -11.1111);
+	cam->look_at = get_vector(0.0, 0.0, 0.0, -1.0);
+	cam->fov_hori = (double)fov;
+        cam->fov_hori *= PI;
+        cam->fov_hori /= 180.0;
+        cam->fov_hori = tan(cam->fov_hori / 2.0);
 	cam->anti_aliasing = 1;
 	cam->recursivity = 0;
 	cam->gamma = FALSE;
@@ -84,6 +90,7 @@ static int	parse_camera(t_cam *cam, char *format)
 int			add_camera(t_scene *scene, char *format)
 {
 	t_cam	*cam;
+	int	norme;
 
 	cam = malloc(sizeof(t_cam));
 	if (!cam)
@@ -92,7 +99,8 @@ int			add_camera(t_scene *scene, char *format)
 	scene->cam_list = cam;
 	if (!parse_camera(cam, format))
 		return (FALSE);
-	if (cam->vup.x == 0.0 && cam->vup.y == 0.0 && cam->vup.z == 0.0)
+	norme = set_normalized(&(cam->vup));
+	if (norme == 0)
 		return (FALSE);
 	printf("        %.1lf,%.1lf,%.1lf      ", cam->o.x, cam->o.y, cam->o.z);
 	printf("%.1lf,%.1lf,%.1lf      ", cam->vup.x, cam->vup.y, cam->vup.z);

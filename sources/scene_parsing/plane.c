@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 16:46:20 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 05:29:27 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static int	parse_plane(t_obj *plane, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	plane->type = PLANE;
+	plane->main = NULL;
 	plane->inter_f = is_intersect_plane;
 	plane->normal_f = set_plane_normal;
 	plane->specular = FALSE;

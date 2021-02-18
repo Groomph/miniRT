@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 17:10:49 by romain            #+#    #+#             */
-/*   Updated: 2021/02/17 20:31:00 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/18 07:13:13 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,62 @@
 #include "mlx.h"
 #include <stdio.h>
 
-int	press_key(int key, t_scene *scene)
+static void	set_coef(t_control *control, int key)
+{
+	if (key == PLUS)
+		control->coef++;
+	if (key == MINUS)
+		control->coef--;
+	if (control->coef < 1)
+		control->coef = 1;
+	printf("Coef set at %d\n", control->coef * control->coef);
+}
+
+int			press_key(int key, t_scene *scene)
 {
 	printf("%d\n", key);
 	if (key == N)
 	{
-		if (!(scene->cam->next))
-		{
-			if (scene->cam == scene->cam_list)
-			{
-				printf("There is only one cam\n");
-				return (1);
-			}
+		if (!(scene->cam->next) && scene->cam == scene->cam_list)
+			return (1);
+		else if (!(scene->cam->next))
 			scene->cam = scene->cam_list;
-		}
 		else
 			scene->cam = scene->cam->next;
+		ray_caster(scene, scene->mlx, scene->window);
 	}
 	else if (key == ESCAPE)
 		stop_program(scene);
-	else
-		return (1);
-	ray_caster(scene, scene->mlx, scene->window);
+	else if (key == Z || key == S || key == Q || key == D
+					|| key == CTRL || key == SPACE)
+		translat_lobby(scene, key, scene->control.selected_obj);
+	else if (key == A || key == E || key == UP || key == DOWN
+					|| key == LEFT || key == RIGHT)
+		rotate_lobby(scene, key);
+	else if (key == TAB)
+		scene->control.selected_obj = NULL;
+	else if (key == PLUS || key == MINUS)
+		set_coef(&(scene->control), key);
 	return (1);
 }
 
-//int	mouse_key(int key, int x, int y, t_scene *scene)
-
-void	loltest(int key, t_scene *scene)
+int			press_mouse_button(int key, int x, int y, t_scene *scene)
 {
-	int	x;
-	int	y;
+	t_ray	ray;
 
-	printf("coucou1\n");
-	mlx_mouse_get_pos(scene->mlx, scene->window, &x, &y);
-	//printf("coucou2\n");
-
-}
-
-int	press_mouse_button(int key, int x, int y, t_scene *scene)
-{
-	//loltest(key, scene);
-	printf("key: %d    x: %d   y: %d\n", key, x, y);
+	set_ray(scene, &ray, (double)x, (double)y);
+	if (key == 3)
+	{
+		if (find_nearest_object(scene, &ray))
+			scene->control.selected_obj = ray.nearest_object;
+		else
+			printf("No object there. x: %d y: %d\n", x, y);
+	}
+	else
+	{
+		scene->cam->look_at = ray.dir;
+		param_camera(scene->cam, scene->img.line_w, scene->img.col_h);
+		ray_caster(scene, scene->mlx, scene->window);
+	}
 	return (1);
 }
