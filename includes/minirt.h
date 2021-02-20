@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 06:04:36 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/20 02:56:33 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "vector.h"
+# include <pthread.h>
 
 # define BOOL int
 # define TRUE 1
@@ -51,7 +52,10 @@ enum	e_key
 	SPACE = 32,
 	A = 97,
 	E = 101,
-	TAB = 65289
+	TAB = 65289,
+	R = 114,
+	T = 116,
+	ENTER = 65293
 };
 
 typedef struct		s_window_image
@@ -154,6 +158,16 @@ typedef struct		s_controler
 	t_obj		*selected_obj;
 }			t_control;
 
+typedef struct		s_thread
+{
+	struct s_scene	*scene;
+	int		y;
+	int		max_y;
+	int		pixel;
+	int		id;
+
+}			t_thread;
+
 typedef struct		s_scene
 {
 	void		*mlx;
@@ -167,6 +181,10 @@ typedef struct		s_scene
 	t_img		img;
 	BOOL		saveit;
 	t_control	control;
+	int		thread_total;
+	int		thread_on;
+	pthread_t	*tab_thread;
+	pthread_attr_t	*attr_thread;
 }			t_scene;
 
 /****************************************************************
@@ -197,6 +215,7 @@ void			reset_disk(t_obj *first);
 BOOL			set_camera_bonus(t_cam *cam, char *format, int i);
 BOOL			set_light_bonus(t_light *light, char *format, int i);
 //BOOL			set_object_bonus(t_obj *obj, char *format, int i);
+BOOL			set_multi_threading(t_scene *scene, char *format);
 int			int_microparser(int *nb, char *format, int *i);
 int			double_microparser(double *doub, char *format, int *i);
 int			vector_microparser(t_vector *vector, char *format, int *i);
@@ -206,7 +225,7 @@ void			error_parsing(t_scene *scene, int fd, int errornb, int line);
 int			stop_program(t_scene *scene);
 
 void			set_ray(t_scene *scene, t_ray *ray, double x, double y);
-void			ray_caster(t_scene *scene, void *mlx, void *window);
+void			*ray_caster(void *thread);
 void			path_tracer(t_scene *scene, t_ray *ray, int i);
 BOOL			find_nearest_object(t_scene *scene, t_ray *ray);
 BOOL			is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter);
@@ -237,6 +256,10 @@ int			press_mouse_button(int key, int x, int y, t_scene *scene);
 void			translat_lobby(t_scene *scene, int key, t_obj *obj);
 void			rotate_lobby(t_scene *scene, int key);
 void			param_camera(t_cam *cam, double w, double h);
+void			set_threads_number(t_scene *scene, int key);
+void			set_coef(t_control *control, int key);
+void			launch_threads(t_scene *scene);
+
 
 
 int			fuse_trgb(int t, int r, int g, int b);

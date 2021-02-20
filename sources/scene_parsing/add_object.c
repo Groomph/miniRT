@@ -6,14 +6,14 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/17 16:57:23 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:39:44 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <stdio.h>
 
-static void	set_bonus_compound(t_scene *scene, t_obj *obj, int i)
+static void	set_bonus_compound(t_obj *obj, int i)
 {
 	t_obj	*temp;
 
@@ -47,11 +47,11 @@ static BOOL	set_object_bonus(t_scene *scene, t_obj *obj, char *format,
 	if (format[i] != '\0')
 		return (set_object_bonus(scene, obj, format, i));
 	if (obj->caps == TRUE)
-	       	if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
+		if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
 			return (FALSE);
 	if ((obj->type == CYLINDER && obj->caps) || obj->type == CUBE
 						|| obj->type == PYRAMIDE)
-		set_bonus_compound(scene, obj, obj->type);
+		set_bonus_compound(obj, obj->type);
 	return (TRUE);
 }
 
@@ -112,6 +112,8 @@ int			add_object(t_scene *scene, char *line, int prev)
 		check = add_camera(scene, line);
 	else if (str_n_comp(line, "l ", 2) == 0)
 		check = add_light(scene, line);
+	else if (str_n_comp(line, "mt ", 3) == 0)
+		check = set_multi_threading(scene, line);
 	else
 		check = add_object2(scene, line);
 	return (check);

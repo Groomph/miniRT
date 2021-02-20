@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:16:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/12 19:12:44 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:42:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 void	set_disk_normal(t_ray *ray, t_obj *disk)
 {
 	double		cos;
-	t_vector	normal;
 	t_point		hit_from_cam;
 
 	hit_from_cam = multiply_vector(&(ray->dir), ray->t);
@@ -34,20 +33,20 @@ void	set_disk_normal(t_ray *ray, t_obj *disk)
 }
 
 /*
-   t_point         hit_from_cam;
-   t_point         center;
-   t_vector        ray_cyl_o;
-
-   hit_from_cam = multiply_vector(&(ray->dir), ray->t);
-   ray->hit = add_vectors(&(ray->o), &hit_from_cam);
-   center = multiply_vector(&(disk->normal), ray->dist);
-   center = add_vectors(&center, &(disk->o));
-   if (ray->hit_inside)
-   ray->hit_normal = sub_vectors(&center, &(ray->hit));
-   else
-   ray->hit_normal = sub_vectors(&(ray->hit), &center);
-   set_normalized(&(ray->hit_normal));
-   */
+**   t_point         hit_from_cam;
+**   t_point         center;
+**   t_vector        ray_cyl_o;
+**
+**   hit_from_cam = multiply_vector(&(ray->dir), ray->t);
+**   ray->hit = add_vectors(&(ray->o), &hit_from_cam);
+**   center = multiply_vector(&(disk->normal), ray->dist);
+**   center = add_vectors(&center, &(disk->o));
+**   if (ray->hit_inside)
+**   ray->hit_normal = sub_vectors(&center, &(ray->hit));
+**   else
+**   ray->hit_normal = sub_vectors(&(ray->hit), &center);
+**   set_normalized(&(ray->hit_normal));
+*/
 
 BOOL	is_intersect_disk(t_ray *ray, t_obj *disk, t_inter *inter)
 {
@@ -62,32 +61,31 @@ BOOL	is_intersect_disk(t_ray *ray, t_obj *disk, t_inter *inter)
 	ray_pl_o = sub_vectors(&(disk->o), &(ray->o));
 	inter->t1 = get_scalar_product(&(disk->normal), &(ray_pl_o)) / cos;
 	if (inter->t1 < 0)
-	       return (FALSE);	
+		return (FALSE);
 	hit_point = multiply_vector(&(ray->dir), inter->t1);
 	hit_point = add_vectors(&(ray->o), &hit_point);
 	hit_point = sub_vectors(&(hit_point), &(disk->o));
 	dist = sqrt(get_norme(&hit_point));
-//	printf("%lf\n", dist);
 	if (dist >= disk->radius)
 		return (FALSE);
 	return (TRUE);
 }
 
 /*
-	temp_o = multiply_vector((&disk->normal), disk->h);
-	temp_o = add_vectors(&(disk->o), &temp_o);
-	ray_pl_o = sub_vector(&(temp_o), &(ray->o));
-	inter->t2 = get_scalar_product(&(disk->normal), &(ray->o)) / cos;
-	hit_point = multiply_vector(&(ray->dir), inter->t1);
-	hit_point = add_vectors(&(ray->o), &hit_point);
-	hit_point = sub_vectors(&(hit_point), &(disk->o));
-	dist = sqrt(get_norme(&hit_point));
-	if (inter->t1 < 0 || dist1 > disk->radius)
-		inter->t1 = INFINITY;
-	hit_point = multiply_vector(&(ray->dir), inter->t2);
-	hit_point = add_vectors(&(ray->o), &hit_point);
-	hit_point = sub_vectors(&(hit_point), &(temp_o));
-	dist = sqrt(get_norme(&hit_point));
-	if (inter->t2 < 0 || dist > disk->radius)
-		inter->t2 = INFINITY;
+**	temp_o = multiply_vector((&disk->normal), disk->h);
+**	temp_o = add_vectors(&(disk->o), &temp_o);
+**	ray_pl_o = sub_vector(&(temp_o), &(ray->o));
+**	inter->t2 = get_scalar_product(&(disk->normal), &(ray->o)) / cos;
+**	hit_point = multiply_vector(&(ray->dir), inter->t1);
+**	hit_point = add_vectors(&(ray->o), &hit_point);
+**	hit_point = sub_vectors(&(hit_point), &(disk->o));
+**	dist = sqrt(get_norme(&hit_point));
+**	if (inter->t1 < 0 || dist1 > disk->radius)
+**		inter->t1 = INFINITY;
+**	hit_point = multiply_vector(&(ray->dir), inter->t2);
+**	hit_point = add_vectors(&(ray->o), &hit_point);
+**	hit_point = sub_vectors(&(hit_point), &(temp_o));
+**	dist = sqrt(get_norme(&hit_point));
+**	if (inter->t2 < 0 || dist > disk->radius)
+**		inter->t2 = INFINITY;
 */

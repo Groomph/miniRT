@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 17:00:13 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:41:13 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 void		set_square_normal(t_ray *ray, t_obj *square)
 {
 	double		cos;
-	t_vector	normal;
 	t_point		hit_from_cam;
 
 	hit_from_cam = multiply_vector(&(ray->dir), ray->t);
@@ -35,7 +34,8 @@ void		set_square_normal(t_ray *ray, t_obj *square)
 	set_normalized(&(ray->hit_normal));
 }
 
-/*	if (ray->hit_normal.x == -0.0)
+/*
+** 	if (ray->hit_normal.x == -0.0)
 **		ray->hit_normal.x = 0.0;
 **	if (ray->hit_normal.y == -0.0)
 **		ray->hit_normal.y = 0.0;

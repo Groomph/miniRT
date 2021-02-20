@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 00:54:44 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:39:01 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ void		param_camera(t_cam *cam, double w, double h)
 **	set_normalized(&cross);
 */
 
-BOOL	set_resolution(t_scene *scene, t_img *img, char *format)
+BOOL		set_resolution(t_scene *scene, t_img *img, char *format)
 {
-	int		i;
-	int		max_x;
-	int		max_y;
+	int			i;
+	int			max_x;
+	int			max_y;
 	long int	max;
 
 	if (img->set)
@@ -103,7 +103,7 @@ BOOL	set_resolution(t_scene *scene, t_img *img, char *format)
 	return (TRUE);
 }
 
-static void	parsing_rt_file(t_scene *scene, t_img *img, int fd)
+static void	parsing_rt_file(t_scene *scene, int fd)
 {
 	int		check;
 	char	*line;
@@ -125,6 +125,8 @@ static void	parsing_rt_file(t_scene *scene, t_img *img, int fd)
 		if (previous < TRUE)
 			error_parsing(scene, fd, previous + 6, line_nb);
 	}
+	if (scene->thread_total < 1)
+		scene->thread_total = 1;
 }
 
 void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
@@ -143,7 +145,7 @@ void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
 		fd = open(av[1], O_RDONLY);
 	if (fd < 0)
 		error_parsing(scene, -1, 11, -1);
-	parsing_rt_file(scene, img, fd);
+	parsing_rt_file(scene, fd);
 	close(fd);
 	if (!(img->set) || !(scene->cam_list) || !(scene->ambient_is_set))
 		error_parsing(scene, -1, 7, -1);

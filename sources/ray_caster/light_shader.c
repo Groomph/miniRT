@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 18:18:42 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:59:35 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 					&& temp.t1 < light_ray->t)
 				return (FALSE);
 		}
-		else// if (ray->hit_inside == TRUE)
+		else
 		{
 			if (obj->inter_f(temp_light, obj, &temp)
 					&& temp.t1 < temp_light->t)
@@ -39,17 +39,23 @@ static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 	}
 	return (TRUE);
 }
+
 /*
-void		apply_ambient_light(t_scene *scene, t_ray *ray)
-{
-	ray->color.x = ray->nearest_object->color.x * scene->ambient_intensity
-						* (scene->ambient_light.x / 255);
-	ray->color.y = ray->nearest_object->color.y * scene->ambient_intensity
-						* (scene->ambient_light.y / 255);
-	ray->color.z = ray->nearest_object->color.z * scene->ambient_intensity
-						* (scene->ambient_light.z / 255);
-}
+**		else// if (ray->hit_inside == TRUE)
 */
+
+/*
+**void		apply_ambient_light(t_scene *scene, t_ray *ray)
+**{
+**	ray->color.x = ray->nearest_object->color.x * scene->ambient_intensity
+**						* (scene->ambient_light.x / 255);
+**	ray->color.y = ray->nearest_object->color.y * scene->ambient_intensity
+**						* (scene->ambient_light.y / 255);
+**	ray->color.z = ray->nearest_object->color.z * scene->ambient_intensity
+**						* (scene->ambient_light.z / 255);
+**}
+*/
+
 void	apply_light_effects(t_ray *ray, t_light *light, double cos)
 {
 	if (cos < 0.0)

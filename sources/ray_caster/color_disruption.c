@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 15:12:11 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 19:13:09 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:03:52 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	check_board(t_ray *ray)
 		ray->color = multiply_vector(&(ray->color), 0.2);
 }
 
-/*	y = y % 2;
+/*
+**	y = y % 2;
 **	z = z % 2;
 **	if (x && !y && !z)
 **		ray->color = multiply_vector(&(ray->color), 0.2);
@@ -72,7 +73,8 @@ void	rainbow(t_ray *ray, int type)
 	ray->color.z *= normal.z;
 }
 
-/*	normal = ray->hit_normal;
+/*
+**	normal = ray->hit_normal;
 **
 **
 **	if (ray->nearest_object->type == SPHERE

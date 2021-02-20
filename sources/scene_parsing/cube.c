@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 07:05:36 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:40:26 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ static BOOL	set_cube(t_scene *scene, t_obj *first)
 		square = malloc(sizeof(t_obj));
 		if (!square)
 			return (FALSE);
+		init_zero(square, sizeof(t_obj));
 		square->next = first->next;
 		first->next = square;
 		set_new_square(square, scene->object, i);
@@ -118,7 +119,6 @@ static BOOL	set_cube(t_scene *scene, t_obj *first)
 
 BOOL			add_cube(t_scene *scene, char *format)
 {
-	double		norme;
 	int			i;
 
 	i = add_square(scene, format);

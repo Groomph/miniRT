@@ -1,5 +1,6 @@
 R     1200    800
 A    0.2 0,255,255,255  
+mt        5
 //c    0,0.5,1       0,1,0     90  
 //BONUS LOOK_AT=-2,1,-2    RECURSIVITY=2
 //c    0,1.5,1       0,1,0     90  
@@ -19,7 +20,7 @@ BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
 //c    0,-0.4,0       0,1,0     90  
 //BONUS LOOK_AT=-0,0.5,-0.5    RECURSIVITY=0
 c    3,4.5,1       0,1,0     90  
-BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
+BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0 
 
 //l    0,3.9,-5       0.999         0,10,255,10
 //l    -2,3.9,-1       0.999         0,255,255,255

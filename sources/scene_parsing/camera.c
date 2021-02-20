@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 00:54:18 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:39:48 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ static int	parse_camera(t_cam *cam, char *format)
 		return (FALSE);
 	cam->look_at = get_vector(0.0, 0.0, 0.0, -1.0);
 	cam->fov_hori = (double)fov;
-        cam->fov_hori *= PI;
-        cam->fov_hori /= 180.0;
-        cam->fov_hori = tan(cam->fov_hori / 2.0);
+	cam->fov_hori *= PI;
+	cam->fov_hori /= 180.0;
+	cam->fov_hori = tan(cam->fov_hori / 2.0);
 	cam->anti_aliasing = 1;
 	cam->recursivity = 0;
 	cam->gamma = FALSE;
@@ -90,7 +90,7 @@ static int	parse_camera(t_cam *cam, char *format)
 int			add_camera(t_scene *scene, char *format)
 {
 	t_cam	*cam;
-	int	norme;
+	int		norme;
 
 	cam = malloc(sizeof(t_cam));
 	if (!cam)

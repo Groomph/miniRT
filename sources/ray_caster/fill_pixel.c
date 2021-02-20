@@ -6,13 +6,14 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/18 04:14:37 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/20 02:57:52 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "minirt.h"
 #include <math.h>
+#include <pthread.h>
 #include <stdio.h>
 
 void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
@@ -72,31 +73,62 @@ static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 	return (fuse_vector(&(temp_color)));
 }
 
-void		ray_caster(t_scene *scene, void *mlx, void *window)
+void		end_thread(t_scene *scene, t_thread *thread)
 {
+//	if (scene->thread_on == 1)
+	if (thread->id == 0)
+	{
+	//	scene->thread_on--;
+		printf("Rendering done\n");
+		printf("ESCAPE = quit miniRT\nENTER = launch render\n");
+		printf("- = decrease move speed and rotation\n");
+		printf("+ = increase move speed and rotation\n");
+		printf("R = decrease number of render thread\n");
+		printf("T = increase number of render thread\n");
+		printf("A, E, ARROWS = rotate the camera or the selected object\n");
+		printf("Z, Q, S, D, CTRL, SPACE = move the camera or the selected object\n");
+		printf("LEFT CLICK = move the camera\n");
+		printf("RIGHT CLICK = select the object\n");
+		printf("TAB = deselect object if selected\n");
+	}
+//	else
+//		scene->thread_on--;
+	scene = NULL;
+//	pthread_detach(scene->tab_thread[thread->id]);
+//	free(thread);
+//	pthread_attr_destroy(&scene->attr_thread[thread->id]);
+	pthread_exit(NULL);
+}
+
+void		*ray_caster(void *temp_thread)
+{
+	t_scene	*scene;
+	t_thread *thread;
 	t_ray	ray;
 	int		x;
-	int		y;
-	int		pixel;
-	int		count[3];
+	int		count;
+	int		count_range;
+	int		max_count;
 
-	y = -1;
-	pixel = 0;
-	count[2] = (scene->img.col_h / 20) + 1;
-	count[1] = count[2];
-	count[0] = 1;
-	while (++y < scene->img.col_h)
+	thread = (t_thread*)temp_thread;
+	scene = thread->scene;
+	count = thread->max_y - thread->y;
+	count_range = count / 20;
+	max_count = thread->y + count_range;
+	count = 0;
+	while (thread->y < thread->max_y)
 	{
 		x = -1;
 		while (++x < scene->img.line_w)
-			scene->img.addr[pixel++] = fill_pixel(scene, &ray, x, y);
-		while (y > count[1])
+			scene->img.addr[thread->pixel++] =
+				fill_pixel(scene, &ray, x, thread->y);
+		while (thread->id == 1 && thread->y > max_count && ++count < 20)
 		{
-			printf("Rendering: %d%%\n", 5 * count[0]++);
-			count[1] += count[2];
+			printf("Rendering: %d%%\n", count * 5);
+			max_count += count_range;
 		}
+		thread->y++;
 	}
-	if (!scene->saveit)
-		mlx_put_image_to_window(mlx, window, scene->img.img, 0, 0);
-	printf("Rendering done\n");
+	end_thread(scene, thread);
+	return (NULL);
 }

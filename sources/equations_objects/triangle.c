@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/10 19:01:32 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:41:00 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 void		set_triangle_normal(t_ray *ray, t_obj *triangle)
 {
 	double		cos;
-	t_vector	normal;
 	t_point		hit_from_cam;
 
 	hit_from_cam = multiply_vector(&(ray->dir), ray->t);

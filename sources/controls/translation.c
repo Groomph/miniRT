@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 23:53:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 06:13:20 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:37:30 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static void	translat_cam(t_scene *scene, int key)
 {
-	int		coef;
+	int			coef;
 	t_vector	temp;
 
 	coef = scene->control.coef;
@@ -73,43 +73,43 @@ static void	special_obj(t_scene *scene, t_obj *obj, int key, t_obj *main)
 }
 
 /*
-static void	translat_special_object(t_scene *scene, t_obj *obj, key, int i)
-{
-	int		i;
-
-	if (obj->type == DISK || obj->type == CUBE || obj->type == PYRAMIDE)
-		obj = obj->main;
-	i = -1;
-	if (obj->type == CYLINDER)
-	{
-		while (++i < 3)
-		{
-			translat_object(scene, &(obj->o), key);
-			obj = obj->next;
-		}
-	}
-	else if (obj->type == CUBE)
-	{
-		while (++i < 6)
-		{
-			translat_object(scene, &(obj->o), key);
-			translat_object(scene, &(obj->a), key);
-			obj = obj->next;
-		}
-	}
-	else if (obj->type == PYRAMIDE)
-	{
-		translat_object(scene, &(obj->o), key);
-		translat_object(scene, &(obj->a), key);
-		obj = obj->next;
-		while (++i < 4)
-		{
-			translat_object(scene, &(obj->o), key);
-			translat_object(scene, &(obj->o2), key);
-			translat_object(scene, &(obj->o3), key);
-		}
-	}
-}
+**static void	translat_special_object(t_scene *scene, t_obj *obj, key, int i)
+**{
+**	int		i;
+**
+**	if (obj->type == DISK || obj->type == CUBE || obj->type == PYRAMIDE)
+**		obj = obj->main;
+**	i = -1;
+**	if (obj->type == CYLINDER)
+**	{
+**		while (++i < 3)
+**		{
+**			translat_object(scene, &(obj->o), key);
+**			obj = obj->next;
+**		}
+**	}
+**	else if (obj->type == CUBE)
+**	{
+**		while (++i < 6)
+**		{
+**			translat_object(scene, &(obj->o), key);
+**			translat_object(scene, &(obj->a), key);
+**			obj = obj->next;
+**		}
+**	}
+**	else if (obj->type == PYRAMIDE)
+**	{
+**		translat_object(scene, &(obj->o), key);
+**		translat_object(scene, &(obj->a), key);
+**		obj = obj->next;
+**		while (++i < 4)
+**		{
+**			translat_object(scene, &(obj->o), key);
+**			translat_object(scene, &(obj->o2), key);
+**			translat_object(scene, &(obj->o3), key);
+**		}
+**	}
+**}
 */
 
 void	translat_lobby(t_scene *scene, int key, t_obj *obj)
@@ -136,5 +136,5 @@ void	translat_lobby(t_scene *scene, int key, t_obj *obj)
 		translat_object(scene, &(obj->o), key);
 	else
 		special_obj(scene, obj->main, key, obj->main);
-	ray_caster(scene, scene->mlx, scene->window);
+	launch_threads(scene);
 }

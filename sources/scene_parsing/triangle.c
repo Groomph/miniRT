@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 05:30:36 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:23:04 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	parse_triangle(t_obj *triangle, char *format)
 	triangle->type = TRIANGLE;
 	triangle->inter_f = is_intersect_triangle;
 	triangle->normal_f = set_triangle_normal;
-	triangle->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o.x, triangle->o.y,
 								triangle->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o2.x, triangle->o2.y,
@@ -53,7 +52,7 @@ int			add_triangle(t_scene *scene, char *format)
 	triangle = malloc(sizeof(t_obj));
 	if (!triangle)
 		return (-1);
-	triangle->main = NULL;
+	init_zero(triangle, sizeof(t_obj));
 	triangle->next = scene->object;
 	scene->object = triangle;
 	if (!parse_triangle(triangle, format))
@@ -64,7 +63,5 @@ int			add_triangle(t_scene *scene, char *format)
 	norme = set_normalized(&(triangle->normal));
 	if (norme < EPSILON)
 		return (FALSE);
-	triangle->check_board = FALSE;
-	triangle->rainbow = FALSE;
 	return (TRUE + 4);
 }

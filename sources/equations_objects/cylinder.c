@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/16 20:20:36 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:42:11 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void		set_cylinder_normal(t_ray *ray, t_obj *cylinder)
 {
 	t_point		hit_from_cam;
 	t_point		center;
-	t_vector	ray_cyl_o;
 
 	hit_from_cam = multiply_vector(&(ray->dir), ray->t);
 	ray->hit = add_vectors(&(ray->o), &hit_from_cam);
@@ -68,7 +67,6 @@ static BOOL	find_delta(t_ray *ray, t_obj *cylinder, t_inter *inter)
 	if ((inter->t1 < 0 && inter->t2 < 0)
 			|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
 		return (FALSE);
-	inter->hit_inside = FALSE;
 	return (TRUE);
 }
 
@@ -97,6 +95,7 @@ BOOL		is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter)
 	hit_point = add_vectors(&(ray->o), &hit_point);
 	hit_point = sub_vectors(&(hit_point), &(cylinder->o));
 	inter->dist = get_scalar_product(&(cylinder->normal), &(hit_point));
+	inter->hit_inside = FALSE;
 	if (inter->t1 > 0 && inter->t1 == inter->t1
 			&& inter->dist > 0 && inter->dist < cylinder->h)
 		return (TRUE);

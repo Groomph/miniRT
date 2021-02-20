@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 05:30:05 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:24:08 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int	parse_square(t_obj *square, char *format)
 	square->type = SQUARE;
 	square->inter_f = is_intersect_square;
 	square->normal_f = set_square_normal;
-	square->specular = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", square->o.x, square->o.y,
 			square->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", square->normal.x,
@@ -85,7 +84,7 @@ int			add_square(t_scene *scene, char *format)
 	square = malloc(sizeof(t_obj));
 	if (!square)
 		return (-1);
-	square->main = NULL;
+	init_zero(square, sizeof(t_obj));
 	square->next = scene->object;
 	scene->object = square;
 	if (!parse_square(square, format))
@@ -94,7 +93,5 @@ int			add_square(t_scene *scene, char *format)
 	if (norme == 0)
 		return (FALSE);
 	set_edges(square);
-	square->check_board = FALSE;
-	square->rainbow = FALSE;
 	return (TRUE + 4);
 }

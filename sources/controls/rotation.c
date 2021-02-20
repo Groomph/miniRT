@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 23:53:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 06:26:25 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:37:15 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static void	rotate_cam(t_scene *scene, t_cam *cam, int key)
 {
-	int		coef;
+	int			coef;
 	t_vector	temp;
 
 	coef = scene->control.coef;
@@ -41,8 +41,9 @@ static void	rotate_cam(t_scene *scene, t_cam *cam, int key)
 }
 
 /*
-**	printf("direction   %lf   %lf    %lf\n",cam->look_at.x, cam->look_at.y, cam->look_at.z); 
-**	printf("vup   %lf   %lf    %lf\n",cam->vup.x, cam->vup.y, cam->vup.z); 
+**	printf("direction   %lf   %lf    %lf\n",cam->look_at.x,
+**					cam->look_at.y, cam->look_at.z);
+**	printf("vup   %lf   %lf    %lf\n",cam->vup.x, cam->vup.y, cam->vup.z);
 */
 
 static void	rotate_vup(t_scene *scene, t_cam *cam, int key)
@@ -76,7 +77,6 @@ void	rotate_obj(t_scene *scene, t_obj *obj, int key, int coef)
 	else if (key == RIGHT)
 		obj->normal = get_y_rotation(&(obj->normal), -1 * coef, FALSE);
 	set_normalized(&obj->normal);
-	printf("do we enter?\n");
 	if (obj->type == SQUARE || obj->type == CUBE || obj->type == PYRAMIDE)
 		set_edges(obj);
 	if (obj->type == CUBE)
@@ -97,5 +97,5 @@ void	rotate_lobby(t_scene *scene, int key)
 		rotate_cam(scene, scene->cam, key);
 	else if (key == A || key == E)
 		rotate_vup(scene, scene->cam, key);
-	ray_caster(scene, scene->mlx, scene->window);
+	launch_threads(scene);
 }

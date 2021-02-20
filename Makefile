@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/02/18 02:48:50 by romain           ###   ########.fr        #
+#    Updated: 2021/02/19 19:11:05 by romain           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,12 +49,12 @@ SOURCES = main.c save.c \
 	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
 	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c $(DIR_PARS)/square.c \
 	  $(DIR_PARS)/cylinder.c $(DIR_PARS)/cube.c $(DIR_PARS)/pyramide.c \
-	  $(DIR_PARS)/cone.c \
+	  $(DIR_PARS)/cone.c $(DIR_PARS)/multi_thread.c \
 	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
 	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c $(DIR_EQUA)/disk.c \
 	  $(DIR_EQUA)/cone.c \
 	  $(DIR_CONT)/lobby.c $(DIR_CONT)/quit_program.c $(DIR_CONT)/translation.c \
-	  $(DIR_CONT)/rotation.c \
+	  $(DIR_CONT)/rotation.c $(DIR_CONT)/increment.c $(DIR_CONT)/multi_threading.c\
 	  $(DIR_VECM)/vector_operations.c $(DIR_VECM)/vector_getters.c \
 	  $(DIR_VECM)/matrice.c $(DIR_VECM)/color.c
 
@@ -67,7 +67,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	make -C $(LIB)/libft
 	make -C $(LIB)/minilibx-linux
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LIBLINUX)
+	$(CC) $(CFLAGS) -pthread -o $(NAME) $(OBJS) $(LIBFT) $(LIBLINUX)
 
 $(DIR_O)/%.o: $(DIR_S)/%.c
 	mkdir -p $(DIR_O)
@@ -76,7 +76,7 @@ $(DIR_O)/%.o: $(DIR_S)/%.c
 	mkdir -p $(DIR_O)/$(DIR_EQUA)
 	mkdir -p $(DIR_O)/$(DIR_VECM)
 	mkdir -p $(DIR_O)/$(DIR_CONT)
-	$(CC) -g -I $(HEADER) -o $@ -c $<
+	$(CC) $(CFLAGS) -pthread -I $(HEADER) -o $@ -c $<
 
 norme:
 	@echo

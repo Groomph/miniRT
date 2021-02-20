@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 06:36:33 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:34:26 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ static void	set_new_triangle(t_obj *pyramide, t_obj *first, int i)
 	t_vector	edge1;
 	t_vector	edge2;
 
+	init_zero(pyramide, sizeof(t_obj));
+	pyramide->next = first->next;
+	first->next = pyramide;
 	if (i == 0)
 	{
 		pyramide->o = first->a;
@@ -51,7 +54,6 @@ static void	set_new_triangle(t_obj *pyramide, t_obj *first, int i)
 	pyramide->main = first;
 	pyramide->inter_f = is_intersect_triangle;
 	pyramide->normal_f = set_triangle_normal;
-	pyramide->specular = FALSE;
 	edge1 = sub_vectors(&(pyramide->o2), &(pyramide->o3));
 	edge2 = sub_vectors(&(pyramide->o), &(pyramide->o3));
 	pyramide->normal = get_vector_product(&edge1, &edge2);
@@ -78,20 +80,19 @@ static int	parse_pyramide(t_obj *pyramide, char *format)
 	pyramide->main = pyramide;
 	pyramide->inter_f = is_intersect_square;
 	pyramide->normal_f = set_square_normal;
-	pyramide->specular = FALSE;
-	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->o.x, pyramide->o.y,
-							pyramide->o.z);
+	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->o.x,
+				pyramide->o.y, pyramide->o.z);
 	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->normal.x,
 				pyramide->normal.y, pyramide->normal.z);
-	printf("     %.1lf,%.1lf,%.1lf,%.1lf\n\n", pyramide->color.other,
-		pyramide->color.x, pyramide->color.y, pyramide->color.z);
+	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->color.x,
+				pyramide->color.y, pyramide->color.z);
 	return (TRUE);
 }
 
 void		reset_new_triangle(t_obj *first)
 {
 	int		i;
-	t_obj		*triangle;
+	t_obj	*triangle;
 
 	i = -1;
 	first->o3 = multiply_vector(&(first->normal), first->h);
@@ -112,6 +113,7 @@ int			add_pyramide(t_scene *scene, char *format)
 	pyramide = malloc(sizeof(t_obj));
 	if (!pyramide)
 		return (-1);
+	init_zero(pyramide, sizeof(t_obj));
 	pyramide->next = scene->object;
 	scene->object = pyramide;
 	if (!parse_pyramide(pyramide, format)
@@ -126,8 +128,6 @@ int			add_pyramide(t_scene *scene, char *format)
 		pyramide = malloc(sizeof(t_obj));
 		if (!pyramide)
 			return (-1);
-		pyramide->next = scene->object->next;
-		scene->object->next = pyramide;
 		set_new_triangle(pyramide, scene->object, i);
 	}
 	return (TRUE + 4);

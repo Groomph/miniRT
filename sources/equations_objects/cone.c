@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/17 14:18:25 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/19 16:42:43 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void		set_cone_normal(t_ray *ray, t_obj *cone)
 {
 	t_vector	hit_from_cam;
 	t_vector	center;
-	t_vector	ray_cyl_o;
 	double		coss;
 
 	hit_from_cam = multiply_vector(&(ray->dir), ray->t);

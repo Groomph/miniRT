@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/18 07:19:39 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:46:17 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,14 @@
 void		reset_disk(t_obj *first)
 {
 	t_obj	*disk;
-	printf("  %.1lf,%.1lf,%.1lf  ", first->o.x, first->o.y, first->o.z);
 
 	disk = first->next;
 	disk->normal = first->normal;
 	disk->o = first->o;
-	printf("  %.1lf,%.1lf,%.1lf  ", disk->o.x, disk->o.y, disk->o.z);
 	disk = disk->next;
 	disk->normal = first->normal;
 	disk->o = multiply_vector(&(first->normal), first->h);
 	disk->o = add_vectors(&(disk->o), &(first->o));
-	printf("  %.1lf,%.1lf,%.1lf  ", disk->o.x, disk->o.y, disk->o.z);
 }
 
 int		add_disk(t_scene *scene, t_obj *cylinder, int i)
@@ -37,6 +34,7 @@ int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 	disk = malloc(sizeof(t_obj));
 	if (!disk)
 		return (FALSE);
+	init_zero(disk, sizeof(t_obj));
 	disk->o = cylinder->o;
 	disk->normal = cylinder->normal;
 	disk->radius = cylinder->radius;
@@ -76,7 +74,6 @@ static int	parse_cylinder(t_obj *cylinder, char *format, int i)
 	cylinder->type = CYLINDER;
 	cylinder->inter_f = is_intersect_cylinder;
 	cylinder->normal_f = set_cylinder_normal;
-	cylinder->specular = FALSE;
 	printf("  %.1lf,%.1lf,%.1lf  ", cylinder->o.x, cylinder->o.y,
 								cylinder->o.z);
 	printf("     %.1lf,%.1lf,%.1lf", cylinder->normal.x,
@@ -96,7 +93,7 @@ int			add_cylinder(t_scene *scene, char *format)
 	cylinder = malloc(sizeof(t_obj));
 	if (!cylinder)
 		return (-1);
-	cylinder->main = NULL;
+	init_zero(cylinder, sizeof(t_obj));
 	cylinder->next = scene->object;
 	scene->object = cylinder;
 	if (!parse_cylinder(cylinder, format, 2))
@@ -104,8 +101,5 @@ int			add_cylinder(t_scene *scene, char *format)
 	norme = set_normalized(&(cylinder->normal));
 	if (norme == 0)
 		return (FALSE);
-	cylinder->caps = FALSE;
-	cylinder->check_board = FALSE;
-	cylinder->rainbow = FALSE;
 	return (TRUE + 4);
 }

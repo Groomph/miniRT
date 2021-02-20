@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 22:13:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 05:31:43 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:27:48 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	parse_cone(t_obj *cone, char *format, int i)
 		|| !vector_microparser(&(cone->normal), format, &i)
 		|| !double_microparser(&(cone->radius), format, &i)
 		|| !double_microparser(&(cone->h), format, &i)
-		|| cone->radius <= EPSILON || cone->radius >= 180 
+		|| cone->radius <= EPSILON || cone->radius >= 180
 		|| cone->h <= EPSILON
 		|| !color_microparser(&(cone->color), format, &i))
 		return (FALSE);
@@ -32,7 +32,6 @@ static int	parse_cone(t_obj *cone, char *format, int i)
 	cone->type = CONE;
 	cone->inter_f = is_intersect_cone;
 	cone->normal_f = set_cone_normal;
-	cone->specular = FALSE;
 	printf("  %.1lf,%.1lf,%.1lf  ", cone->o.x, cone->o.y,
 								cone->o.z);
 	printf("     %.1lf,%.1lf,%.1lf", cone->normal.x,
@@ -51,7 +50,7 @@ int			add_cone(t_scene *scene, char *format)
 	cone = malloc(sizeof(t_obj));
 	if (!cone)
 		return (-1);
-	cone->main = NULL;
+	init_zero(cone, sizeof(t_obj));
 	cone->next = scene->object;
 	scene->object = cone;
 	if (!parse_cone(cone, format, 2))
@@ -59,7 +58,5 @@ int			add_cone(t_scene *scene, char *format)
 	norme = set_normalized(&(cone->normal));
 	if (norme == 0)
 		return (FALSE);
-	cone->check_board = FALSE;
-	cone->rainbow = FALSE;
 	return (TRUE + 4);
 }

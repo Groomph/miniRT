@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/18 05:29:27 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/19 16:39:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,8 @@ static int	parse_plane(t_obj *plane, char *format)
 	if (format[i] != '\0')
 		return (FALSE);
 	plane->type = PLANE;
-	plane->main = NULL;
 	plane->inter_f = is_intersect_plane;
 	plane->normal_f = set_plane_normal;
-	plane->specular = FALSE;
-	plane->check_board = FALSE;
-	plane->rainbow = FALSE;
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->o.x, plane->o.y,
 								plane->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->normal.x, plane->normal.y,
@@ -46,13 +42,12 @@ static int	parse_plane(t_obj *plane, char *format)
 int			add_plane(t_scene *scene, char *format)
 {
 	t_obj		*plane;
-	t_vector	edge1;
-	t_vector	edge2;
 	double		norme;
 
 	plane = malloc(sizeof(t_obj));
 	if (!plane)
 		return (-1);
+	init_zero(plane, sizeof(t_obj));
 	plane->next = scene->object;
 	scene->object = plane;
 	if (!parse_plane(plane, format))
