@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 20:31:57 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:32:35 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	pixel_correction(t_cam *cam, t_color *color)
 	}
 }
 
-static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
+static int	fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 {
 	int		i;
 	int		j;

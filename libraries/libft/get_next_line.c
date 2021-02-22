@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:48:15 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/29 11:39:37 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:50:14 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static size_t	isnl(char *str)
 	return (0);
 }
 
-static int	extractline(char **buf, char **line, size_t nl, size_t len)
+static int		extractline(char **buf, char **line, size_t nl, size_t len)
 {
 	if (len == 0)
 	{
@@ -49,7 +49,7 @@ static int	extractline(char **buf, char **line, size_t nl, size_t len)
 	return (1);
 }
 
-int		get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
 	static char	*permbuf;
 	char		tmpbuf[101];

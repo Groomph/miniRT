@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:33:40 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:35:16 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <math.h>
 #include <stdio.h>
 
-static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
+static BOOL		is_illuminated(t_scene *scene, t_ray *light_ray,
 						t_ray *ray, t_ray *temp_light)
 {
 	t_obj	*obj;
@@ -56,7 +56,7 @@ static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 **}
 */
 
-void		apply_light_effects(t_ray *ray, t_light *light, double cos)
+void			apply_light_effects(t_ray *ray, t_light *light, double cos)
 {
 	if (cos < 0.0)
 		cos *= -1.0;
@@ -87,7 +87,7 @@ static double	set_light_ray(t_ray *ray, t_light *light,
 	return (get_scalar_product(&(light_ray->dir), &(ray->hit_normal)));
 }
 
-static void	set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
+static void		set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
 {
 	light_ray->o = multiply_vector(&(ray->hit_normal), EPSILON);
 	light_ray->o = add_vectors(&(light_ray->o), &(ray->hit));
@@ -104,7 +104,7 @@ static void	set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
 	}
 }
 
-void		apply_light(t_scene *scene, t_ray *ray, t_light *light)
+void			apply_light(t_scene *scene, t_ray *ray, t_light *light)
 {
 	t_ray		light_ray;
 	t_ray		temp_light;

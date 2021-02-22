@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 11:41:07 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 19:44:54 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:34:09 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ BOOL	find_nearest_object(t_scene *scene, t_ray *ray)
 	return (FALSE);
 }
 
-void		reflect_ray(t_scene *scene, t_ray *ray, int i)
+void	reflect_ray(t_scene *scene, t_ray *ray, int i)
 {
 	t_vector	temp;
 	double		cos;
@@ -56,7 +56,7 @@ void		reflect_ray(t_scene *scene, t_ray *ray, int i)
 	path_tracer(scene, ray, i + 1);
 }
 
-void		set_disruption(t_ray *ray)
+void	set_disruption(t_ray *ray)
 {
 	ray->temp_color = ray->nearest_object->color;
 	if (ray->nearest_object->rainbow)
@@ -75,7 +75,7 @@ void		set_disruption(t_ray *ray)
 		wave(&(ray->hit), &(ray->hit_normal));
 }
 
-void		path_tracer(t_scene *scene, t_ray *ray, int i)
+void	path_tracer(t_scene *scene, t_ray *ray, int i)
 {
 	t_light	*temp_light;
 

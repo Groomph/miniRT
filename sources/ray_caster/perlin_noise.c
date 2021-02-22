@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:37:00 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:18:53 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:31:52 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static double	grad(int hash, double x, double y, double z)
 	return (ret1 + ret2);
 }
 
-static void	noise_params(int *u, double *x, double *y, double *z)
+static void		noise_params(int *u, double *x, double *y, double *z)
 {
 	u[0] = (int)floor(*x) & 255;
 	u[1] = (int)floor(*y) & 255;
@@ -67,7 +67,7 @@ static void	noise_params(int *u, double *x, double *y, double *z)
 	*z -= floor(*z);
 }
 
-double		noise(double x, double y, double z)
+double			noise(double x, double y, double z)
 {
 	int		u[3];
 	double	c[3];

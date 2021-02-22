@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:24:08 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 21:29:55 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	set_edges2(t_obj *square, t_vector *x_axe, t_vector *y_axe)
 	square->ad = sub_vectors(&(square->d), &(square->a));
 }
 
-void	set_edges(t_obj *square)
+void		set_edges(t_obj *square)
 {
 	t_vector	x_axe;
 	t_vector	y_axe;

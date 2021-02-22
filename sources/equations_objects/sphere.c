@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:19:56 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:31:12 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "vector.h"
 #include <math.h>
 
-void		set_sphere_normal(t_ray *ray, t_obj *sphere)
+void			set_sphere_normal(t_ray *ray, t_obj *sphere)
 {
 	t_point	hit_from_cam;
 
@@ -52,7 +52,7 @@ static double	find_delta(t_ray *ray, t_obj *sphere, double *b)
 	return ((*b * *b) - c);
 }
 
-BOOL		is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter)
+BOOL			is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter)
 {
 	double		delta;
 	double		b;

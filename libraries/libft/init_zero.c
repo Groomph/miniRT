@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:23:49 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/27 12:45:32 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 21:49:37 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_zero(void *pt, size_t n)
 {
 	unsigned char	*tempt;
-	size_t		i;
+	size_t			i;
 
 	tempt = (unsigned char*)pt;
 	i = 0;

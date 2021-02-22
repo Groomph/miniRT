@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:22:25 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:28:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	parse_camera(t_cam *cam, char *format)
 	return (TRUE);
 }
 
-int		add_camera(t_scene *scene, char *format)
+int			add_camera(t_scene *scene, char *format)
 {
 	t_cam	*cam;
 	int		norme;

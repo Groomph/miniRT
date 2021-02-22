@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 19:00:15 by romain            #+#    #+#             */
-/*   Updated: 2021/01/29 11:42:56 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:51:38 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	atoi_windex(const char *str, int *i)
 {
 	unsigned int	nb;
-	int	neg;
+	int				neg;
 
 	nb = 0;
 	neg = 1;
