@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:28:08 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 19:12:34 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/21 23:10:01 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ static void	press_key2(int key, t_scene *scene)
 
 int			press_key(int key, t_scene *scene)
 {
-	printf("%d\n", key);
-	if (scene->thread_on != 0)
-	{
-		printf("render running\n");
-		return (1);
-	}
 	if (key == ESCAPE)
 		stop_program(scene);
 	else if (key == Z || key == S || key == Q || key == D
@@ -72,11 +66,6 @@ int			press_mouse_button(int key, int x, int y, t_scene *scene)
 {
 	t_ray	ray;
 
-	if (scene->thread_on != 0)
-	{
-		printf("render running\n");
-		return (1);
-	}
 	set_ray(scene, &ray, (double)x, (double)y);
 	if (key == 3)
 	{

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 23:53:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 14:37:30 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:32:27 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static void	special_obj(t_scene *scene, t_obj *obj, int key, t_obj *main)
 **}
 */
 
-void	translat_lobby(t_scene *scene, int key, t_obj *obj)
+void		translat_lobby(t_scene *scene, int key, t_obj *obj)
 {
 	if (scene->control.coef == 0)
 		scene->control.coef = 1;

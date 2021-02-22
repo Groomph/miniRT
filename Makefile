@@ -6,7 +6,7 @@
 #    By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/15 14:29:49 by rsanchez          #+#    #+#              #
-#    Updated: 2021/02/19 19:11:05 by romain           ###   ########.fr        #
+#    Updated: 2021/02/22 05:37:16 by rsanchez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,11 +44,13 @@ DIR_O = temporary
 
 SOURCES = main.c save.c \
 	  $(DIR_RAYC)/fill_pixel.c $(DIR_RAYC)/path_tracer.c $(DIR_RAYC)/light_shader.c \
-	  $(DIR_RAYC)/color_disruption.c \
+	  $(DIR_RAYC)/color_disruption.c $(DIR_RAYC)/normal_disruption.c \
+	  $(DIR_RAYC)/perlin_noise.c $(DIR_RAYC)/sky_box.c \
 	  $(DIR_PARS)/file_parsing.c $(DIR_PARS)/parsing_utils.c $(DIR_PARS)/add_object.c \
 	  $(DIR_PARS)/camera.c $(DIR_PARS)/light.c $(DIR_PARS)/sphere.c \
 	  $(DIR_PARS)/plane.c $(DIR_PARS)/triangle.c $(DIR_PARS)/square.c \
 	  $(DIR_PARS)/cylinder.c $(DIR_PARS)/cube.c $(DIR_PARS)/pyramide.c \
+	  $(DIR_PARS)/add_bonus.c $(DIR_PARS)/sky_box.c \
 	  $(DIR_PARS)/cone.c $(DIR_PARS)/multi_thread.c \
 	  $(DIR_EQUA)/sphere.c $(DIR_EQUA)/plane.c $(DIR_EQUA)/triangle.c \
 	  $(DIR_EQUA)/square.c $(DIR_EQUA)/cylinder.c $(DIR_EQUA)/disk.c \

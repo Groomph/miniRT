@@ -1,5 +1,5 @@
 R     1200    800
-A    0.2 0,255,255,255  
+A    0.5 0,255,255,255  
 mt        5
 //c    0,0.5,1       0,1,0     90  
 //BONUS LOOK_AT=-2,1,-2    RECURSIVITY=2
@@ -9,8 +9,6 @@ mt        5
 //BONUS LOOK_AT=-0,1,1    RECURSIVITY=0
 //c    0,2.5,1       0,1,0     90  
 //BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
-c    -3,-3.5,3       0,1,0     90  
-BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
 c    0,1.5,-4       0,1,0     90  
 BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
 c    0,7,-6       0,1,0     90  
@@ -21,6 +19,8 @@ BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
 //BONUS LOOK_AT=-0,0.5,-0.5    RECURSIVITY=0
 c    3,4.5,1       0,1,0     90  
 BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0 
+c    -3,-3.5,3       0,1,0     90  
+BONUS LOOK_AT=-2,1,-2    RECURSIVITY=0
 
 //l    0,3.9,-5       0.999         0,10,255,10
 //l    -2,3.9,-1       0.999         0,255,255,255
@@ -31,7 +31,7 @@ l    0,-1,3       0.999         0,255,255,255
 l    -3,-1,0       0.999         0,255,255,255
 
 sp   -0.5,2.3,-2.5        0.5       0,255,50,50
-BONUS    RAINBOW CHECK_BOARD
+BONUS       RAINBOW CHECK_BOARD
 
 
 sp     0,0,-0.5         0.5       0,0,0,255
@@ -48,14 +48,23 @@ cu    0,0,0      -1,1,1       2       0,10,100,255
 //BONUS     SPECULAR   RAINBOW 
 sq    0,2,2      0,1,1       2       0,201,101,201
 pl   0.0,0,-8    0,0,1    0,33,33,0
+BONUS     WATER 
 //BONUS     SPECULAR   RAINBOW 
 pl   0.0,0,7    0,0,1    0,0,0,33
+BONUS     WATER 
 //BONUS     SPECULAR   RAINBOW 
 pl   0.0,6,0    0,-1,0    0,0,33,33
+BONUS     WATER 
 pl   0.0,-4,0    0,1,0    0,0,33,33
+BONUS     WATER 
 //BONUS     SPECULAR   RAINBOW 
 pl   -8.0,0,0    1,0,0    0,33,0,33
+BONUS     WATER 
 //BONUS     SPECULAR   RAINBOW 
 pl   8.0,0,0    1,0,0    0,0,33,0
+BONUS     WATER 
 py   -2,2,-2    0,-1,0    3  4  0,10,200,100
+BONUS     MARBRE
+//BONUS     WATER 
+//PERLIN  RAINBOW CHECK_BOARD
 //BONUS    RAINBOW SPECULAR

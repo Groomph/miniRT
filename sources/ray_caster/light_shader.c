@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 14:59:35 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:33:40 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,15 @@ static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 **}
 */
 
-void	apply_light_effects(t_ray *ray, t_light *light, double cos)
+void		apply_light_effects(t_ray *ray, t_light *light, double cos)
 {
 	if (cos < 0.0)
 		cos *= -1.0;
-	ray->color.x += cos * (ray->nearest_object->color.x * light->intensity
+	ray->color.x += cos * (ray->temp_color.x * light->intensity
 							* (light->color.x / 255));
-	ray->color.y += cos * (ray->nearest_object->color.y * light->intensity
+	ray->color.y += cos * (ray->temp_color.y * light->intensity
 							* (light->color.y / 255));
-	ray->color.z += cos * (ray->nearest_object->color.z * light->intensity
+	ray->color.z += cos * (ray->temp_color.z * light->intensity
 							* (light->color.z / 255));
 }
 

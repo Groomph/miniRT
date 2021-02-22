@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/20 02:57:52 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:31:57 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
-void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
+void		set_ray(t_scene *scene, t_ray *ray, double x, double y)
 {
 	t_point		x_pos;
 	t_point		y_pos;
@@ -34,7 +34,7 @@ void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
 	ray->color = get_vector(0, 0, 0, 0);
 }
 
-static void		pixel_correction(t_cam *cam, t_color *color)
+static void	pixel_correction(t_cam *cam, t_color *color)
 {
 	color->x /= cam->anti_aliasing * cam->anti_aliasing;
 	color->y /= cam->anti_aliasing * cam->anti_aliasing;
@@ -73,62 +73,38 @@ static int		fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 	return (fuse_vector(&(temp_color)));
 }
 
-void		end_thread(t_scene *scene, t_thread *thread)
+void		set_count(int *count, t_thread *thread)
 {
-//	if (scene->thread_on == 1)
-	if (thread->id == 0)
-	{
-	//	scene->thread_on--;
-		printf("Rendering done\n");
-		printf("ESCAPE = quit miniRT\nENTER = launch render\n");
-		printf("- = decrease move speed and rotation\n");
-		printf("+ = increase move speed and rotation\n");
-		printf("R = decrease number of render thread\n");
-		printf("T = increase number of render thread\n");
-		printf("A, E, ARROWS = rotate the camera or the selected object\n");
-		printf("Z, Q, S, D, CTRL, SPACE = move the camera or the selected object\n");
-		printf("LEFT CLICK = move the camera\n");
-		printf("RIGHT CLICK = select the object\n");
-		printf("TAB = deselect object if selected\n");
-	}
-//	else
-//		scene->thread_on--;
-	scene = NULL;
-//	pthread_detach(scene->tab_thread[thread->id]);
-//	free(thread);
-//	pthread_attr_destroy(&scene->attr_thread[thread->id]);
-	pthread_exit(NULL);
+	count[0] = thread->max_y - thread->y;
+	count[1] = count[0] / 20;
+	count[2] = thread->y + count[1];
+	count[0] = 0;
 }
 
 void		*ray_caster(void *temp_thread)
 {
-	t_scene	*scene;
-	t_thread *thread;
-	t_ray	ray;
-	int		x;
-	int		count;
-	int		count_range;
-	int		max_count;
+	t_scene		*scene;
+	t_thread	*thread;
+	t_ray		ray;
+	int			x;
+	int			count[3];
 
 	thread = (t_thread*)temp_thread;
 	scene = thread->scene;
-	count = thread->max_y - thread->y;
-	count_range = count / 20;
-	max_count = thread->y + count_range;
-	count = 0;
+	set_count(count, thread);
 	while (thread->y < thread->max_y)
 	{
 		x = -1;
 		while (++x < scene->img.line_w)
 			scene->img.addr[thread->pixel++] =
 				fill_pixel(scene, &ray, x, thread->y);
-		while (thread->id == 1 && thread->y > max_count && ++count < 20)
+		while (thread->id == scene->thread_total - 1
+				&& thread->y > count[2] && ++count[0] < 20)
 		{
-			printf("Rendering: %d%%\n", count * 5);
-			max_count += count_range;
+			printf("Rendering: %d%%\n", count[0] * 5);
+			count[2] += count[1];
 		}
 		thread->y++;
 	}
-	end_thread(scene, thread);
-	return (NULL);
+	pthread_exit(NULL);
 }

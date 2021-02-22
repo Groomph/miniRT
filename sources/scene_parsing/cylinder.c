@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/19 16:46:17 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:24:32 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		reset_disk(t_obj *first)
 	disk->o = add_vectors(&(disk->o), &(first->o));
 }
 
-int		add_disk(t_scene *scene, t_obj *cylinder, int i)
+int			add_disk(t_scene *scene, t_obj *cylinder, int i)
 {
 	t_obj		*disk;
 
@@ -52,7 +52,6 @@ int		add_disk(t_scene *scene, t_obj *cylinder, int i)
 		if (!add_disk(scene, cylinder, 1))
 			return (FALSE);
 		cylinder->o = disk->o;
-		cylinder->main = cylinder;
 	}
 	return (TRUE);
 }

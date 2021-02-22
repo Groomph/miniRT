@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/19 22:21:15 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:14:06 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ static void	set_window_img(t_scene *scene, void *mlx, void **window)
 
 int			update(t_scene *scene)
 {
-	if (scene->thread_on == 0)
-		mlx_put_image_to_window(scene->mlx, scene->window,
-							scene->img.img, 0, 0);
+	mlx_put_image_to_window(scene->mlx, scene->window,
+						scene->img.img, 0, 0);
 	return (1);
 }
 
@@ -41,14 +40,13 @@ int			main(int ac, char **av)
 	t_scene	scene;
 
 	init_zero(&scene, sizeof(scene));
+	scene.thread_total = 1;
 	scene.mlx = mlx_init();
 	check_prog_args(&scene, &(scene.img), ac, av);
 	set_window_img(&scene, scene.mlx, &(scene.window));
-	scene.thread_on = 0;
 	launch_threads(&scene);
 	if (scene.saveit)
 		create_bmp(&scene, &(scene.img));
-	//mlx_do_key_autorepeatoff(scene.mlx);
 	mlx_hook(scene.window, 2, (1L << 0), press_key, &scene);
 	mlx_hook(scene.window, 33, (1L << 17), stop_program, &scene);
 	mlx_hook(scene.window, 4, (1L << 2), press_mouse_button, &scene);
@@ -56,3 +54,7 @@ int			main(int ac, char **av)
 	mlx_loop(scene.mlx);
 	return (1);
 }
+
+/*
+**	//mlx_do_key_autorepeatoff(scene.mlx);
+*/

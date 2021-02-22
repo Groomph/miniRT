@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quit_program.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/20 03:03:13 by rsanchez         ###   ########.fr       */
+/*   Created: 2021/02/22 20:16:18 by rsanchez          #+#    #+#             */
+/*   Updated: 2021/02/22 20:43:30 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static void	error_printer(errornb, line)
+static void	error_printer(int errornb, int line)
 {
 	char	*error_tab[15];
 
@@ -39,15 +39,15 @@ static void	error_printer(errornb, line)
 		printf("%s\n", error_tab[errornb]);
 }
 
-void	error_parsing(t_scene *scene, int fd, int errornb, int line)
+void		error_parsing(t_scene *scene, int fd, int errornb, int line)
 {
 	char	*temp;
-	int	check;
-	
+	int		check;
+
 	check = 1;
 	while (fd > -1 && check > 0)
 	{
-		check =	get_next_line(fd, &temp);
+		check = get_next_line(fd, &temp);
 		free(temp);
 	}
 	if (fd > -1)
@@ -56,7 +56,7 @@ void	error_parsing(t_scene *scene, int fd, int errornb, int line)
 	stop_program(scene);
 }
 
-static void		clear_all(t_cam *cam, t_light *light, t_obj *obj)
+static void	clear_all(t_cam *cam, t_light *light, t_obj *obj)
 {
 	if (cam)
 	{
@@ -75,10 +75,8 @@ static void		clear_all(t_cam *cam, t_light *light, t_obj *obj)
 	}
 }
 
-int		stop_program(t_scene *scene)
+int			stop_program(t_scene *scene)
 {
-//	int	i;
-
 	clear_all(scene->cam_list, scene->light, scene->object);
 	if (scene->window)
 		mlx_destroy_window(scene->mlx, scene->window);
@@ -86,13 +84,13 @@ int		stop_program(t_scene *scene)
 		mlx_destroy_image(scene->mlx, scene->img.img);
 	if (scene->mlx)
 	{
-	//	mlx_do_key_autorepeaton(scene->mlx);
 		mlx_destroy_display(scene->mlx);
 		free(scene->mlx);
 	}
-//	i = -1;
-//	if (scene->tab_thread)
-//		free(scene->tab_thread);
 	exit(0);
 	return (1);
 }
+
+/*
+**	//	mlx_do_key_autorepeaton(scene->mlx);
+*/

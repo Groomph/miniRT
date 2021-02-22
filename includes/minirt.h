@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/20 02:56:33 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:49:23 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct		s_rayon
 	BOOL		hit_inside;
 	double		dist;
 	t_color		color;
+	t_color		temp_color;
 	struct s_object	*nearest_object;
 	t_point		hit;
 	t_vector	hit_normal;
@@ -128,9 +129,11 @@ typedef struct		s_rayon
 
 typedef struct		s_object
 {
+	t_point		o;
+	t_vector	normal;
+	double		radius;
 	t_color		color;
 	int		type;
-	t_point		o;
 	t_point		o2;
 	t_point		o3;
 	t_point		a;
@@ -139,9 +142,7 @@ typedef struct		s_object
 	t_point		d;
 	t_vector	ab;
 	t_vector	ad;
-	double		radius;
 	double		h;
-	t_vector	normal;
 	BOOL		(*inter_f)(t_ray*, struct s_object*, t_inter*);
 	void		(*normal_f)(t_ray*, struct s_object*);
 	struct s_object	*main;
@@ -149,6 +150,11 @@ typedef struct		s_object
 	BOOL		caps;
 	BOOL		check_board;
 	BOOL		rainbow;
+	BOOL		perlin;
+	BOOL		marbre;
+	BOOL		liana;
+	BOOL		wave;
+	BOOL		water;
 	struct s_object	*next;
 }			t_obj;
 
@@ -168,6 +174,19 @@ typedef struct		s_thread
 
 }			t_thread;
 
+typedef struct		s_sky_box
+{
+	t_point		o;
+	t_vector	normal;
+	t_point		a;
+	t_vector	ab;
+	t_vector	ad;
+	double		radius;
+	int		w;
+	int		h;
+	int		*addr;
+}			t_sky_box;
+
 typedef struct		s_scene
 {
 	void		*mlx;
@@ -179,17 +198,12 @@ typedef struct		s_scene
 	t_light		*light;
 	t_obj		*object;
 	t_img		img;
+	t_sky_box	skybox[6];
+	BOOL		box;
 	BOOL		saveit;
 	t_control	control;
 	int		thread_total;
-	int		thread_on;
-	pthread_t	*tab_thread;
-	pthread_attr_t	*attr_thread;
 }			t_scene;
-
-/****************************************************************
-**			    PARSING
-****************************************************************/
 
 void			check_prog_args(t_scene *scene, t_img *img, int ac, char **av);
 int			add_object(t_scene *scene, char *line, int prev);
@@ -206,15 +220,14 @@ int			add_disk(t_scene *scene, t_obj *obj, int i);
 int			add_cube(t_scene *scene, char *format);
 int			add_pyramide(t_scene *scene, char *format);
 int			add_cone(t_scene *scene, char *format);
+int			add_sky_box(t_scene *scene, char *format);
 void			set_edges(t_obj *square);
 void			reset_cube(t_obj *first);
 void			reset_new_triangle(t_obj *first);
 void			reset_disk(t_obj *first);
-//void			set_bonus_compound(t_scene *scene, t_obj *cube);
-//void			set_pyramide_specular(t_scene *scene, t_obj *cube);
+int			add_bonus(t_scene *scene, char *format, int previous);
 BOOL			set_camera_bonus(t_cam *cam, char *format, int i);
 BOOL			set_light_bonus(t_light *light, char *format, int i);
-//BOOL			set_object_bonus(t_obj *obj, char *format, int i);
 BOOL			set_multi_threading(t_scene *scene, char *format);
 int			int_microparser(int *nb, char *format, int *i);
 int			double_microparser(double *doub, char *format, int *i);
@@ -230,9 +243,11 @@ void			path_tracer(t_scene *scene, t_ray *ray, int i);
 BOOL			find_nearest_object(t_scene *scene, t_ray *ray);
 BOOL			is_intersect_sphere(t_ray *ray, t_obj *sphere, t_inter *inter);
 BOOL			is_intersect_plane(t_ray *ray, t_obj *plane, t_inter *inter);
-BOOL			is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter);
+BOOL			is_intersect_triangle(t_ray *ray, t_obj *triangle,
+									t_inter *inter);
 BOOL			is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter);
-BOOL			is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter);
+BOOL			is_intersect_cylinder(t_ray *ray, t_obj *cylinder,
+									t_inter *inter);
 BOOL			is_intersect_disk(t_ray *ray, t_obj *cylinder, t_inter *inter);
 BOOL			is_intersect_cone(t_ray *ray, t_obj *cone, t_inter *inter);
 void			set_sphere_normal(t_ray *ray, t_obj *sphere);
@@ -242,16 +257,21 @@ void			set_square_normal(t_ray *ray, t_obj *square);
 void			set_cylinder_normal(t_ray *ray, t_obj *cylinder);
 void			set_disk_normal(t_ray *ray, t_obj *cylinder);
 void			set_cone_normal(t_ray *ray, t_obj *cone);
-//void			apply_ambient_light(t_scene *scene, t_ray *ray);
 void			apply_light(t_scene *scene, t_ray *ray, t_light *light);
 void			apply_light_effects(t_ray *ray, t_light *light, double cos);
 void			check_board(t_ray *ray);
 void			rainbow(t_ray *ray, int type);
+void			perlin(t_point p, t_color *c);
+double			noise(double x, double y, double z);
+void			marbre(t_point p, t_color *c);
+void			liana(t_point p, t_color *c);
+void			water(t_point *p, t_vector *normal);
+void			wave(t_point *p, t_vector *normal);
+void			skybox_intersect(t_scene *scene, t_ray *ray);
 
 void			create_bmp(t_scene *scene, t_img *img);
 
 int			press_key(int key, t_scene *scene);
-//int			press_mouse_button(int key, t_scene *scene);
 int			press_mouse_button(int key, int x, int y, t_scene *scene);
 void			translat_lobby(t_scene *scene, int key, t_obj *obj);
 void			rotate_lobby(t_scene *scene, int key);
@@ -259,8 +279,6 @@ void			param_camera(t_cam *cam, double w, double h);
 void			set_threads_number(t_scene *scene, int key);
 void			set_coef(t_control *control, int key);
 void			launch_threads(t_scene *scene);
-
-
 
 int			fuse_trgb(int t, int r, int g, int b);
 int			fuse_vector(t_vector *vec);

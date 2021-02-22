@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 23:53:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:37:15 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:16:02 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	rotate_vup(t_scene *scene, t_cam *cam, int key)
 	param_camera(cam, scene->img.line_w, scene->img.col_h);
 }
 
-void	rotate_obj(t_scene *scene, t_obj *obj, int key, int coef)
+void		rotate_obj(t_scene *scene, t_obj *obj, int key, int coef)
 {
 	coef = scene->control.coef * 10;
 	if (obj->main)
@@ -87,7 +87,7 @@ void	rotate_obj(t_scene *scene, t_obj *obj, int key, int coef)
 		reset_disk(obj);
 }
 
-void	rotate_lobby(t_scene *scene, int key)
+void		rotate_lobby(t_scene *scene, int key)
 {
 	if (scene->control.coef == 0)
 		scene->control.coef = 1;

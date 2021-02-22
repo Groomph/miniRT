@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:28:08 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/20 03:43:51 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:25:49 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,98 +15,81 @@
 #include <pthread.h>
 #include <stdio.h>
 
-/*
-static BOOL	malloc_tab(t_scene *scene)
+static void	join_thread(int i, int max, pthread_t *tab_thread)
 {
-//	int	i;
-
-	//i = -1;
-	while (++i < scene->thread_total)
+	while (++i < max)
 	{
-		scene->tab_thread[i] = (pthread_t*)(malloc(sizeof(pthread_t)));
-		if (scene->tab_thread[i] == NULL)
-		{
-			while (--i >= 0)
-				free(scene->tab_thread[i]);
-			printf("Error while setting threads, render aborted");
-			return (FALSE);
-		}
+		if (pthread_join(tab_thread[i], NULL))
+			printf("Error thread_join\n");
 	}
-//	scene->tab_thread[scene->thread_total] = NULL;
-	return (TRUE);
-}*/
+}
 
-static void	launch_threads2(t_scene *scene, int y, int left)
+static BOOL	threads(t_scene *scene, int y, int left, pthread_t *tab_thread)
 {
-	int		i;
+	int			i;
 	t_thread	*thread;
 
-	i = -1;
-	
 	thread = malloc(sizeof(t_thread) * scene->thread_total);
-	scene->attr_thread = malloc(sizeof(pthread_attr_t) * scene->thread_total);
-//	if (!thread)
-//		continue;
+	if (!thread)
+		return (FALSE);
+	i = -1;
 	while (++i < scene->thread_total)
 	{
-		pthread_attr_init(&scene->attr_thread[i]);
 		thread[i].scene = scene;
 		thread[i].y = i * y;
 		thread[i].max_y = thread[i].y + y;
-		if (left > 0)
-		{
+		if (left-- > 0)
 			thread[i].max_y++;
-			left--;
-		}
+		if (thread[i].max_y >= scene->img.col_h)
+			thread[i].max_y = scene->img.col_h;
 		thread[i].pixel = y * i * scene->img.line_w;
 		thread[i].id = i;
-		if (pthread_create(&scene->tab_thread[i], &scene->attr_thread[i], ray_caster, &thread[i]) != 0)
-		{
+		if (pthread_create(&tab_thread[i], NULL, ray_caster,
+							&thread[i]) != 0)
 			printf("Launch new thread has failed\n");
-			continue;
-		}
-	//	scene->thread_on++;
 	}
-	i = -1;
-	while (++i < scene->thread_total)
-	{
-		if (pthread_join(scene->tab_thread[i], NULL))
-			printf("exit(1)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!;\n");
-	}
-	i = -1;
-	while (++i < scene->thread_total)
-		pthread_attr_destroy(&scene->attr_thread[i]);
-	free(scene->attr_thread);
-	free(scene->tab_thread);
+	join_thread(-1, scene->thread_total, tab_thread);
 	free(thread);
-	scene->attr_thread = NULL;
-	scene->tab_thread = NULL;
-	thread = NULL;
+	return (TRUE);
+}
+
+static void	controls_message(void)
+{
+	printf("Rendering done\n");
+	printf("ESCAPE = quit miniRT\nENTER = launch render\n");
+	printf("- = decrease move speed and rotation\n");
+	printf("+ = increase move speed and rotation\n");
+	printf("R = decrease number of render thread\n");
+	printf("T = increase number of render thread\n");
+	printf("A, E, ARROWS = rotate the camera or the selected object\n");
+	printf("Z, Q, S, D, CTRL, SPACE = ");
+	printf("move the camera or the selected object\n");
+	printf("LEFT CLICK = move the camera\n");
+	printf("RIGHT CLICK = select the object\n");
+	printf("TAB = deselect object if selected\n");
 }
 
 void		launch_threads(t_scene *scene)
 {
-//	int		i;
-	int		y;
-	int		left;
+	int			y;
+	int			left;
+	pthread_t	*tab_thread;
 
-//	if (scene->thread_on != 0)
-//	{
-//		printf("render running\n");
-//		return ;
-//	}
-//	if (scene->tab_thread)
-//		free(scene->tab_thread);
-	left = scene->img.col_h % scene->thread_total;
-//	malloc_tab(scene);
-	y = scene->img.col_h / scene->thread_total;
-	scene->tab_thread = malloc(sizeof(pthread_t) * (scene->thread_total));
-	if (scene->tab_thread)
-		launch_threads2(scene, y, left);
-//		i = -1;
-//		while (scene->tab_thread[++i] != NULL)
-//			free(scene->tab_thread[i]);
+	tab_thread = malloc(sizeof(pthread_t) * (scene->thread_total));
+	if (tab_thread)
+	{
+		left = scene->img.col_h % scene->thread_total;
+		y = scene->img.col_h / scene->thread_total;
+		threads(scene, y, left, tab_thread);
+		free(tab_thread);
+	}
+	controls_message();
 }
+
+/*
+**	mlx_put_image_to_window(scene->mlx, scene->window,
+**					scene->img.img, 0, 0);
+*/
 
 /*
 **		printf("pixel: %d\n", thread->pixel);

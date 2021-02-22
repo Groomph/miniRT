@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:39:01 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/21 23:11:50 by romain           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,6 @@ static void	parsing_rt_file(t_scene *scene, int fd)
 		if (previous < TRUE)
 			error_parsing(scene, fd, previous + 6, line_nb);
 	}
-	if (scene->thread_total < 1)
-		scene->thread_total = 1;
 }
 
 void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)

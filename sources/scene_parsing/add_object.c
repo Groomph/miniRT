@@ -6,73 +6,12 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/19 16:39:44 by rsanchez         ###   ########.fr       */
+/*   Updated: 2021/02/22 06:15:23 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include <stdio.h>
-
-static void	set_bonus_compound(t_obj *obj, int i)
-{
-	t_obj	*temp;
-
-	temp = obj->next;
-	while (i-- > 0)
-	{
-		temp->specular = obj->specular;
-		temp->check_board = obj->check_board;
-		temp->rainbow = obj->rainbow;
-		temp = temp->next;
-	}
-}
-
-static BOOL	set_object_bonus(t_scene *scene, t_obj *obj, char *format,
-									int i)
-{
-	while (format[i] == ' ')
-		i++;
-	if (str_n_comp(&(format[i]), "SPECULAR", 8) == 0 && (i += 8))
-		obj->specular = TRUE;
-	else if (str_n_comp(&(format[i]), "CAPS", 4) == 0 && (i += 4))
-		obj->caps = TRUE;
-	else if (str_n_comp(&(format[i]), "CHECK_BOARD", 11) == 0 && (i += 11))
-		obj->check_board = TRUE;
-	else if (str_n_comp(&(format[i]), "RAINBOW", 7) == 0 && (i += 7))
-		obj->rainbow = TRUE;
-	else
-		return (FALSE);
-	while (format[i] == ' ')
-		i++;
-	if (format[i] != '\0')
-		return (set_object_bonus(scene, obj, format, i));
-	if (obj->caps == TRUE)
-		if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
-			return (FALSE);
-	if ((obj->type == CYLINDER && obj->caps) || obj->type == CUBE
-						|| obj->type == PYRAMIDE)
-		set_bonus_compound(obj, obj->type);
-	return (TRUE);
-}
-
-static int	add_bonus(t_scene *scene, char *format, int previous)
-{
-	int	check;
-
-	if (previous == 20)
-		return (-3);
-	else if (previous == 3)
-		check = set_camera_bonus(scene->cam_list, format, 5);
-	else if (previous == 4)
-		check = set_light_bonus(scene->light, format, 5);
-	else if (previous >= 5)
-		check = set_object_bonus(scene, scene->object, format, 5);
-	else
-		check = -2;
-	if (check < TRUE)
-		return (FALSE);
-	return (20);
-}
 
 static int	add_object2(t_scene *scene, char *line)
 {
@@ -104,6 +43,8 @@ int			add_object(t_scene *scene, char *line, int prev)
 		return (prev);
 	else if (str_n_comp(line, "BONUS ", 6) == 0)
 		check = add_bonus(scene, line, prev);
+	else if (str_n_comp(line, "SKYBOX", 6) == 0)
+		check = add_sky_box(scene, line);
 	else if (str_n_comp(line, "R ", 2) == 0)
 		check = set_resolution(scene, &(scene->img), line);
 	else if (str_n_comp(line, "A ", 2) == 0)

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 14:39:48 by romain           ###   ########.fr       */
+/*   Updated: 2021/02/22 20:22:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <math.h>
 #include <stdio.h>
 
-BOOL			set_camera_bonus2(t_cam *cam, char *format, int *i)
+BOOL		set_camera_bonus2(t_cam *cam, char *format, int *i)
 {
 	if (str_n_comp(&(format[*i]), "ANTI_ALIASING=", 14) == 0 && (*i += 14))
 	{
@@ -43,7 +43,7 @@ BOOL			set_camera_bonus2(t_cam *cam, char *format, int *i)
 	return (TRUE);
 }
 
-BOOL			set_camera_bonus(t_cam *cam, char *format, int i)
+BOOL		set_camera_bonus(t_cam *cam, char *format, int i)
 {
 	int	check;
 
@@ -87,7 +87,7 @@ static int	parse_camera(t_cam *cam, char *format)
 	return (TRUE);
 }
 
-int			add_camera(t_scene *scene, char *format)
+int		add_camera(t_scene *scene, char *format)
 {
 	t_cam	*cam;
 	int		norme;
