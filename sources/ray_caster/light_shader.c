@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 07:50:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:35:16 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/06 19:33:44 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <math.h>
 #include <stdio.h>
 
-static BOOL		is_illuminated(t_scene *scene, t_ray *light_ray,
+static BOOL	is_illuminated(t_scene *scene, t_ray *light_ray,
 						t_ray *ray, t_ray *temp_light)
 {
 	t_obj	*obj;
@@ -26,13 +26,13 @@ static BOOL		is_illuminated(t_scene *scene, t_ray *light_ray,
 		if (obj != ray->nearest_object)
 		{
 			if (obj->inter_f(light_ray, obj, &temp)
-					&& temp.t1 < light_ray->t)
+				&& temp.t1 < light_ray->t)
 				return (FALSE);
 		}
 		else
 		{
 			if (obj->inter_f(temp_light, obj, &temp)
-					&& temp.t1 < temp_light->t)
+				&& temp.t1 < temp_light->t)
 				return (FALSE);
 		}
 		obj = obj->next;
@@ -56,16 +56,16 @@ static BOOL		is_illuminated(t_scene *scene, t_ray *light_ray,
 **}
 */
 
-void			apply_light_effects(t_ray *ray, t_light *light, double cos)
+void	apply_light_effects(t_ray *ray, t_light *light, double cos)
 {
 	if (cos < 0.0)
 		cos *= -1.0;
 	ray->color.x += cos * (ray->temp_color.x * light->intensity
-							* (light->color.x / 255));
+			* (light->color.x / 255));
 	ray->color.y += cos * (ray->temp_color.y * light->intensity
-							* (light->color.y / 255));
+			* (light->color.y / 255));
 	ray->color.z += cos * (ray->temp_color.z * light->intensity
-							* (light->color.z / 255));
+			* (light->color.z / 255));
 }
 
 static double	set_light_ray(t_ray *ray, t_light *light,
@@ -87,7 +87,7 @@ static double	set_light_ray(t_ray *ray, t_light *light,
 	return (get_scalar_product(&(light_ray->dir), &(ray->hit_normal)));
 }
 
-static void		set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
+static void	set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
 {
 	light_ray->o = multiply_vector(&(ray->hit_normal), EPSILON);
 	light_ray->o = add_vectors(&(light_ray->o), &(ray->hit));
@@ -104,7 +104,7 @@ static void		set_temp_light_ray(t_ray *ray, t_light *light, t_ray *light_ray)
 	}
 }
 
-void			apply_light(t_scene *scene, t_ray *ray, t_light *light)
+void	apply_light(t_scene *scene, t_ray *ray, t_light *light)
 {
 	t_ray		light_ray;
 	t_ray		temp_light;

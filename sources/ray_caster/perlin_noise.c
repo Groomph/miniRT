@@ -6,13 +6,13 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/21 19:37:00 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:31:52 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/06 20:31:55 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 
-static int		g_perm[] = {
+static const int	g_perm[] = {
 	151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225,
 	140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23, 190, 6, 148,
 	247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32,
@@ -41,6 +41,11 @@ static double	lerp(double t, double a, double b)
 	return (a + t * (b - a));
 }
 
+//	ret1 = ((h & 1) == 0) ? u : -u;
+//	ret2 = ((h & 2) == 0) ? v : -v;
+//	u = (h < 8 || h == 12 || h == 13) ? x : y;
+//	v = (h < 4 || h == 12 || h == 13) ? y : z;
+
 static double	grad(int hash, double x, double y, double z)
 {
 	int		h;
@@ -50,14 +55,26 @@ static double	grad(int hash, double x, double y, double z)
 	double	ret2;
 
 	h = hash & 15;
-	u = (h < 8 || h == 12 || h == 13) ? x : y;
-	v = (h < 4 || h == 12 || h == 13) ? y : z;
-	ret1 = ((h & 1) == 0) ? u : -u;
-	ret2 = ((h & 2) == 0) ? v : -v;
+	if (h < 8 || h == 12 || h == 13)
+		u = x;
+	else
+		u = y;
+	if (h < 4 || h == 12 || h == 13)
+		v = y;
+	else
+		v = z;
+	if ((h & 1) == 0)
+		ret1 = u;
+	else
+		ret1 = -u;
+	if ((h & 2) == 0)
+		ret2 = v;
+	else
+		ret2 = -v;
 	return (ret1 + ret2);
 }
 
-static void		noise_params(int *u, double *x, double *y, double *z)
+static void	noise_params(int *u, double *x, double *y, double *z)
 {
 	u[0] = (int)floor(*x) & 255;
 	u[1] = (int)floor(*y) & 255;
@@ -67,7 +84,7 @@ static void		noise_params(int *u, double *x, double *y, double *z)
 	*z -= floor(*z);
 }
 
-double			noise(double x, double y, double z)
+double	noise(double x, double y, double z)
 {
 	int		u[3];
 	double	c[3];
@@ -84,12 +101,14 @@ double			noise(double x, double y, double z)
 	h[4] = g_perm[(h[0] + 1) % 256] + u[2];
 	h[5] = g_perm[(h[1] + 1) % 256] + u[2];
 	return (lerp(c[2], lerp(c[1], lerp(c[0],
-			grad(g_perm[h[2] % 256], x, y, z),
-			grad(g_perm[h[3] % 256], x - 1., y, z)),
-			lerp(c[0], grad(g_perm[h[4] % 256], x, y - 1., z),
-			grad(g_perm[h[5] % 256], x - 1., y - 1., z))),
-	lerp(c[1], lerp(c[0], grad(g_perm[(h[2] + 1) % 256], x, y, z - 1.),
-			grad(g_perm[(h[3] + 1) % 256], x - 1., y, z - 1.)),
-		lerp(c[0], grad(g_perm[(h[4] + 1) % 256], x, y - 1., z - 1.),
-		grad(g_perm[(h[5] + 1) % 256], x - 1., y - 1., z - 1.)))));
+					grad(g_perm[h[2] % 256], x, y, z),
+					grad(g_perm[h[3] % 256], x - 1., y, z)),
+				lerp(c[0], grad(g_perm[h[4] % 256], x, y - 1., z),
+					grad(g_perm[h[5] % 256], x - 1., y - 1., z))),
+			lerp(c[1], lerp(c[0], grad(g_perm[(h[2] + 1) % 256], x, y, z - 1.),
+					grad(g_perm[(h[3] + 1) % 256],
+						x - 1., y, z - 1.)),
+				lerp(c[0], grad(g_perm[(h[4] + 1) % 256],
+						x, y - 1., z - 1.),
+					grad(g_perm[(h[5] + 1) % 256], x - 1., y - 1., z - 1.)))));
 }
