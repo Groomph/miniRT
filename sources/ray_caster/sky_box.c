@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 03:51:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 10:27:22 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:57:50 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	find_pixel(t_ray *ray, int i)
 	return ((512 + h) * 1024 + (w + 512));
 }
 
-void		skybox_intersect(t_scene *scene, t_ray *ray)
+void	skybox_intersect(t_scene *scene, t_ray *ray)
 {
 	int	i;
 	int	pixel;

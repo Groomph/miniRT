@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:41:13 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:02:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <math.h>
 #include <stdio.h>
 
-void		set_square_normal(t_ray *ray, t_obj *square)
+void	set_square_normal(t_ray *ray, t_obj *square)
 {
 	double		cos;
 	t_point		hit_from_cam;
@@ -96,7 +96,7 @@ void		set_square_normal(t_ray *ray, t_obj *square)
 **}
 */
 
-BOOL		is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter)
+BOOL	is_intersect_square(t_ray *ray, t_obj *square, t_inter *inter)
 {
 	t_inter		inter2;
 	t_vector	hit_point;

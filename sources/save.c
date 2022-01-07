@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 16:03:48 by romain            #+#    #+#             */
-/*   Updated: 2021/02/11 21:26:16 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:53:11 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	set_headers(t_img *img, t_bmp *bmp)
 	bmp->img.important_color_nb = 0;
 }
 
-void		create_bmp(t_scene *scene, t_img *img)
+void	create_bmp(t_scene *scene, t_img *img)
 {
 	int		fd;
 	t_bmp	bmp;

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:25:29 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:39:00 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:02:36 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define DOFREE 1
 # define DONTFREE 0
 
-typedef struct		s_list
+typedef struct s_list
 {
 	void			*object;
 	struct s_list	*next;
@@ -43,9 +43,9 @@ int					is_infinite(long double doub);
 */
 
 char				*substr_free(char *s, size_t start, size_t len,
-																int freestr);
+						int freestr);
 char				*strjoin_free(char *s1, char *s2, int freestr1,
-																int freestr2);
+						int freestr2);
 size_t				string_len(const char *s);
 int					shift_right_add(char *str, char c, int i);
 int					shift_left_erase(char *str, int i);
@@ -54,7 +54,7 @@ char				*str_nstr_comp(char *str1, char *str2, size_t size_str2);
 
 int					utoa_len(unsigned long long nb, int sizebase);
 int					utoa_base(unsigned long long nb, char *dest, char *base,
-																int sizebase);
+						int sizebase);
 int					atoi_windex(const char *str, int *i);
 double				atodoub_windex(const char *str, int *i);
 

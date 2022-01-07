@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:42:43 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:02:19 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <math.h>
 #include <stdio.h>
 
-void		set_cone_normal(t_ray *ray, t_obj *cone)
+void	set_cone_normal(t_ray *ray, t_obj *cone)
 {
 	t_vector	hit_from_cam;
 	t_vector	center;
@@ -71,13 +71,13 @@ static BOOL	find_intersections(t_ray *ray, t_obj *cone, t_inter *inter)
 		inter->t2 = co.a;
 	}
 	if ((inter->t1 < 0 && inter->t2 < 0)
-			|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
+		|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
 		return (FALSE);
 	inter->hit_inside = FALSE;
 	return (TRUE);
 }
 
-BOOL		is_intersect_cone(t_ray *ray, t_obj *cone, t_inter *inter)
+BOOL	is_intersect_cone(t_ray *ray, t_obj *cone, t_inter *inter)
 {
 	t_point	hit_point;
 	double	scalar;
@@ -90,7 +90,7 @@ BOOL		is_intersect_cone(t_ray *ray, t_obj *cone, t_inter *inter)
 	inter->dist = sqrt(get_norme(&hit_point));
 	scalar = get_scalar_product(&hit_point, &(cone->normal));
 	if (inter->t1 > 0 && inter->t1 == inter->t1
-			&& inter->dist > 0 && inter->dist < cone->h && scalar > 0)
+		&& inter->dist > 0 && inter->dist < cone->h && scalar > 0)
 		return (TRUE);
 	hit_point = multiply_vector(&(ray->dir), inter->t2);
 	hit_point = add_vectors(&(ray->o), &hit_point);

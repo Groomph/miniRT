@@ -6,11 +6,17 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:24:27 by rsanchez          #+#    #+#             */
-/*   Updated: 2020/12/15 14:24:30 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:57:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	is_double_signed(long double doub)
 {
-	return ((1.0 / doub) != (1.0 / (doub < 0 ? 1 : 0)));
+	int	i;
+
+	if (doub < 0)
+		i = 1;
+	else
+		i = 0;
+	return ((1.0 / doub) != (1.0 / i));
 }

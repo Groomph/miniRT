@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 23:53:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:32:27 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:58:41 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,14 @@ static void	special_obj(t_scene *scene, t_obj *obj, int key, t_obj *main)
 **}
 */
 
-void		translat_lobby(t_scene *scene, int key, t_obj *obj)
+void	translat_lobby(t_scene *scene, int key, t_obj *obj)
 {
 	if (scene->control.coef == 0)
 		scene->control.coef = 1;
 	if (obj == NULL)
 		translat_cam(scene, key);
 	else if (obj->type == SPHERE || obj->type == PLANE
-						|| obj->type == CONE)
+		|| obj->type == CONE)
 		translat_object(scene, &(obj->o), key);
 	else if (obj->type == TRIANGLE)
 	{

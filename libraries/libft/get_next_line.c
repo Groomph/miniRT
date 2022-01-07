@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:48:15 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:50:14 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:00:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static size_t	isnl(char *str)
 	return (0);
 }
 
-static int		extractline(char **buf, char **line, size_t nl, size_t len)
+static int	extractline(char **buf, char **line, size_t nl, size_t len)
 {
 	if (len == 0)
 	{
@@ -37,7 +37,8 @@ static int		extractline(char **buf, char **line, size_t nl, size_t len)
 			*buf = NULL;
 			return (0);
 		}
-		if (!(*line = malloc(1)))
+		*line = malloc(1);
+		if (!(*line))
 			return (-1);
 		**line = '\0';
 		return (0);
@@ -49,7 +50,7 @@ static int		extractline(char **buf, char **line, size_t nl, size_t len)
 	return (1);
 }
 
-int				get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	*permbuf;
 	char		tmpbuf[101];
@@ -67,7 +68,7 @@ int				get_next_line(int fd, char **line)
 		{
 			tmpbuf[len] = '\0';
 			permbuf = strjoin_free(permbuf, tmpbuf,
-							DOFREE, DONTFREE);
+					DOFREE, DONTFREE);
 			if (!permbuf)
 				return (-1);
 			nl = isnl(permbuf);

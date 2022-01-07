@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:39:56 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:06:49 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static int	parse_plane(t_obj *plane, char *format)
 	plane->inter_f = is_intersect_plane;
 	plane->normal_f = set_plane_normal;
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->o.x, plane->o.y,
-								plane->o.z);
+		plane->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", plane->normal.x, plane->normal.y,
-								plane->normal.z);
+		plane->normal.z);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", plane->color.other,
-			plane->color.x, plane->color.y, plane->color.z);
+		plane->color.x, plane->color.y, plane->color.z);
 	return (TRUE);
 }
 
-int			add_plane(t_scene *scene, char *format)
+int	add_plane(t_scene *scene, char *format)
 {
 	t_obj		*plane;
 	double		norme;

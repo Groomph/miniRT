@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:34:26 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:08:12 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,15 @@ static int	parse_pyramide(t_obj *pyramide, char *format)
 	pyramide->inter_f = is_intersect_square;
 	pyramide->normal_f = set_square_normal;
 	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->o.x,
-				pyramide->o.y, pyramide->o.z);
+		pyramide->o.y, pyramide->o.z);
 	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->normal.x,
-				pyramide->normal.y, pyramide->normal.z);
+		pyramide->normal.y, pyramide->normal.z);
 	printf("     %.1lf,%.1lf,%.1lf   ", pyramide->color.x,
-				pyramide->color.y, pyramide->color.z);
+		pyramide->color.y, pyramide->color.z);
 	return (TRUE);
 }
 
-void		reset_new_triangle(t_obj *first)
+void	reset_new_triangle(t_obj *first)
 {
 	int		i;
 	t_obj	*triangle;
@@ -105,7 +105,7 @@ void		reset_new_triangle(t_obj *first)
 	}
 }
 
-int			add_pyramide(t_scene *scene, char *format)
+int	add_pyramide(t_scene *scene, char *format)
 {
 	t_obj		*pyramide;
 	int			i;
@@ -117,7 +117,7 @@ int			add_pyramide(t_scene *scene, char *format)
 	pyramide->next = scene->object;
 	scene->object = pyramide;
 	if (!parse_pyramide(pyramide, format)
-			|| set_normalized(&(pyramide->normal)) == 0)
+		|| set_normalized(&(pyramide->normal)) == 0)
 		return (FALSE);
 	set_edges(pyramide);
 	pyramide->o3 = multiply_vector(&(pyramide->normal), pyramide->h);

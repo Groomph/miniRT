@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 02:50:08 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/03 20:25:05 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:52:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_vector	get_z_rotation(t_vector *vec, double theta, BOOL is_radian)
 	return (temp);
 }
 
-void		set_full_rotation(t_vector *vec, t_vector *dir)
+void	set_full_rotation(t_vector *vec, t_vector *dir)
 {
 	*vec = get_x_rotation(vec, dir->x, TRUE);
 	*vec = get_y_rotation(vec, dir->y, TRUE);

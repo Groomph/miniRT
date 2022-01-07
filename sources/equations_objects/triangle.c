@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 11:34:54 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:03:07 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "vector.h"
 #include <math.h>
 
-void		set_triangle_normal(t_ray *ray, t_obj *triangle)
+void	set_triangle_normal(t_ray *ray, t_obj *triangle)
 {
 	double		cos;
 	t_point		hit_from_cam;
@@ -55,7 +55,7 @@ static BOOL	find_t(t_inter *inter, t_tri *tri)
 	return (TRUE);
 }
 
-BOOL		is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter)
+BOOL	is_intersect_triangle(t_ray *ray, t_obj *triangle, t_inter *inter)
 {
 	t_tri		tri;
 	t_vector	tri_ray_o;

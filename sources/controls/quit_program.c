@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 20:16:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:43:30 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:01:01 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	error_printer(int errornb, int line)
 		printf("%s\n", error_tab[errornb]);
 }
 
-void		error_parsing(t_scene *scene, int fd, int errornb, int line)
+void	error_parsing(t_scene *scene, int fd, int errornb, int line)
 {
 	char	*temp;
 	int		check;
@@ -75,7 +75,7 @@ static void	clear_all(t_cam *cam, t_light *light, t_obj *obj)
 	}
 }
 
-int			stop_program(t_scene *scene)
+int	stop_program(t_scene *scene)
 {
 	clear_all(scene->cam_list, scene->light, scene->object);
 	if (scene->window)

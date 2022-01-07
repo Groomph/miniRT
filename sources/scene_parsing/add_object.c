@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 06:15:23 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:04:15 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static int	add_object2(t_scene *scene, char *line)
 		return (-2);
 }
 
-int			add_object(t_scene *scene, char *line, int prev)
+int	add_object(t_scene *scene, char *line, int prev)
 {
-	int check;
+	int	check;
 
 	if (str_n_comp(line, "//", 2) == 0)
 		return (prev);

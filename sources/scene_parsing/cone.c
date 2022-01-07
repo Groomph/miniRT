@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 22:13:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:27:48 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:40:28 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ static int	parse_cone(t_obj *cone, char *format, int i)
 	cone->inter_f = is_intersect_cone;
 	cone->normal_f = set_cone_normal;
 	printf("  %.1lf,%.1lf,%.1lf  ", cone->o.x, cone->o.y,
-								cone->o.z);
+		cone->o.z);
 	printf("     %.1lf,%.1lf,%.1lf", cone->normal.x,
-					cone->normal.y, cone->normal.z);
+		cone->normal.y, cone->normal.z);
 	printf("%.2lf    ", cone->radius);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", cone->color.other,
-			cone->color.x, cone->color.y, cone->color.z);
+		cone->color.x, cone->color.y, cone->color.z);
 	return (TRUE);
 }
 
-int			add_cone(t_scene *scene, char *format)
+int	add_cone(t_scene *scene, char *format)
 {
 	t_obj		*cone;
 	double		norme;

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:11:58 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/16 15:15:07 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:52:47 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ t_vector	get_vector_product(t_vector *vec1, t_vector *vec2)
 	return (temp);
 }
 
-double		get_scalar_product(t_vector *vec, t_vector *vec2)
+double	get_scalar_product(t_vector *vec, t_vector *vec2)
 {
 	return (vec->x * vec2->x + vec->y * vec2->y + vec->z * vec2->z);
 }
 
-double		get_norme(t_vector *vec)
+double	get_norme(t_vector *vec)
 {
 	return (vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
 }
 
-double		set_normalized(t_vector *vec1)
+double	set_normalized(t_vector *vec1)
 {
 	double	norme_squarred;
 	double	norme;

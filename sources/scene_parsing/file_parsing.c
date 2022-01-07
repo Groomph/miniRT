@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 16:21:17 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/21 23:11:50 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:26:51 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	set_lower_point(t_cam *cam)
 **	set_normalized(&(cam->look_at));
 */
 
-void		param_camera(t_cam *cam, double w, double h)
+void	param_camera(t_cam *cam, double w, double h)
 {
 	double		ratio;
 	t_vector	focale;
@@ -74,7 +74,7 @@ void		param_camera(t_cam *cam, double w, double h)
 **	set_normalized(&cross);
 */
 
-BOOL		set_resolution(t_scene *scene, t_img *img, char *format)
+BOOL	set_resolution(t_scene *scene, t_img *img, char *format)
 {
 	int			i;
 	int			max_x;
@@ -92,15 +92,15 @@ BOOL		set_resolution(t_scene *scene, t_img *img, char *format)
 		i++;
 	max = img->line_w * img->col_h;
 	if (format[i] != '\0' || img->line_w <= 0 || img->col_h <= 0
-							|| max > 1000000000)
+		|| max > 1000000000)
 		return (FALSE);
 	if (!scene->saveit && img->line_w > max_x)
 		img->line_w = max_x;
 	if (!scene->saveit && img->col_h > max_y)
 		img->col_h = max_y;
-	img->set = TRUE;
-	img->col_h += (img->col_h % 4 > 0) ? 4 - (img->col_h % 4) : 0;
-	return (TRUE);
+	if (img->col_h % 4 > 0)
+		img->col_h += 4 - (img->col_h % 4);
+	return (img->set = TRUE);
 }
 
 static void	parsing_rt_file(t_scene *scene, int fd)
@@ -127,7 +127,7 @@ static void	parsing_rt_file(t_scene *scene, int fd)
 	}
 }
 
-void		check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
+void	check_prog_args(t_scene *scene, t_img *img, int ac, char **av)
 {
 	int		fd;
 	t_cam	*temp_cam;

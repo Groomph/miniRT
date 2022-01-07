@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 13:55:41 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:36:41 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:05:52 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ BOOL	set_multi_threading(t_scene *scene, char *format)
 
 	i = 2;
 	if (!int_microparser(&(scene->thread_total), format, &i)
-			|| scene->thread_total < 1)
+		|| scene->thread_total < 1)
 		return (FALSE);
 	while (format[i] == ' ')
 		i++;

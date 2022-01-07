@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:28:08 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 20:25:49 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:59:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static BOOL	threads(t_scene *scene, int y, int left, pthread_t *tab_thread)
 		thread[i].pixel = y * i * scene->img.line_w;
 		thread[i].id = i;
 		if (pthread_create(&tab_thread[i], NULL, ray_caster,
-							&thread[i]) != 0)
+				&thread[i]) != 0)
 			printf("Launch new thread has failed\n");
 	}
 	join_thread(-1, scene->thread_total, tab_thread);
@@ -69,7 +69,7 @@ static void	controls_message(void)
 	printf("TAB = deselect object if selected\n");
 }
 
-void		launch_threads(t_scene *scene)
+void	launch_threads(t_scene *scene)
 {
 	int			y;
 	int			left;

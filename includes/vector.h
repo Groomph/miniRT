@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:08:40 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:44:23 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:03:20 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef struct		s_3d_vector
+typedef struct s_3d_vector
 {
 	double			x;
 	double			y;
@@ -31,7 +31,7 @@ typedef struct		s_3d_vector
 typedef t_vector	t_point;
 typedef t_vector	t_color;
 
-typedef struct		s_resolv_triangle
+typedef struct s_resolv_triangle
 {
 	t_vector		edge1;
 	t_vector		edge2;
@@ -40,7 +40,7 @@ typedef struct		s_resolv_triangle
 	t_vector		q;
 }					t_tri;
 
-typedef struct		s_resolv_square
+typedef struct s_resolv_square
 {
 	t_point			a;
 	t_point			b;
@@ -51,7 +51,7 @@ typedef struct		s_resolv_square
 	t_vector		q;
 }					t_squ;
 
-typedef struct		s_resolv_cylinder
+typedef struct s_resolv_cylinder
 {
 	double			a;
 	double			b;

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 06:24:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:42:11 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:01:48 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <math.h>
 #include <stdio.h>
 
-void		set_cylinder_normal(t_ray *ray, t_obj *cylinder)
+void	set_cylinder_normal(t_ray *ray, t_obj *cylinder)
 {
 	t_point		hit_from_cam;
 	t_point		center;
@@ -65,7 +65,7 @@ static BOOL	find_delta(t_ray *ray, t_obj *cylinder, t_inter *inter)
 	if (inter->t1 >= inter->t2)
 		printf("WHAT?!\n");
 	if ((inter->t1 < 0 && inter->t2 < 0)
-			|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
+		|| (inter->t1 != inter->t1 && inter->t2 != inter->t2))
 		return (FALSE);
 	return (TRUE);
 }
@@ -83,7 +83,7 @@ static BOOL	find_delta(t_ray *ray, t_obj *cylinder, t_inter *inter)
 **printf("t3: %lf   t4: %lf\n", t3, t4);
 */
 
-BOOL		is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter)
+BOOL	is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter)
 {
 	t_vector	ray_cyl_o;
 	t_point		hit_point;
@@ -97,7 +97,7 @@ BOOL		is_intersect_cylinder(t_ray *ray, t_obj *cylinder, t_inter *inter)
 	inter->dist = get_scalar_product(&(cylinder->normal), &(hit_point));
 	inter->hit_inside = FALSE;
 	if (inter->t1 > 0 && inter->t1 == inter->t1
-			&& inter->dist > 0 && inter->dist < cylinder->h)
+		&& inter->dist > 0 && inter->dist < cylinder->h)
 		return (TRUE);
 	hit_point = multiply_vector(&(ray->dir), inter->t2);
 	hit_point = add_vectors(&(ray->o), &hit_point);

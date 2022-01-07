@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 17:28:08 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/21 23:10:01 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:59:16 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ static void	press_key2(int key, t_scene *scene)
 		launch_threads(scene);
 }
 
-int			press_key(int key, t_scene *scene)
+int	press_key(int key, t_scene *scene)
 {
 	if (key == ESCAPE)
 		stop_program(scene);
 	else if (key == Z || key == S || key == Q || key == D
-					|| key == CTRL || key == SPACE)
+		|| key == CTRL || key == SPACE)
 		translat_lobby(scene, key, scene->control.selected_obj);
 	else if (key == A || key == E || key == UP || key == DOWN
-					|| key == LEFT || key == RIGHT)
+		|| key == LEFT || key == RIGHT)
 		rotate_lobby(scene, key);
 	else if (key == TAB)
 		scene->control.selected_obj = NULL;
@@ -62,7 +62,7 @@ int			press_key(int key, t_scene *scene)
 	return (1);
 }
 
-int			press_mouse_button(int key, int x, int y, t_scene *scene)
+int	press_mouse_button(int key, int x, int y, t_scene *scene)
 {
 	t_ray	ray;
 

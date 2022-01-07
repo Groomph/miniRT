@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/19 16:26:10 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:07:28 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ static int	parse_sphere(t_obj *sphere, char *format)
 	sphere->inter_f = is_intersect_sphere;
 	sphere->normal_f = set_sphere_normal;
 	printf("        %.1lf,%.1lf,%.1lf      ", sphere->o.x, sphere->o.y,
-								sphere->o.z);
+		sphere->o.z);
 	printf("%.2lf    ", sphere->radius);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", sphere->color.other,
-			sphere->color.x, sphere->color.y, sphere->color.z);
+		sphere->color.x, sphere->color.y, sphere->color.z);
 	return (TRUE);
 }
 
-int			add_sphere(t_scene *scene, char *format)
+int	add_sphere(t_scene *scene, char *format)
 {
-	t_obj		*sphere;
+	t_obj	*sphere;
 
 	sphere = malloc(sizeof(t_obj));
 	if (!sphere)

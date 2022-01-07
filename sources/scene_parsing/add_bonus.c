@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 01:01:10 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 19:22:58 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:48:56 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,53 @@ static void	set_bonus_compound(t_obj *obj, int i)
 	}
 }
 
+static BOOL	set_object_bonus3(t_obj *obj, char *format, int *i)
+{
+	if (str_n_comp(&(format[*i]), "PERLIN", 6) == 0)
+	{
+		(*i) += 2;
+		obj->perlin = TRUE;
+	}
+	else if (str_n_comp(&(format[*i]), "MARBRE", 6) == 0)
+	{
+		(*i) += 2;
+		obj->marbre = TRUE;
+	}
+	else if (str_n_comp(&(format[*i]), "LIANA", 5) == 0 && ++(*i))
+		obj->liana = TRUE;
+	else if (str_n_comp(&(format[*i]), "WATER", 5) == 0 && ++(*i))
+		obj->water = TRUE;
+	else if (str_n_comp(&(format[*i]), "WAVE", 4) == 0)
+		obj->wave = TRUE;
+	else if (str_n_comp(&(format[*i]), "CAPS", 4) == 0)
+		obj->caps = TRUE;
+	else
+		return (FALSE);
+	*i += 4;
+	return (TRUE);
+}
+
 static BOOL	set_object_bonus2(t_obj *obj, char *format, int *i)
 {
 	while (format[*i] == ' ')
 		(*i)++;
-	if (str_n_comp(&(format[*i]), "SPECULAR", 8) == 0 && ((*i) += 8))
+	if (str_n_comp(&(format[*i]), "SPECULAR", 8) == 0)
+	{
+		(*i) += 8;
 		obj->specular = TRUE;
-	else if (str_n_comp(&(format[*i]), "CAPS", 4) == 0 && ((*i) += 4))
-		obj->caps = TRUE;
-	else if (str_n_comp(&(format[*i]), "CHECK_BOARD", 11) == 0
-							&& ((*i) += 11))
+	}
+	else if (str_n_comp(&(format[*i]), "CHECK_BOARD", 11) == 0)
+	{
+		(*i) += 11;
 		obj->check_board = TRUE;
-	else if (str_n_comp(&(format[*i]), "RAINBOW", 7) == 0 && ((*i) += 7))
+	}
+	else if (str_n_comp(&(format[*i]), "RAINBOW", 7) == 0)
+	{
+		(*i) += 7;
 		obj->rainbow = TRUE;
-	else if (str_n_comp(&(format[*i]), "PERLIN", 6) == 0 && ((*i) += 6))
-		obj->perlin = TRUE;
-	else if (str_n_comp(&(format[*i]), "MARBRE", 6) == 0 && ((*i) += 6))
-		obj->marbre = TRUE;
-	else if (str_n_comp(&(format[*i]), "LIANA", 5) == 0 && ((*i) += 5))
-		obj->liana = TRUE;
-	else if (str_n_comp(&(format[*i]), "WATER", 5) == 0 && ((*i) += 5))
-		obj->water = TRUE;
-	else if (str_n_comp(&(format[*i]), "WAVE", 4) == 0 && ((*i) += 4))
-		obj->wave = TRUE;
+	}
 	else
-		return (FALSE);
+		return (set_object_bonus3(obj, format, i));
 	return (TRUE);
 }
 
@@ -73,12 +95,12 @@ static BOOL	set_object_bonus(t_scene *scene, t_obj *obj, char *format,
 		if (obj->type != CYLINDER || !add_disk(scene, obj, 0))
 			return (FALSE);
 	if ((obj->type == CYLINDER && obj->caps) || obj->type == CUBE
-						|| obj->type == PYRAMIDE)
+		|| obj->type == PYRAMIDE)
 		set_bonus_compound(obj, obj->type);
 	return (TRUE);
 }
 
-int			add_bonus(t_scene *scene, char *format, int previous)
+int	add_bonus(t_scene *scene, char *format, int previous)
 {
 	int	check;
 

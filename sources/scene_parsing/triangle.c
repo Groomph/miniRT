@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/19 16:23:04 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:05:34 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ static int	parse_triangle(t_obj *triangle, char *format)
 	triangle->inter_f = is_intersect_triangle;
 	triangle->normal_f = set_triangle_normal;
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o.x, triangle->o.y,
-								triangle->o.z);
+		triangle->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o2.x, triangle->o2.y,
-								triangle->o2.z);
+		triangle->o2.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", triangle->o3.x, triangle->o3.y,
-								triangle->o3.z);
+		triangle->o3.z);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", triangle->color.other,
-			triangle->color.x, triangle->color.y, triangle->color.z);
+		triangle->color.x, triangle->color.y, triangle->color.z);
 	return (TRUE);
 }
 
-int			add_triangle(t_scene *scene, char *format)
+int	add_triangle(t_scene *scene, char *format)
 {
 	t_obj		*triangle;
 	t_vector	edge1;

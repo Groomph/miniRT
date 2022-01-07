@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 20:14:06 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:54:49 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,23 @@ static void	set_window_img(t_scene *scene, void *mlx, void **window)
 {
 	if (!scene->saveit)
 		*window = mlx_new_window(mlx, scene->img.line_w,
-						scene->img.col_h, "miniRT");
+				scene->img.col_h, "miniRT");
 	scene->img.img = mlx_new_image(mlx, scene->img.line_w,
-							scene->img.col_h);
-	scene->img.addr = (int*)mlx_get_data_addr(scene->img.img,
-	&(scene->img.bits_pixel), &(scene->img.line_w), &(scene->img.endian));
+			scene->img.col_h);
+	scene->img.addr = (int *)mlx_get_data_addr(scene->img.img,
+			&(scene->img.bits_pixel), &(scene->img.line_w),
+			&(scene->img.endian));
 	scene->img.line_w /= 4;
 }
 
-int			update(t_scene *scene)
+int	update(t_scene *scene)
 {
 	mlx_put_image_to_window(scene->mlx, scene->window,
-						scene->img.img, 0, 0);
+		scene->img.img, 0, 0);
 	return (1);
 }
 
-int			main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_scene	scene;
 

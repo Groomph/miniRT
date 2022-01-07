@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:29:55 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:06:25 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ static int	parse_square(t_obj *square, char *format)
 	square->inter_f = is_intersect_square;
 	square->normal_f = set_square_normal;
 	printf("        %.1lf,%.1lf,%.1lf      ", square->o.x, square->o.y,
-			square->o.z);
+		square->o.z);
 	printf("        %.1lf,%.1lf,%.1lf      ", square->normal.x,
-			square->normal.y, square->normal.z);
+		square->normal.y, square->normal.z);
 	printf("     %.1lf   ", square->radius);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", square->color.other,
-			square->color.x, square->color.y, square->color.z);
+		square->color.x, square->color.y, square->color.z);
 	return (TRUE);
 }
 
@@ -58,7 +58,7 @@ static void	set_edges2(t_obj *square, t_vector *x_axe, t_vector *y_axe)
 	square->ad = sub_vectors(&(square->d), &(square->a));
 }
 
-void		set_edges(t_obj *square)
+void	set_edges(t_obj *square)
 {
 	t_vector	x_axe;
 	t_vector	y_axe;
@@ -76,7 +76,7 @@ void		set_edges(t_obj *square)
 	set_edges2(square, &x_axe, &y_axe);
 }
 
-int			add_square(t_scene *scene, char *format)
+int	add_square(t_scene *scene, char *format)
 {
 	t_obj		*square;
 	double		norme;

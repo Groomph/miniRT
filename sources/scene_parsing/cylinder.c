@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 18:13:44 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 20:24:32 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:51:55 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "vector.h"
 #include <stdio.h>
 
-void		reset_disk(t_obj *first)
+void	reset_disk(t_obj *first)
 {
 	t_obj	*disk;
 
@@ -27,7 +27,7 @@ void		reset_disk(t_obj *first)
 	disk->o = add_vectors(&(disk->o), &(first->o));
 }
 
-int			add_disk(t_scene *scene, t_obj *cylinder, int i)
+int	add_disk(t_scene *scene, t_obj *cylinder, int i)
 {
 	t_obj		*disk;
 
@@ -74,17 +74,17 @@ static int	parse_cylinder(t_obj *cylinder, char *format, int i)
 	cylinder->inter_f = is_intersect_cylinder;
 	cylinder->normal_f = set_cylinder_normal;
 	printf("  %.1lf,%.1lf,%.1lf  ", cylinder->o.x, cylinder->o.y,
-								cylinder->o.z);
+		cylinder->o.z);
 	printf("     %.1lf,%.1lf,%.1lf", cylinder->normal.x,
-					cylinder->normal.y, cylinder->normal.z);
+		cylinder->normal.y, cylinder->normal.z);
 	printf("%.2lf    ", cylinder->radius);
 	printf("%.2lf    ", cylinder->h);
 	printf("         %.1lf,%.1lf,%.1lf,%.1lf\n\n", cylinder->color.other,
-			cylinder->color.x, cylinder->color.y, cylinder->color.z);
+		cylinder->color.x, cylinder->color.y, cylinder->color.z);
 	return (TRUE);
 }
 
-int			add_cylinder(t_scene *scene, char *format)
+int	add_cylinder(t_scene *scene, char *format)
 {
 	t_obj		*cylinder;
 	double		norme;

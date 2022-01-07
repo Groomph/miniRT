@@ -6,7 +6,7 @@
 /*   By: romain <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:49:17 by romain            #+#    #+#             */
-/*   Updated: 2021/02/22 21:32:35 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:57:29 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <pthread.h>
 #include <stdio.h>
 
-void		set_ray(t_scene *scene, t_ray *ray, double x, double y)
+void	set_ray(t_scene *scene, t_ray *ray, double x, double y)
 {
 	t_point		x_pos;
 	t_point		y_pos;
@@ -61,8 +61,8 @@ static int	fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 		while (++j < scene->cam->anti_aliasing)
 		{
 			set_ray(scene, ray,
-			x + (double)i / scene->cam->anti_aliasing,
-			y + (double)j / scene->cam->anti_aliasing);
+				x + (double) i / scene->cam->anti_aliasing,
+				y + (double) j / scene->cam->anti_aliasing);
 			path_tracer(scene, ray, 0);
 			temp_color.x += ray->color.x;
 			temp_color.y += ray->color.y;
@@ -73,7 +73,7 @@ static int	fill_pixel(t_scene *scene, t_ray *ray, double x, double y)
 	return (fuse_vector(&(temp_color)));
 }
 
-void		set_count(int *count, t_thread *thread)
+void	set_count(int *count, t_thread *thread)
 {
 	count[0] = thread->max_y - thread->y;
 	count[1] = count[0] / 20;
@@ -81,7 +81,7 @@ void		set_count(int *count, t_thread *thread)
 	count[0] = 0;
 }
 
-void		*ray_caster(void *temp_thread)
+void	*ray_caster(void *temp_thread)
 {
 	t_scene		*scene;
 	t_thread	*thread;
@@ -89,17 +89,17 @@ void		*ray_caster(void *temp_thread)
 	int			x;
 	int			count[3];
 
-	thread = (t_thread*)temp_thread;
+	thread = (t_thread *)temp_thread;
 	scene = thread->scene;
 	set_count(count, thread);
 	while (thread->y < thread->max_y)
 	{
 		x = -1;
 		while (++x < scene->img.line_w)
-			scene->img.addr[thread->pixel++] =
-				fill_pixel(scene, &ray, x, thread->y);
+			scene->img.addr[thread->pixel++]
+				= fill_pixel(scene, &ray, x, thread->y);
 		while (thread->id == scene->thread_total - 1
-				&& thread->y > count[2] && ++count[0] < 20)
+			&& thread->y > count[2] && ++count[0] < 20)
 		{
 			printf("Rendering: %d%%\n", count[0] * 5);
 			count[2] += count[1];

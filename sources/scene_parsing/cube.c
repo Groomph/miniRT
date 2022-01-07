@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/31 20:57:54 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/02/22 21:30:30 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:04:38 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	set_new_square(t_obj *square, t_obj *first, int i)
 	square->radius = first->radius;
 }
 
-void		reset_cube(t_obj *first)
+void	reset_cube(t_obj *first)
 {
 	int		i;
 	t_obj	*square;
@@ -117,7 +117,7 @@ static BOOL	set_cube(t_scene *scene, t_obj *first)
 	return (TRUE);
 }
 
-BOOL		add_cube(t_scene *scene, char *format)
+BOOL	add_cube(t_scene *scene, char *format)
 {
 	int			i;
 

@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 20:12:47 by rsanchez          #+#    #+#             */
-/*   Updated: 2021/01/25 08:45:41 by romain           ###   ########.fr       */
+/*   Updated: 2022/01/07 15:03:52 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	vector_microparser(t_vector *vector, char *format, int *i)
 		if (format[*i] >= '0' && format[*i] <= '9')
 			doub[j] = atodoub_windex(format, i);
 		else if (format[(*i) + 1] >= '0' && format[(*i) + 1] <= '9'
-							&& format[*i] == '-')
+			&& format[*i] == '-')
 			doub[j] = atodoub_windex(format, i);
 		else
 			return (0);
@@ -45,7 +45,7 @@ int	double_microparser(double *doub, char *format, int *i)
 	if (format[*i] >= '0' && format[*i] <= '9')
 		*doub = atodoub_windex(format, i);
 	else if (format[(*i) + 1] >= '0' && format[(*i) + 1] <= '9'
-						&& format[*i] == '-')
+		&& format[*i] == '-')
 		*doub = atodoub_windex(format, i);
 	else
 		return (0);
@@ -59,7 +59,7 @@ int	int_microparser(int *nb, char *format, int *i)
 	if (format[*i] >= '0' && format[*i] <= '9')
 		*nb = atoi_windex(format, i);
 	else if (format[(*i) + 1] >= '0' && format[(*i) + 1] <= '9'
-						&& format[*i] == '-')
+		&& format[*i] == '-')
 		*nb = atoi_windex(format, i);
 	else
 		return (0);
