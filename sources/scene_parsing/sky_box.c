@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 05:08:57 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/07 15:11:22 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:48:20 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,19 @@ BOOL	add_sky_box2(t_sky_box *box)
 
 	i = -1;
 	while (++i < 6)
-		if (box[i].addr == NULL)
+		if (box[i].img == NULL)
 			return (FALSE);
-	box[0].addr = (int *)mlx_get_data_addr(box[0].addr,
+	box[0].addr = (int *)mlx_get_data_addr(box[0].img,
 			&t[0], &t[1], &t[2]);
-	box[1].addr = (int *)mlx_get_data_addr(box[1].addr,
+	box[1].addr = (int *)mlx_get_data_addr(box[1].img,
 			&t[0], &t[1], &t[2]);
-	box[2].addr = (int *)mlx_get_data_addr(box[2].addr,
+	box[2].addr = (int *)mlx_get_data_addr(box[2].img,
 			&t[0], &t[1], &t[2]);
-	box[3].addr = (int *)mlx_get_data_addr(box[3].addr,
+	box[3].addr = (int *)mlx_get_data_addr(box[3].img,
 			&t[0], &t[1], &t[2]);
-	box[4].addr = (int *)mlx_get_data_addr(box[4].addr,
+	box[4].addr = (int *)mlx_get_data_addr(box[4].img,
 			&t[0], &t[1], &t[2]);
-	box[5].addr = (int *)mlx_get_data_addr(box[5].addr,
+	box[5].addr = (int *)mlx_get_data_addr(box[5].img,
 			&t[0], &t[1], &t[2]);
 	return (TRUE);
 }
@@ -95,17 +95,17 @@ BOOL	add_sky_box(t_scene *scene, char *format)
 		return (FALSE);
 	set_square(scene);
 	box = scene->skybox;
-	box[0].addr = mlx_xpm_file_to_image(scene->mlx, "box/top.xpm",
+	box[0].img = mlx_xpm_file_to_image(scene->mlx, "box/top.xpm",
 			&(box[0].w), &(box[0].h));
-	box[1].addr = mlx_xpm_file_to_image(scene->mlx, "box/bot.xpm",
+	box[1].img = mlx_xpm_file_to_image(scene->mlx, "box/bot.xpm",
 			&(box[1].w), &(box[1].h));
-	box[2].addr = mlx_xpm_file_to_image(scene->mlx, "box/north.xpm",
+	box[2].img = mlx_xpm_file_to_image(scene->mlx, "box/north.xpm",
 			&(box[2].w), &(box[2].h));
-	box[3].addr = mlx_xpm_file_to_image(scene->mlx, "box/south.xpm",
+	box[3].img = mlx_xpm_file_to_image(scene->mlx, "box/south.xpm",
 			&(box[3].w), &(box[3].h));
-	box[4].addr = mlx_xpm_file_to_image(scene->mlx, "box/east.xpm",
+	box[4].img = mlx_xpm_file_to_image(scene->mlx, "box/east.xpm",
 			&(box[4].w), &(box[4].h));
-	box[5].addr = mlx_xpm_file_to_image(scene->mlx, "box/west.xpm",
+	box[5].img = mlx_xpm_file_to_image(scene->mlx, "box/west.xpm",
 			&(box[5].w), &(box[5].h));
 	if (!add_sky_box2(box))
 		return (FALSE);

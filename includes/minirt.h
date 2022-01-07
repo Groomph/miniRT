@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 17:34:51 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/07 16:28:44 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:47:42 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ typedef struct s_sky_box
 	double		radius;
 	int			w;
 	int			h;
+	void		*img;
 	int			*addr;
 }			t_sky_box;
 

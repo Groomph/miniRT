@@ -6,7 +6,7 @@
 /*   By: rsanchez <rsanchez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 20:16:18 by rsanchez          #+#    #+#             */
-/*   Updated: 2022/01/07 15:01:01 by rsanchez         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:47:06 by rsanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,20 @@ static void	clear_all(t_cam *cam, t_light *light, t_obj *obj)
 
 int	stop_program(t_scene *scene)
 {
+	int	i;
+
+	i = 0;
 	clear_all(scene->cam_list, scene->light, scene->object);
 	if (scene->window)
 		mlx_destroy_window(scene->mlx, scene->window);
 	if (scene->img.img)
 		mlx_destroy_image(scene->mlx, scene->img.img);
+	while (i < 6)
+	{
+		if (scene->skybox[i].img)
+			mlx_destroy_image(scene->mlx, scene->skybox[i].img);
+		i++;
+	}
 	if (scene->mlx)
 	{
 		mlx_destroy_display(scene->mlx);
